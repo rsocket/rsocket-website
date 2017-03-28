@@ -369,6 +369,28 @@
 <div class="content">
 	
   <p>
+Example C++ server:
+	  
+	  <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">  <span style="color: #888888">// RSocket server accepting on TCP</span>
+  <span style="color: #008800; font-weight: bold">auto</span> rs <span style="color: #333333">=</span> RSocket<span style="color: #333333">::</span>createServer(TcpConnectionAcceptor<span style="color: #333333">::</span>create(FLAGS_port));
+  <span style="color: #888888">// global request handler</span>
+  <span style="color: #008800; font-weight: bold">auto</span> handler <span style="color: #333333">=</span> std<span style="color: #333333">::</span>make_shared<span style="color: #333333">&lt;</span>HelloStreamRequestHandler<span style="color: #333333">&gt;</span>();
+  <span style="color: #888888">// start accepting connections</span>
+  rs<span style="color: #333333">-&gt;</span>startAndPark([handler](<span style="color: #008800; font-weight: bold">auto</span> r) { <span style="color: #008800; font-weight: bold">return</span> handler; });
+</pre></div>
+
+	
+Example C++ client:
+	
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">  <span style="color: #008800; font-weight: bold">auto</span> rsf <span style="color: #333333">=</span> RSocket<span style="color: #333333">::</span>createClient(
+      TcpConnectionFactory<span style="color: #333333">::</span>create(FLAGS_host, FLAGS_port));
+
+  <span style="color: #008800; font-weight: bold">auto</span> s <span style="color: #333333">=</span> std<span style="color: #333333">::</span>make_shared<span style="color: #333333">&lt;</span>ExampleSubscriber<span style="color: #333333">&gt;</span>(<span style="color: #0000DD; font-weight: bold">5</span>, <span style="color: #0000DD; font-weight: bold">6</span>);
+  <span style="color: #008800; font-weight: bold">auto</span> rs <span style="color: #333333">=</span> rsf<span style="color: #333333">-&gt;</span>connect().get();
+  <span style="color: #008800; font-weight: bold">auto</span> flowable <span style="color: #333333">=</span> rs<span style="color: #333333">-&gt;</span>requestStream(Payload(<span style="background-color: #fff0f0">&quot;Jane&quot;</span>));
+  flowable<span style="color: #333333">-&gt;</span>subscribe(createSubscriber<span style="color: #333333">&lt;</span>std<span style="color: #333333">::</span>string<span style="color: #333333">&gt;</span>(
+          [](<span style="color: #008800; font-weight: bold">auto</span> t) { std<span style="color: #333333">::</span>cout <span style="color: #333333">&lt;&lt;</span> t <span style="color: #333333">&lt;&lt;</span> std<span style="color: #333333">::</span>endl; }));
+</pre></div>
 
   </p>
 	
