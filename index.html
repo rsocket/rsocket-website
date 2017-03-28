@@ -1,1 +1,377 @@
-RSocket.io
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>RSocket</title>
+
+  <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/base-min.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Raleway:200">
+  
+  <style>
+  /* copy/paste/modify from http://purecss.io/base/ on top of base-min.css from http://purecss.io/*/
+  
+  /* --------------------------
+   * Element Styles
+   * --------------------------
+  */
+
+  body {
+      min-width: 320px;
+      color: #777;
+      line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+      font-weight: bold;
+      color: rgb(75, 75, 75);
+  }
+  h3 {
+      font-size: 1.25em;
+  }
+  h4 {
+      font-size: 1.125em;
+  }
+
+  a {
+      color: #3b8bba; /* block-background-text-normal */
+      text-decoration: none;
+  }
+
+  a:visited {
+      color: #265778; /* block-normal-text-normal */
+  }
+
+  dt {
+      font-weight: bold;
+  }
+  dd {
+      margin: 0 0 10px 0;
+  }
+
+  aside {
+      background: #1f8dd6; /* same color as selected state on site menu */
+      padding: 0.3em 1em;
+      border-radius: 3px;
+      color: #fff;
+  }
+      aside a, aside a:visited {
+          color: rgb(169, 226, 255);
+      }
+
+
+  /* --------------------------
+   * Layout Styles
+   * --------------------------
+  */
+
+  /* Navigation Push Styles */
+  #layout {
+      position: relative;
+      padding-left: 0;
+  }
+      #layout.active #menu {
+          left: 160px;
+          width: 160px;
+      }
+
+  /* Apply the .box class on the immediate parent of any grid element (pure-u-*) to apply some padding. */
+  .l-box {
+      padding: 1em;
+  }
+
+  .l-wrap {
+      margin-left: auto;
+      margin-right: auto;
+  }
+  .content .l-wrap {
+      margin-left: -1em;
+      margin-right: -1em;
+  }
+
+
+  /* --------------------------
+   * Header Module Styles
+   * --------------------------
+  */
+
+  .header {
+      font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      max-width: 768px;
+      margin: 0 auto;
+      padding: 1em;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+      background: #fff;
+      letter-spacing: 0.05em;
+  }
+      .header h1 {
+          font-size: 300%;
+          font-weight: 100;
+          margin: 0;
+      }
+       .header h2 {
+          font-size: 125%;
+          font-weight: 100;
+          line-height: 1.5;
+          margin: 0;
+          color: #666;
+          letter-spacing: -0.02em;
+      }
+
+
+   /* --------------------------
+    * Content Module Styles
+    * --------------------------
+   */
+
+  /* The content div is placed as a wrapper around all the docs */
+  .content {
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 1em;
+      padding-right: 1em;
+      max-width: 768px;
+  }
+
+      .content .content-subhead {
+          margin: 2em 0 1em 0;
+          font-weight: 300;
+          color: #888;
+          position: relative;
+      }
+
+      .content .content-spaced {
+          line-height: 1.8;
+      }
+
+      .content .content-quote {
+          font-family: "Georgia", serif;
+          color: #666;
+          font-style: italic;
+          line-height: 1.8;
+          border-left: 5px solid #ddd;
+          padding-left: 1.5em;
+      }
+
+	  .content .section {
+          padding-left: 1.5em;
+	  }
+
+
+	  /* --------------------------
+	   * Code Styles
+	   * --------------------------
+	  */
+
+	  pre,
+	  code {
+	      font-family: Consolas, Courier, monospace;
+	      color: #333;
+	      background: rgb(250, 250, 250);
+	  }
+
+	  code {
+	      padding: 0.2em 0.4em;
+	      white-space: nowrap;
+	  }
+	  .content p code {
+	      font-size: 90%;
+	  }
+
+	  .code {
+	      margin-left: -1em;
+	      margin-right: -1em;
+	      padding: 1em;
+	      border: 1px solid #eee;
+	      border-left-width: 0;
+	      border-right-width: 0;
+	      overflow-x: auto;
+	      -webkit-overflow-scrolling: touch;
+	  }
+	  .code code {
+	      font-size: 95%;
+	      white-space: pre;
+	      word-wrap: normal;
+	      padding: 0;
+	      background: none;
+	  }
+	  .code-wrap code {
+	      white-space: pre-wrap;
+	      word-wrap: break-word;
+	  }
+
+	  /* --------------------------
+	   * Footer Module Styles
+	   * --------------------------
+	  */
+
+	  .footer {
+	      font-size: 87.5%;
+	      border-top: 1px solid #eee;
+	      margin-top: 3.4286em;
+	      padding: 1.1429em;
+	      background: rgb(250, 250, 250);
+	  }
+
+	  .legal {
+	      line-height: 1.6;
+	      text-align: center;
+	      margin: 0 auto;
+	  }
+
+      .legal-license {
+          margin-top: 0;
+      }
+      .legal-links {
+          list-style: none;
+          padding: 0;
+          margin-bottom: 0;
+      }
+      .legal-copyright {
+          margin-top: 0;
+          margin-bottom: 0;
+      }
+
+
+	  /* --------------------------
+	   * Responsive Styles
+	   * --------------------------
+	  */
+
+	  /* smaller screens */
+	  @media screen and (max-width: 200em) {
+
+	      .header h1 {
+	          font-size: 220%;
+	      }
+		  
+	  }
+	  
+	  /* below are defaults from purecss.io */
+	  
+	  @media screen and (min-width: 35.5em) {
+
+	      .legal-license {
+	          text-align: left;
+	          margin: 0;
+	      }
+	      .legal-copyright,
+	      .legal-links,
+	      .legal-links li {
+	          text-align: right;
+	          margin: 0;
+	      }
+
+	  }
+
+	  @media screen and (min-width: 48em) {
+
+	      .l-wrap,
+	      .l-wrap .content {
+	          padding-left: 1em;
+	          padding-right: 1em;
+	      }
+	      .content .l-wrap {
+	          margin-left: -2em;
+	          margin-right: -2em;
+	      }
+
+	      .header,
+	      .content {
+	          padding-left: 2em;
+	          padding-right: 2em;
+	      }
+
+	      .header h1 {
+	          font-size: 320%;
+	      }
+	      .header h2 {
+	          font-size: 128%;
+	      }
+
+	      .content p {
+	          font-size: 1.125em;
+	      }
+
+	      .code {
+	          margin-left: auto;
+	          margin-right: auto;
+	          border-left-width: 1px;
+	          border-right-width: 1px;
+	      }
+
+	      .table-responsive {
+	          margin-left: auto;
+	          margin-right: auto;
+	      }
+	      .table-responsive table {
+	          border-left-width: 1px;
+	          border-right-width: 1px;
+	      }
+
+	  }
+
+	  @media (max-width: 58em) {
+	      /* Only apply this when the window is smaller. Otherwise, the following
+	      case results in extra padding on the left:
+	          * Make the window small. (Rotate to portrait on a mobile.)
+	          * Tap the menu to trigger the active state.
+	          * Make the window large again. (Rotate to landscape on mobile.)
+	      */
+	      #layout.active {
+	          position: relative;
+	          left: 160px;
+	      }
+	  }
+
+	  @media (min-width: 58em) {
+
+	      #layout {
+	          padding-left: 160px; /* left col width "#menu" */
+	          left: 0;
+	      }
+	      #menu {
+	          left: 160px;
+	      }
+	      .menu-link {
+	          position: fixed;
+	          left: 160px;
+	          display: none;
+	      }
+	      #layout.active .menu-link {
+	          left: 160px;
+	      }
+
+	  }
+
+
+
+  </style>
+</head>
+
+<body>
+
+<div class="header">
+		<h1>RSocket</h1>
+	<h2>Application protocol providing Reactive Streams semantics</h2>
+
+	<a href="https://github.com/rsocket/rsocket">Spec</a> | 
+	<a href="https://github.com/ReactiveSocket/reactivesocket-tck">TCK</a> |
+	<a href="https://github.com/ReactiveSocket/reactivesocket-cpp">C++</a> | 
+	<a href="https://github.com/ReactiveSocket/reactivesocket-java">Java</a> |
+	<a href="https://github.com/ReactiveSocket/reactivesocket-js">Javascript</a> | 
+	<a href="https://github.com/rsocket/rsocket-wireshark">Wireshark</a> |
+	<a href="https://github.com/ReactiveSocket/reactivesocket-cli">CLI</a>
+
+</div>
+<div class="content">
+	
+	<p>
+  RSocket.
+  </p>
+	
+</div>
+</body>
+</html>
