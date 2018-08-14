@@ -8,10 +8,10 @@
 
   <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/base-min.css">
   <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
-  
+
   <style>
   /* copy/paste/modify from http://purecss.io/base/ on top of base-min.css from http://purecss.io/*/
-  
+
   /* --------------------------
    * Element Styles
    * --------------------------
@@ -246,11 +246,11 @@
 	      .header h1 {
 	          font-size: 220%;
 	      }
-		  
+
 	  }
-	  
+
 	  /* below are defaults from purecss.io */
-	  
+
 	  @media screen and (min-width: 35.5em) {
 
 	      .legal-license {
@@ -354,22 +354,22 @@
 <body>
 
 <div class="header">
-		<h1>RSocket</h1>
+		<h1><img src="images/r-socket-horizontal-grey.svg"  width="50%" alt="RSocket"></h1>
 	<h2>Application protocol providing Reactive Streams semantics</h2>
 
-	<a href="https://github.com/rsocket/rsocket">Spec</a> | 
+	<a href="https://github.com/rsocket/rsocket">Spec</a> |
 	<a href="https://github.com/rsocket/rsocket-tck">TCK</a> |
-	<a href="https://github.com/rsocket/rsocket-cpp">C++</a> | 
+	<a href="https://github.com/rsocket/rsocket-cpp">C++</a> |
 	<a href="https://github.com/rsocket/rsocket-java">Java</a> |
-	<a href="https://github.com/rsocket/rsocket-js">JavaScript</a> | 
+	<a href="https://github.com/rsocket/rsocket-js">JavaScript</a> |
 	<a href="https://github.com/rsocket/rsocket-wireshark">Wireshark</a> |
 	<a href="https://github.com/rsocket/rsocket-cli">CLI</a>
 
 </div>
 <div class="content">
-	
+
 <p>RSocket is a binary protocol for use on byte stream transports such as TCP, WebSockets, and Aeron. </p>
-	
+
 <p>It enables the following symmetric interaction models via async message passing over a single connection:</p>
 
 <ul>
@@ -379,10 +379,10 @@
 <li>channel (bi-directional streams)</li>
 </ul>
 
-<p>It supports session resumption, to allow resuming long-lived streams across different transport connections. 
+<p>It supports session resumption, to allow resuming long-lived streams across different transport connections.
    This is particularly useful for mobile<->server communication when network connections drop, switch, and reconnect frequently.
 </p>
-	
+
 <p>Detailed information can be found in these documents:</p>
 <ul>
   <li><a href="https://github.com/ReactiveSocket/reactivesocket/blob/master/Motivations.md">Motivations.md</a> - Why RSocket?</li>
@@ -391,10 +391,10 @@
 </ul>
 
 <p>Following is a brief example of a server and client in C++:</p>
-	
+
 <p>
 Example C++ server:
-</p>	  
+</p>
 	  <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">  <span style="color: #888888">// RSocket server accepting on TCP</span>
   <span style="color: #008800; font-weight: bold">auto</span> rs <span style="color: #333333">=</span> RSocket<span style="color: #333333">::</span>createServer(TcpConnectionAcceptor<span style="color: #333333">::</span>create(FLAGS_port));
   <span style="color: #888888">// global request handler</span>
@@ -403,9 +403,9 @@ Example C++ server:
   rs<span style="color: #333333">-&gt;</span>startAndPark([handler](<span style="color: #008800; font-weight: bold">auto</span> r) { <span style="color: #008800; font-weight: bold">return</span> handler; });
 </pre></div>
 
-<p>	
+<p>
 Example C++ client:
-</p>	
+</p>
 <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">  <span style="color: #008800; font-weight: bold">auto</span> rsf <span style="color: #333333">=</span> RSocket<span style="color: #333333">::</span>createClient(
       TcpConnectionFactory<span style="color: #333333">::</span>create(FLAGS_host, FLAGS_port));
 
@@ -416,7 +416,7 @@ Example C++ client:
 </pre></div>
 
 <p>
-	
+
 </div>
 </body>
 </html>
