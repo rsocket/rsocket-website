@@ -92,4 +92,4 @@ gradle-app.setting
 
 ### NODE ###
 
-**/node_modules/**
+website/node_modules/**
