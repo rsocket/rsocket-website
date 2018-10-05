@@ -44,7 +44,7 @@ const siteConfig = {
   footerIcon: 'img/r-socket-pink.svg',
   gaTrackingId: 'UA-12345678-9',
   highlight: {
-    theme: 'default',
+    theme: "default"
   },
   markdownPlugins: [
     function foo(md) {

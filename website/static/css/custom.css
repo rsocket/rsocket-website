@@ -15,6 +15,40 @@
 @media only screen and (min-width: 1500px) {
 }
 
+.hljs {
+    /* this -15px margin offsets the usual margin given to a page. This way it looks like this:
+        |        |
+      | myCode     |
+        |        |
+      instead of:
+        |        |
+        | myCode |
+        |        |
+      might not be clear as ascii comment, but the **code words inside the code
+      block** are aligned with the page's boundaries; previously the code block
+      itself starts at the boundary, then has extra padding. Now the code words
+      themselves are aligned with the rest of the page's paragraphs' starting
+      point
+     */
+    margin-left: -15px;
+    margin-right: -15px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    padding: 15px;
+    font-size: 15px;
+  
+    /* respect the section's max width, from .mainContainer .wrapper p */
+    max-width: 40rem;
+}
+.homeCodeSnippet pre {
+    background-color: white;
+}
+
+.homeCodeSnippet code {
+    margin: 0 auto;
+    width: 100%;
+}
+
 a {
     color: #ec1792;
 }
@@ -34,12 +68,9 @@ a {
     text-align: initial;
 }
 
-pre{
+pre {
     overflow: auto;
     background: #ddd;
-    padding-left: 10px;
-    padding-bottom: 10px;
-    padding-top: 10px;
     white-space: pre-line;
     white-space: -moz-pre-wrap;
     white-space: -o-pre-wrap;
