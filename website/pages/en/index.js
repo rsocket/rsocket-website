@@ -120,8 +120,7 @@ class Index extends React.Component {
     return (
       <div>
         <HomeSplash language={language} />
-        <div className="mainContainer">
-        <Container padding={['bottom', 'top']} background="light">
+        <div className="productShowcaseSection paddingBottom" style={{textAlign: "left",}}>
           <p>RSocket is a binary protocol for use on byte stream transports such as TCP, WebSockets, and Aeron.</p>
           <p>It enables the following symmetric interaction models via async message passing over a single connection:
             <div className="container">
@@ -170,7 +169,6 @@ class Index extends React.Component {
               .doOnTerminate(() -&#x203A; System.out.println("Sent " + count + " messages."))
               .blockLast();
           </p>
-        </Container>  
         </div>
       </div>
     );
