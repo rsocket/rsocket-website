@@ -12,6 +12,7 @@
     "docusaurus": "^1.4.0"
   },
   "dependencies": {
+    "docusaurus": "^1.4.0",
     "highlight.js": "^9.12.0"
   }
 }

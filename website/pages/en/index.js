@@ -120,56 +120,72 @@ class Index extends React.Component {
     return (
       <div>
         <HomeSplash language={language} />
-        <div className="productShowcaseSection paddingBottom" style={{textAlign: "left",}}>
-          <p>RSocket is a binary protocol for use on byte stream transports such as TCP, WebSockets, and Aeron.</p>
-          <p>It enables the following symmetric interaction models via async message passing over a single connection:
+        <Container>
+          <div className="productShowcaseSection paddingBottom" style={{textAlign: "left",}}>
+            <p>RSocket is a binary protocol for use on byte stream transports such as TCP, WebSockets, and Aeron.</p>
+            <p>It enables the following symmetric interaction models via async message passing over a single connection:
+              <div className="container">
+                <ul>
+                  <li>request/response (stream of 1)</li>
+                  <li>request/stream (finite stream of many)</li>
+                  <li>fire-and-forget (no response)</li>
+                  <li>channel (bi-directional streams)</li>
+                </ul>
+              </div>
+            </p>
+            <p>It supports session resumption, to allow resuming long-lived streams across different transport connections. This is particularly useful for mobile&lsaquo;&ndash;&rsaquo;server communication when network connections drop, switch, and reconnect frequently. </p>
+            <p>Detailed information can be found in these documents:</p>
             <div className="container">
               <ul>
-                <li>request/response (stream of 1)</li>
-                <li>request/stream (finite stream of many)</li>
-                <li>fire-and-forget (no response)</li>
-                <li>channel (bi-directional streams)</li>
+                <li><a href={docUrl('FAQ')}>FAQ</a> - Frequently Asked Questions</li>
+                <li><a href={docUrl('Motivations')}>Motivations</a> - Why RSocket?</li>
+                <li><a href={docUrl('Protocol')}>Protocol</a> - The Protocol</li>
               </ul>
             </div>
-          </p>
-          <p>It supports session resumption, to allow resuming long-lived streams across different transport connections. This is particularly useful for mobile&lsaquo;&ndash;&rsaquo;server communication when network connections drop, switch, and reconnect frequently. </p>
-          <p>Detailed information can be found in these documents:</p>
-          <div className="container">
-            <ul>
-              <li><a href={docUrl('FAQ')}>FAQ</a> - Frequently Asked Questions</li>
-              <li><a href={docUrl('Motivations')}>Motivations</a> - Why RSocket?</li>
-              <li><a href={docUrl('Protocol')}>Protocol</a> - The Protocol</li>
-            </ul>
+            <p>Following is a brief example of a server and client in Java:</p>
+            <p>Example Java Server:</p>
+            <div className="homeCodeSnippet">
+              <MarkdownBlock>
+              {
+`\`\`\`java
+RSocketFactory.receive()
+    .frameDecoder(Frame::retain)
+    .acceptor(new PingHandler())
+    .transport(TcpServerTransport.create(7878))
+    .start()
+    .block()
+    .onClose();
+`
+              }
+              </MarkdownBlock>
+            </div>
+            <p>Example Java Client:</p>
+            <div className="homeCodeSnippet">
+              <MarkdownBlock className="homeCodeSnippet">
+                  {
+`\`\`\`java
+Mono<RSocket> client =
+    RSocketFactory.connect()
+        .frameDecoder(Frame::retain)
+        .transport(TcpClientTransport.create(7878))
+        .start();
+
+PingClient pingClient = new PingClient(client);
+
+Recorder recorder = pingClient.startTracker(Duration.ofSeconds(1));
+
+int count = 1_000;
+
+pingClient
+    .startPingPong(count, recorder)
+    .doOnTerminate(() -> System.out.println("Sent " + count + " messages."))
+    .blockLast();
+`
+                  }
+              </MarkdownBlock>
+            </div>
           </div>
-          <p>Following is a brief example of a server and client in Java:</p>
-          <p>Example Java Server:</p>
-          <p>RSocketFactory.receive()
-                .frameDecoder(Frame::retain)
-                .acceptor(new PingHandler())
-                .transport(TcpServerTransport.create(7878))
-                .start()
-                .block()
-                .onClose();</p>
-          <p>Example Java Client:</p>
-          <p>
-          Mono&#x2039;RSocket&#x203A; client =
-              RSocketFactory.connect()
-                  .frameDecoder(Frame::retain)
-                  .transport(TcpClientTransport.create(7878))
-                  .start();
-
-          PingClient pingClient = new PingClient(client);
-
-          Recorder recorder = pingClient.startTracker(Duration.ofSeconds(1));
-
-          int count = 1_000;
-
-          pingClient
-              .startPingPong(count, recorder)
-              .doOnTerminate(() -&#x203A; System.out.println("Sent " + count + " messages."))
-              .blockLast();
-          </p>
-        </div>
+        </Container>
       </div>
     );
   }
