@@ -54,7 +54,7 @@ class Footer extends React.Component {
             </a>
             <a href={this.pageUrl('slack')}>Slack</a>
             <a
-              href="https://twitter.com/"
+              href="https://twitter.com/RSocketIO"
               target="_blank"
               rel="noreferrer noopener">
               Twitter
