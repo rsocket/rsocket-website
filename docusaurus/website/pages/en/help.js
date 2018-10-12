@@ -46,7 +46,7 @@ class Help extends React.Component {
             <header className="postHeader">
               <h1>Need help?</h1>
             </header>
-            <p>This project is maintained by a dedicated group of people from <a href="https://opensource.fb.com/">Facebook</a>, <a href="https://pivotal.io/open-source">Pivotal</a>, and <a href="http://www.netifi.com">Netifi</a>.</p>
+            <p>This project is maintained by a dedicated group of people from <a href="https://opensource.fb.com/">Facebook</a>, <a href="https://pivotal.io/open-source">Pivotal</a>, and <a href="https://www.netifi.com/rsocket">Netifi</a>.</p>
             <GridBlock contents={supportLinks} layout="threeColumn" />
           </div>
         </Container>
