@@ -36,7 +36,7 @@
     border-radius: 6px;
     padding: 15px;
     font-size: 15px;
-  
+
     /* respect the section's max width, from .mainContainer .wrapper p */
     max-width: 40rem;
 }
@@ -56,13 +56,10 @@ a {
 .container {
     margin-left: auto;
     margin-right: auto;
-    text-align: center;
 }
 
 .container ul {
-    width: 35%;
     margin: auto;
-    display: inline-block;
 
     /* One most likely needs to realign flow content */
     text-align: initial;
@@ -75,4 +72,16 @@ pre {
     white-space: -moz-pre-wrap;
     white-space: -o-pre-wrap;
     white-space: -ms-pre-wrap;
+}
+
+/* Matches lists padding with paragraphs padding on the main site */
+.productShowcaseSection ul {
+    margin: 0 auto;
+    max-width: 560px;
+    padding: 0.8em 2em;
+}
+
+/* Adds small padding in TOC menu items */
+.toc .toggleNav ul {
+    padding: 0 8px;
 }
