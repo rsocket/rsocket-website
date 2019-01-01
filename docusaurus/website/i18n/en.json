@@ -5,10 +5,6 @@
     "previous": "Previous",
     "tagline": "Application protocol providing Reactive Streams semantics",
     "docs": {
-      "doc1": {
-        "title": "Latin-ish",
-        "sidebar_label": "Example Page"
-      },
       "FAQ": {
         "title": "FAQ",
         "sidebar_label": "FAQ"
