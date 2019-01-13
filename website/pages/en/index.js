@@ -142,6 +142,7 @@ class Index extends React.Component {
                 <li><a href={docUrl('Protocol')}>Protocol</a> - The Protocol</li>
               </ul>
             </div>
+            <p>Join the <a href="https://community.netifi.com/c/rsocket">RSocket Community Forums</a> to learn more about RSocket, get your RSocket questions answered, and interact with other RSocket developers.</p>
             <p>Following is a brief example of a server and client in Java:</p>
             <p>Example Java Server:</p>
             <div className="homeCodeSnippet">

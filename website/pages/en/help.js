@@ -23,19 +23,12 @@ class Help extends React.Component {
     const language = this.props.language || '';
     const supportLinks = [
       {
-        content: `Learn more about the motivations for RSocket [here.](${docUrl(
-          'Motivations.html',
-          language
-        )})`,
-        title: 'Browse Docs',
+        content: `Learn more about the [motivations](${docUrl('Motivations.html', language)}) behind RSocket and details of the [protocol](${docUrl('Protocol.html', language)}).`,
+        title: 'Browse Documentation',
       },
       {
-        content: 'Ask questions about the documentation and project',
-        title: 'Join the community',
-      },
-      {
-        content: "Find out what's new with this project",
-        title: 'Stay up to date',
+        content: `Ask questions about the documentation and project on the <a href="https://community.netifi.com/c/rsocket">RSocket Forums</a>.`,
+        title: 'Join the Community',
       },
     ];
 
