@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>RSocket Blog</title>
+        <link>https://rsocket.io/blog</link>
+        <description>The best place to stay up-to-date with the latest RSocket news and events.</description>
+        <lastBuildDate>Mon, 08 Oct 2018 06:00:00 GMT</lastBuildDate>
+        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+        <generator>Feed for Node.js</generator>
+        <image>
+            <title>RSocket Blog</title>
+            <url>https://rsocket.io/img/r-socket-pink.svg</url>
+            <link>https://rsocket.io/blog</link>
+        </image>
+        <copyright>Copyright © 2019 RSocket Contributors</copyright>
+        <item>
+            <title><![CDATA[Welcome]]></title>
+            <link>https://rsocket.io/blog/2018/10/08.html</link>
+            <guid>https://rsocket.io/blog/2018/10/08.html</guid>
+            <pubDate>Mon, 08 Oct 2018 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>Welcome to the new RSocket website. More information is coming soon. In the meantime check out this great <a href="https://www.youtube.com/watch?v=e-N4BchYXws">RSocket overview</a> by <a href="https://twitter.com/nebhale">Ben Hale</a>.</p> ]]></description>
+        </item>
+    </channel>
+</rss>
