@@ -76,6 +76,7 @@ class HomeSplash extends React.Component {
             <Button href={docUrl("Protocol.html")}>Spec</Button>
             <Button href="https://github.com/rsocket/rsocket-java">Java</Button>
             <Button href="https://github.com/rsocket/rsocket-js">JavaScript</Button>
+            <Button href="https://github.com/rsocket/rsocket-net">.Net</Button>
             <Button href="https://github.com/rsocket/rsocket-cpp">C++</Button>
             <Button href="https://github.com/rsocket/rsocket-kotlin">Kotlin</Button>
           </PromoSection>
