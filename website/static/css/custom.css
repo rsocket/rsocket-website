@@ -1,0 +1,87 @@
+/* your custom css */
+
+@media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
+}
+
+@media only screen and (min-width: 1024px) {
+}
+
+@media only screen and (max-width: 1023px) {
+}
+
+@media only screen and (min-width: 1400px) {
+}
+
+@media only screen and (min-width: 1500px) {
+}
+
+.hljs {
+    /* this -15px margin offsets the usual margin given to a page. This way it looks like this:
+        |        |
+      | myCode     |
+        |        |
+      instead of:
+        |        |
+        | myCode |
+        |        |
+      might not be clear as ascii comment, but the **code words inside the code
+      block** are aligned with the page's boundaries; previously the code block
+      itself starts at the boundary, then has extra padding. Now the code words
+      themselves are aligned with the rest of the page's paragraphs' starting
+      point
+     */
+    margin-left: -15px;
+    margin-right: -15px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    padding: 15px;
+    font-size: 15px;
+
+    /* respect the section's max width, from .mainContainer .wrapper p */
+    max-width: 40rem;
+}
+.homeCodeSnippet pre {
+    background-color: white;
+}
+
+.homeCodeSnippet code {
+    margin: 0 auto;
+    width: 100%;
+}
+
+a {
+    color: #ec1792;
+}
+
+.container {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.container ul {
+    margin: auto;
+
+    /* One most likely needs to realign flow content */
+    text-align: initial;
+}
+
+pre {
+    overflow: auto;
+    background: #ddd;
+    white-space: pre-line;
+    white-space: -moz-pre-wrap;
+    white-space: -o-pre-wrap;
+    white-space: -ms-pre-wrap;
+}
+
+/* Matches lists padding with paragraphs padding on the main site */
+.productShowcaseSection ul {
+    margin: 0 auto;
+    max-width: 560px;
+    padding: 0.8em 2em;
+}
+
+/* Adds small padding in TOC menu items */
+.toc .toggleNav ul {
+    padding: 0 8px;
+}
