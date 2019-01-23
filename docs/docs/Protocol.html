@@ -1,0 +1,1151 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Protocol · RSocket</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;h1&gt;&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; id=&quot;status&quot;&gt;&lt;/a&gt;&lt;a href=&quot;#status&quot; aria-hidden=&quot;true&quot; class=&quot;hash-link&quot;&gt;&lt;svg class=&quot;hash-link-icon&quot; aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Status&lt;/h1&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Protocol · RSocket"/><meta property="og:type" content="website"/><meta property="og:url" content="https://rsocket.io/index.html"/><meta property="og:description" content="&lt;h1&gt;&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; id=&quot;status&quot;&gt;&lt;/a&gt;&lt;a href=&quot;#status&quot; aria-hidden=&quot;true&quot; class=&quot;hash-link&quot;&gt;&lt;svg class=&quot;hash-link-icon&quot; aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;Status&lt;/h1&gt;
+"/><meta property="og:image" content="https://rsocket.io/img/r-rsocket-pink.png"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/img/favicon.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script>
+              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+              ga('create', 'UA-12345678-9', 'auto');
+              ga('send', 'pageview');
+            </script><link rel="stylesheet" href="https://docusaurus.io/style.css"/><link rel="stylesheet" href="http://css.link" type="text/css"/><script type="text/javascript" src="https://docusaurus.io/slash.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js" async=""></script><script src="https://unpkg.com/vanilla-back-to-top@7.1.14/dist/vanilla-back-to-top.min.js"></script><script>
+        document.addEventListener('DOMContentLoaded', function() {
+          addBackToTop(
+            {"zIndex":100}
+          )
+        });
+        </script><link rel="stylesheet" href="/css/prism.css"/><link rel="stylesheet" href="/css/main.css"/></head><body class="sideNavVisible"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/r-socket-pink.svg" alt="RSocket"/></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/docs/FAQ" target="_self">About</a></li><li class=""><a href="https://github.com/rsocket" target="_self">GitHub</a></li><li class=""><a href="/help" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>About</span></h2></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">About</h3><ul><li class="navListItem"><a class="navItem" href="/docs/FAQ">FAQ</a></li><li class="navListItem"><a class="navItem" href="/docs/Motivations">Motivations</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs/Protocol">Protocol</a></li></ul></div></div></section></div><script>
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><a class="edit-page-link button" href="https://github.com/facebook/docusaurus/edit/master/docs/Protocol.md" target="_blank" rel="noreferrer noopener">Edit</a><h1 class="postHeaderTitle">Protocol</h1></header><article><div><span><h1><a class="anchor" aria-hidden="true" id="status"></a><a href="#status" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Status</h1>
+<p>This protocol is currently a draft for the final specifications.
+Current version of the protocol is <strong>0.2</strong> (Major Version: 0, Minor Version: 2). This is currently considered a 1.0 Release Candidate. Final testing is being done in Java and C++ implementations with goal to release 1.0 in the near future.</p>
+<h2><a class="anchor" aria-hidden="true" id="introduction"></a><a href="#introduction" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Introduction</h2>
+<p>Specify an application protocol for <a href="http://www.reactive-streams.org/">Reactive Streams</a> semantics across an asynchronous, binary
+boundary. For more information, please see <a href="http://rsocket.io/">rsocket.io</a>.</p>
+<p>RSocket assumes an operating paradigm. These assumptions are:</p>
+<ul>
+<li><p>one-to-one communication</p></li>
+<li><p>non-proxied communication. Or if proxied, the RSocket semantics and assumptions are preserved across the proxy.</p></li>
+<li><p>no state preserved across <a href="#transport-protocol">transport protocol</a> sessions by the protocol</p></li>
+</ul>
+<p>Key words used by this document conform to the meanings in <a href="https://tools.ietf.org/html/rfc2119">RFC 2119</a>.</p>
+<p>Byte ordering is big endian for all fields.</p>
+<h2><a class="anchor" aria-hidden="true" id="table-of-contents"></a><a href="#table-of-contents" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Table of Contents</h2>
+<ul>
+<li><a href="#terminology">Terminology</a></li>
+<li><a href="#versioning-scheme">Versioning Scheme</a></li>
+<li><a href="#data-and-metadata">Data and Metadata</a></li>
+<li><a href="#framing">Framing</a>
+<ul>
+<li><a href="#transport-protocol">Transport Protocol</a></li>
+<li><a href="#framing-protocol-usage">Framing Protocol Usage</a></li>
+<li><a href="#framing-format">Framing Format</a></li>
+<li><a href="#frame-header-format">Frame Header Format</a></li>
+<li><a href="#stream-identifiers">Stream Identifiers</a></li>
+<li><a href="#frame-types">Frame Types</a></li>
+</ul></li>
+<li><a href="#resuming-operation">Resuming Operation</a></li>
+<li><a href="#connection-establishment">Connection Establishment</a></li>
+<li><a href="#fragmentation-and-reassembly">Fragmentation and Reassembly</a></li>
+<li><a href="#stream-sequences-and-lifetimes">Stream Sequences and Lifetimes</a>
+<ul>
+<li><a href="#stream-sequences-request-response">Request Response</a></li>
+<li><a href="#stream-sequences-fire-and-forget">Fire and Forget</a></li>
+<li><a href="#stream-sequences-request-stream">Request Stream</a></li>
+<li><a href="#stream-sequences-channel">Request Channel</a></li>
+</ul></li>
+<li><a href="#flow-control">Flow Control</a>
+<ul>
+<li><a href="#flow-control-reactive-streams">Reactive Stream Semantics</a></li>
+<li><a href="#flow-control-lease">Lease Semantics</a></li>
+<li><a href="#flow-control-qos">QoS and Prioritization</a></li>
+</ul></li>
+<li><a href="#handling-the-unexpected">Handling the Unexpected</a></li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="terminology"></a><a href="#terminology" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Terminology</h2>
+<ul>
+<li><strong>Frame</strong>: A single message containing a request, response, or protocol processing.</li>
+<li><strong>Fragment</strong>: A portion of an application message that has been partitioned for inclusion in a Frame.
+See <a href="#fragmentation-and-reassembly">Fragmentation and Reassembly</a>.</li>
+<li><strong>Transport</strong>: Protocol used to carry RSocket protocol. One of WebSockets, TCP, or Aeron. The transport MUST
+provide capabilities mentioned in the <a href="#transport-protocol">transport protocol</a> section.</li>
+<li><strong>Stream</strong>: Unit of operation (request/response, etc.). See <a href="/docs/Motivations">Motivations</a>.</li>
+<li><strong>Request</strong>: A stream request. May be one of four types. As well as request for more items or cancellation of previous request.</li>
+<li><strong>Payload</strong>: A stream message (upstream or downstream). Contains data associated with a stream created by a previous request. In Reactive Streams and Rx this is the 'onNext' event.</li>
+<li><strong>Complete</strong>: Terminal event sent on a stream to signal successful completion. In Reactive Streams and Rx this is the 'onComplete' event.
+<ul>
+<li>A frame (PAYLOAD or REQUEST_CHANNEL) with the Complete bit set is sometimes referred to as COMPLETE in this document when reference to the frame is semantically about the Complete bit/event.</li>
+</ul></li>
+<li><strong>Client</strong>: The side initiating a connection.</li>
+<li><strong>Server</strong>: The side accepting connections from clients.</li>
+<li><strong>Connection</strong>: The instance of a transport session between client and server.</li>
+<li><strong>Requester</strong>: The side sending a request. A connection has at most 2 Requesters. One in each direction.</li>
+<li><strong>Responder</strong>: The side receiving a request. A connection has at most 2 Responders. One in each direction.</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="versioning-scheme"></a><a href="#versioning-scheme" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Versioning Scheme</h2>
+<p>RSocket follows a versioning scheme consisting of a numeric major version and a numeric minor version.</p>
+<h3><a class="anchor" aria-hidden="true" id="cross-version-compatibility"></a><a href="#cross-version-compatibility" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Cross version compatibility</h3>
+<p>RSocket assumes that all version changes (major and minor) are backward incompatible.
+A client can pass a version that it supports via the <a href="#frame-setup">Setup Frame</a>.
+It is up to a server to accept clients of lower versions than what it supports.</p>
+<h2><a class="anchor" aria-hidden="true" id="data-and-metadata"></a><a href="#data-and-metadata" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Data And Metadata</h2>
+<p>RSocket provides mechanisms for applications to distinguish payload into two types. Data and Metadata. The distinction
+between the types in an application is left to the application.</p>
+<p>The following are features of Data and Metadata.</p>
+<ul>
+<li>Metadata can be encoded differently than Data.</li>
+<li>Metadata can be &quot;attached&quot; (i.e. correlated) with the following entities:</li>
+<li>Connection via Metadata Push and Stream ID of 0</li>
+<li>Individual Request or Payload (upstream or downstream)</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="framing"></a><a href="#framing" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Framing</h2>
+<h3><a class="anchor" aria-hidden="true" id="transport-protocol"></a><a href="#transport-protocol" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Transport Protocol</h3>
+<p>The RSocket protocol uses a lower level transport protocol to carry RSocket frames. A transport protocol MUST provide the following:</p>
+<ol>
+<li>Unicast <a href="https://en.wikipedia.org/wiki/Reliability_(computer_networking)">Reliable Delivery</a>.</li>
+<li><a href="https://en.wikipedia.org/wiki/Connection-oriented_communication">Connection-Oriented</a> and preservation of frame ordering. Frame A sent before Frame B MUST arrive in source order. i.e. if Frame A is sent by the same source as Frame B, then Frame A will always arrive before Frame B. No assumptions about ordering across sources is assumed.</li>
+<li><a href="https://en.wikipedia.org/wiki/Frame_check_sequence">FCS</a> is assumed to be in use either at the transport protocol or at each MAC layer hop. But no protection against malicious corruption is assumed.</li>
+</ol>
+<p>An implementation MAY &quot;close&quot; a transport connection due to protocol processing. When this occurs, it is assumed that the connection will have no further frames sent and all frames will be ignored.</p>
+<p>RSocket as specified here has been designed for and tested with TCP, WebSocket, Aeron, and <a href="https://http2.github.io/http2-spec/#StreamsLayer">HTTP/2 streams</a> as transport protocols.</p>
+<h3><a class="anchor" aria-hidden="true" id="framing-protocol-usage"></a><a href="#framing-protocol-usage" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Framing Protocol Usage</h3>
+<p>Some of the supported transport protocols for RSocket may not support specific framing that preserves message boundaries. For these protocols, a framing protocol MUST be used with the RSocket frame that prepends the RSocket Frame Length.</p>
+<p>The frame length field MUST be omitted if the transport protocol preserves message boundaries e.g. provides compatible framing. If, however, the transport protocol only provides a stream abstraction or can merge messages without preserving boundaries, or multiple transport protocols may be used, then the frame header MUST be used.</p>
+<table>
+<thead>
+<tr><th style="text-align:left">Transport Protocol</th><th style="text-align:left">Frame Length Field Required</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align:left">TCP</td><td style="text-align:left"><strong>YES</strong></td></tr>
+<tr><td style="text-align:left">WebSocket</td><td style="text-align:left"><strong>NO</strong></td></tr>
+<tr><td style="text-align:left">Aeron</td><td style="text-align:left"><strong>NO</strong></td></tr>
+<tr><td style="text-align:left">HTTP/2 Stream</td><td style="text-align:left"><strong>YES</strong></td></tr>
+</tbody>
+</table>
+<h3><a class="anchor" aria-hidden="true" id="framing-format"></a><a href="#framing-format" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Framing Format</h3>
+<p>When using a transport protocol providing framing, the RSocket frame is simply encapsulated into the transport protocol messages directly.</p>
+<pre><code class="hljs">    +<span class="hljs-params">-----------------------------------------------</span>+
+    |                RSocket Frame          <span class="hljs-string">...</span>
+    |                                              
+    +<span class="hljs-params">-----------------------------------------------</span>+
+</code></pre>
+<p>When using a transport protocol that does not provide compatible framing, the Frame Length MUST be prepended to the RSocket Frame.</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                    Frame Length               |
+    +-----------------------------------------------+
+    |                RSocket Frame          ...
+    |                                              
+    +-----------------------------------------------+
+</code></pre>
+<ul>
+<li><strong>Frame Length</strong>: (24 bits = max value 16,777,215) Unsigned 24-bit integer representing the length of Frame in bytes. Excluding the Frame Length field.</li>
+</ul>
+<p><strong>NOTE</strong>: Byte ordering is big endian.</p>
+<h3><a class="anchor" aria-hidden="true" id="frame-header-format"></a><a href="#frame-header-format" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Frame Header Format</h3>
+<p>RSocket frames begin with a RSocket Frame Header. The general layout is given below.</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |<span class="hljs-number">0</span>|                         Stream ID                           |
+    +-----------+-+-+---------------+-------------------------------+
+    |Frame Type |I|M|     Flags     |     Depends on Frame Type    ...
+    +-------------------------------+
+</code></pre>
+<ul>
+<li><strong>Stream ID</strong>: (31 bits = max value 2^31-1 = 2,147,483,647) Unsigned 31-bit integer representing the stream Identifier for this frame or 0 to indicate the entire connection.
+<ul>
+<li>Transport protocols that include demultiplexing, such as HTTP/2, MAY omit the Stream ID field if all parties agree. The means of negotiation and agreement is left to the transport protocol.</li>
+</ul></li>
+<li><strong>Frame Type</strong>: (6 bits = max value 63) Type of Frame.</li>
+<li><strong>Flags</strong>: (10 bits) Any Flag bit not specifically indicated in the frame type should be set to 0 when sent and not interpreted on
+reception. Flags generally depend on Frame Type, but all frame types MUST provide space for the following flags:
+<ul>
+<li>(<strong>I</strong>)gnore: Ignore frame if not understood</li>
+<li>(<strong>M</strong>)etadata: Metadata present</li>
+</ul></li>
+</ul>
+<p><strong>NOTE</strong>: Byte ordering is big endian.</p>
+<h4><a class="anchor" aria-hidden="true" id="handling-ignore-flag"></a><a href="#handling-ignore-flag" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Handling Ignore Flag</h4>
+<p>The (<strong>I</strong>)gnore flag is used for extension of the protocol. A value of 0 in a frame for this flag indicates the protocol can't
+ignore this frame. An implementation MAY send an ERROR[CONNECTION_ERROR] frame and close the underlying transport
+connection on reception of a frame that it does not understand with this bit not set.</p>
+<h4><a class="anchor" aria-hidden="true" id="frame-validation"></a><a href="#frame-validation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Frame Validation</h4>
+<p>RSocket implementations may provide their own validation at the metadata level for specific frames. However, this is an application concern and not necessary for protocol processing.</p>
+<h4><a class="anchor" aria-hidden="true" id="metadata-optional-header"></a><a href="#metadata-optional-header" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Metadata Optional Header</h4>
+<p>Specific Frame Types MAY contain Metadata. If that Frame Type supports both Data and Metadata, the optional Metadata header MUST be included. This metadata header is between the Frame Header and any payload.</p>
+<p>Metadata Length MUST be equal to the Frame Length minus the sum of the length of the Frame Header and the length of the Frame Payload, if present. If Metadata Length is not equal to this value, the frame is invalid and the receiver MUST send an ERROR[CONNECTION_ERROR] frame and close the underlying transport connection on reception unless the frame's IGNORE flag is set.</p>
+<p>On a frame with Data and Metadata:</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |              Metadata Length                  |
+    +---------------------------------------------------------------+
+    |                       Metadata Payload                       ...
+    +---------------------------------------------------------------+
+    |                       Payload of Frame                       ...
+    +---------------------------------------------------------------+
+</code></pre>
+<p>On a frame that supports Data and Metadata, but Data length is 0:</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |              Metadata Length                  |
+    +---------------------------------------------------------------+
+    |                       Metadata Payload                       ...
+    +---------------------------------------------------------------+
+</code></pre>
+<p>On a frame that only has Metadata, the Metadata length field is NOT needed:</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                       Metadata Payload                       ...
+    +---------------------------------------------------------------+
+</code></pre>
+<ul>
+<li><strong>Metadata Length</strong>: (24 bits = max value 16,777,215) Unsigned 24-bit integer representing the length of Metadata in bytes. Excluding Metadata Length field.</li>
+</ul>
+<p><a name="stream-identifiers"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="stream-identifiers"></a><a href="#stream-identifiers" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Stream Identifiers</h3>
+<h4><a class="anchor" aria-hidden="true" id="generation"></a><a href="#generation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Generation</h4>
+<p>Stream IDs are generated by a Requester. The lifetime of a Stream ID is determined by the request type and
+the semantics of the stream based on its type.</p>
+<p>Stream ID value of 0 is reserved for any operation involving the connection.</p>
+<p>A Stream ID MUST be locally unique for a Requester in a connection.</p>
+<p>Stream ID generation follows general guidelines for <a href="https://tools.ietf.org/html/rfc7540">HTTP/2</a> with respect
+to odd/even values. In other words, a client MUST generate odd Stream IDs and a server MUST generate even Stream IDs.</p>
+<p>Stream IDs on the client MUST start at 1 and increment by 2 sequentially, such as 1, 3, 5, 7, etc.</p>
+<p>Stream IDs on the server MUST start at 2 and increment by 2 sequentially, such as 2, 4, 6, 8, etc.</p>
+<h4><a class="anchor" aria-hidden="true" id="lifetime"></a><a href="#lifetime" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Lifetime</h4>
+<p>Once the max Stream ID has been used (2^31-1), the Requester MAY re-use Stream IDs. A Responder MUST assume Stream IDs will be re-used.</p>
+<p>When the max Stream ID has been used:</p>
+<ol>
+<li>If Stream ID re-use is not employed:</li>
+</ol>
+<ul>
+<li>No new streams can be created, thus a new connection MUST be established to create new streams once the max has been met.</li>
+</ul>
+<ol start="2">
+<li>If Stream IDs are re-used:</li>
+</ol>
+<ul>
+<li>The Requester MUST re-use IDs by wrapping and restarting at ID 1 for client, and ID 2 for server, and incrementing sequentially by 2s as stated above.</li>
+<li>The Requester MUST skip IDs still in use.</li>
+<li>The Responder MAY choose to ERROR[REJECT] any Stream ID if it considers the ID still in use. The Requester MAY retry on the next sequential Stream ID considered unused.</li>
+<li>If all Stream IDs are concurrently in use, no new streams can be created, thus a new connection MUST be established to create new streams.</li>
+</ul>
+<p>It is RECOMMENDED that Stream ID re-use only be used in combination with resumability.</p>
+<h3><a class="anchor" aria-hidden="true" id="frame-types"></a><a href="#frame-types" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Frame Types</h3>
+<table>
+<thead>
+<tr><th style="text-align:left">Type</th><th style="text-align:left">Value</th><th style="text-align:left">Description</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align:left"><strong>RESERVED</strong></td><td style="text-align:left">0x00</td><td style="text-align:left"><strong>Reserved</strong></td></tr>
+<tr><td style="text-align:left"><a href="#frame-setup"><strong>SETUP</strong></a></td><td style="text-align:left">0x01</td><td style="text-align:left"><strong>Setup</strong>: Sent by client to initiate protocol processing.</td></tr>
+<tr><td style="text-align:left"><a href="#frame-lease"><strong>LEASE</strong></a></td><td style="text-align:left">0x02</td><td style="text-align:left"><strong>Lease</strong>: Sent by Responder to grant the ability to send requests.</td></tr>
+<tr><td style="text-align:left"><a href="#frame-keepalive"><strong>KEEPALIVE</strong></a></td><td style="text-align:left">0x03</td><td style="text-align:left"><strong>Keepalive</strong>: Connection keepalive.</td></tr>
+<tr><td style="text-align:left"><a href="#frame-request-response"><strong>REQUEST_RESPONSE</strong></a></td><td style="text-align:left">0x04</td><td style="text-align:left"><strong>Request Response</strong>: Request single response.</td></tr>
+<tr><td style="text-align:left"><a href="#frame-fnf"><strong>REQUEST_FNF</strong></a></td><td style="text-align:left">0x05</td><td style="text-align:left"><strong>Fire And Forget</strong>: A single one-way message.</td></tr>
+<tr><td style="text-align:left"><a href="#frame-request-stream"><strong>REQUEST_STREAM</strong></a></td><td style="text-align:left">0x06</td><td style="text-align:left"><strong>Request Stream</strong>: Request a completable stream.</td></tr>
+<tr><td style="text-align:left"><a href="#frame-request-channel"><strong>REQUEST_CHANNEL</strong></a></td><td style="text-align:left">0x07</td><td style="text-align:left"><strong>Request Channel</strong>: Request a completable stream in both directions.</td></tr>
+<tr><td style="text-align:left"><a href="#frame-request-n"><strong>REQUEST_N</strong></a></td><td style="text-align:left">0x08</td><td style="text-align:left"><strong>Request N</strong>: Request N more items with Reactive Streams semantics.</td></tr>
+<tr><td style="text-align:left"><a href="#frame-cancel"><strong>CANCEL</strong></a></td><td style="text-align:left">0x09</td><td style="text-align:left"><strong>Cancel Request</strong>: Cancel outstanding request.</td></tr>
+<tr><td style="text-align:left"><a href="#frame-payload"><strong>PAYLOAD</strong></a></td><td style="text-align:left">0x0A</td><td style="text-align:left"><strong>Payload</strong>: Payload on a stream. For example, response to a request, or message on a channel.</td></tr>
+<tr><td style="text-align:left"><a href="#frame-error"><strong>ERROR</strong></a></td><td style="text-align:left">0x0B</td><td style="text-align:left"><strong>Error</strong>: Error at connection or application level.</td></tr>
+<tr><td style="text-align:left"><a href="#frame-metadata-push"><strong>METADATA_PUSH</strong></a></td><td style="text-align:left">0x0C</td><td style="text-align:left"><strong>Metadata</strong>: Asynchronous Metadata frame</td></tr>
+<tr><td style="text-align:left"><a href="#frame-resume"><strong>RESUME</strong></a></td><td style="text-align:left">0x0D</td><td style="text-align:left"><strong>Resume</strong>: Replaces SETUP for Resuming Operation (optional)</td></tr>
+<tr><td style="text-align:left"><a href="#frame-resume-ok"><strong>RESUME_OK</strong></a></td><td style="text-align:left">0x0E</td><td style="text-align:left"><strong>Resume OK</strong> : Sent in response to a RESUME if resuming operation possible (optional)</td></tr>
+<tr><td style="text-align:left"><a href="#frame-ext"><strong>EXT</strong></a></td><td style="text-align:left">0x3F</td><td style="text-align:left"><strong>Extension Header</strong>: Used To Extend more frame types as well as extensions.</td></tr>
+</tbody>
+</table>
+<p><a name="frame-setup"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="setup-frame-0x01"></a><a href="#setup-frame-0x01" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>SETUP Frame (0x01)</h3>
+<p>Setup frames MUST always use Stream ID 0 as they pertain to the connection.</p>
+<p>The SETUP frame is sent by the client to inform the server of the parameters under which it desires
+to operate. The usage and message sequence used is shown in <a href="#connection-establishment">Connection Establishment</a>.</p>
+<p>One of the important parameters for a connection is the format, layout, and any schema of the data and metadata for
+frames. This is, for lack of a better term, referred to here as &quot;MIME Type&quot;. An implementation MAY use typical MIME type
+values or MAY decide to use specific non-MIME type values to indicate format, layout, and any schema
+for data and metadata. The protocol implementation MUST NOT interpret the MIME type itself. This is an application
+concern only.</p>
+<p>The encoding format for Data and Metadata are included separately in the SETUP.</p>
+<p>Frame Contents</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                         Stream ID = <span class="hljs-number">0</span>                         |
+    +-----------+-+-+-+-+-----------+-------------------------------+
+    |Frame Type |<span class="hljs-number">0</span>|M|R|L|  Flags    |
+    +-----------+-+-+-+-+-----------+-------------------------------+
+    |         Major Version         |        Minor Version          |
+    +-------------------------------+-------------------------------+
+    |<span class="hljs-number">0</span>|                 Time Between KEEPALIVE Frames               |
+    +---------------------------------------------------------------+
+    |<span class="hljs-number">0</span>|                       Max Lifetime                          |
+    +---------------------------------------------------------------+
+    |         Token Length          | Resume Identification Token  ...
+    +---------------+-----------------------------------------------+
+    |  MIME Length  |   Metadata Encoding MIME Type                ...
+    +---------------+-----------------------------------------------+
+    |  MIME Length  |     Data Encoding MIME Type                  ...
+    +---------------+-----------------------------------------------+
+                          Metadata &amp; Setup Payload
+</code></pre>
+<ul>
+<li><strong>Frame Type</strong>: (6 bits) 0x01</li>
+<li><strong>Flags</strong>: (10 bits)
+<ul>
+<li>(<strong>M</strong>)etadata: Metadata present</li>
+<li>(<strong>R</strong>)esume Enable: Client requests resume capability if possible. Resume Identification Token present.</li>
+<li>(<strong>L</strong>)ease: Will honor LEASE (or not).</li>
+</ul></li>
+<li><strong>Major Version</strong>: (16 bits = max value 65,535) Unsigned 16-bit integer of Major version number of the protocol.</li>
+<li><strong>Minor Version</strong>: (16 bits = max value 65,535) Unsigned 16-bit integer of Minor version number of the protocol.</li>
+<li><strong>Time Between KEEPALIVE Frames</strong>: (31 bits = max value 2^31-1 = 2,147,483,647) Unsigned 31-bit integer of Time (in milliseconds) between KEEPALIVE frames that the client will send. Value MUST be &gt; 0.
+<ul>
+<li>For server-to-server connections, a reasonable time interval between client KEEPALIVE frames is 500ms.</li>
+<li>For mobile-to-server connections, the time interval between client KEEPALIVE frames is often &gt; 30,000ms.</li>
+</ul></li>
+<li><strong>Max Lifetime</strong>: (31 bits = max value 2^31-1 = 2,147,483,647) Unsigned 31-bit integer of Time (in milliseconds) that a client will allow a server to not respond to a KEEPALIVE before it is assumed to be dead. Value MUST be &gt; 0.</li>
+<li><strong>Resume Identification Token Length</strong>: (16 bits = max value 65,535) Unsigned 16-bit integer of Resume Identification Token Length in bytes. (Not present if R flag is not set)</li>
+<li><strong>Resume Identification Token</strong>: Token used for client resume identification (Not present if R flag is not set)</li>
+<li><strong>MIME Length</strong>: Encoding MIME Type Length in bytes.</li>
+<li><strong>Encoding MIME Type</strong>: MIME Type for encoding of Data and Metadata. This SHOULD be a US-ASCII string
+that includes the <a href="https://en.wikipedia.org/wiki/Internet_media_type">Internet media type</a> specified
+in <a href="https://tools.ietf.org/html/rfc2045">RFC 2045</a>. Many are registered with
+<a href="https://www.iana.org/assignments/media-types/media-types.xhtml">IANA</a> such as
+<a href="https://www.iana.org/assignments/media-types/application/cbor">CBOR</a>.
+<a href="http://www.iana.org/assignments/media-type-structured-suffix/media-type-structured-suffix.xml">Suffix</a>
+rules MAY be used for handling layout. For example, <code>application/x.netflix+cbor</code> or
+<code>application/x.reactivesocket+cbor</code> or <code>application/x.netflix+json</code>. The string MUST NOT be null terminated.</li>
+<li><strong>Setup Data</strong>: includes payload describing connection capabilities of the endpoint sending the
+Setup header.</li>
+</ul>
+<p><strong>NOTE</strong>: A server that receives a SETUP frame that has (<strong>R</strong>)esume Enabled set, but does not support resuming operation, MUST reject the SETUP with an ERROR[REJECTED_SETUP].</p>
+<p><a name="frame-error"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="error-frame-0x0b"></a><a href="#error-frame-0x0b" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>ERROR Frame (0x0B)</h3>
+<p>Error frames are used for errors on individual requests/streams as well as connection errors and in response to SETUP frames.</p>
+<p>Frame Contents</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                           Stream ID                           |
+    +-----------+-+-+---------------+-------------------------------+
+    |Frame Type |<span class="hljs-number">0</span>|<span class="hljs-number">0</span>|      Flags    |
+    +-----------+-+-+---------------+-------------------------------+
+    |                          Error Code                           |
+    +---------------------------------------------------------------+
+                               Error Data
+</code></pre>
+<ul>
+<li><strong>Frame Type</strong>: (6 bits) 0x0B</li>
+<li><strong>Error Code</strong>: (32 bits = max value 2^31-1 = 2,147,483,647) Type of Error.
+<ul>
+<li>See list of valid Error Codes below.</li>
+</ul></li>
+<li><strong>Error Data</strong>: includes Payload describing error information. Error Data SHOULD be a UTF-8 encoded string. The string MUST NOT be null terminated.</li>
+</ul>
+<p>A Stream ID of 0 means the error pertains to the connection., including connection establishment. A Stream ID &gt; 0 means the error pertains to a given stream.</p>
+<p>The Error Data is typically an Exception message, but could include stringified stacktrace information if appropriate.</p>
+<h4><a class="anchor" aria-hidden="true" id="error-codes"></a><a href="#error-codes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Error Codes</h4>
+<table>
+<thead>
+<tr><th style="text-align:left">Type</th><th style="text-align:left">Value</th><th style="text-align:left">Description</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align:left"><strong>RESERVED</strong></td><td style="text-align:left">0x00000000</td><td style="text-align:left"><strong>Reserved</strong></td></tr>
+<tr><td style="text-align:left"><strong>INVALID_SETUP</strong></td><td style="text-align:left">0x00000001</td><td style="text-align:left">The Setup frame is invalid for the server (it could be that the client is too recent for the old server). Stream ID MUST be 0.</td></tr>
+<tr><td style="text-align:left"><strong>UNSUPPORTED_SETUP</strong></td><td style="text-align:left">0x00000002</td><td style="text-align:left">Some (or all) of the parameters specified by the client are unsupported by the server. Stream ID MUST be 0.</td></tr>
+<tr><td style="text-align:left"><strong>REJECTED_SETUP</strong></td><td style="text-align:left">0x00000003</td><td style="text-align:left">The server rejected the setup, it can specify the reason in the payload. Stream ID MUST be 0.</td></tr>
+<tr><td style="text-align:left"><strong>REJECTED_RESUME</strong></td><td style="text-align:left">0x00000004</td><td style="text-align:left">The server rejected the resume, it can specify the reason in the payload. Stream ID MUST be 0.</td></tr>
+<tr><td style="text-align:left"><strong>CONNECTION_ERROR</strong></td><td style="text-align:left">0x00000101</td><td style="text-align:left">The connection is being terminated. Stream ID MUST be 0. Sender or Receiver of this frame MAY close the connection immediately without waiting for outstanding streams to terminate.</td></tr>
+<tr><td style="text-align:left"><strong>CONNECTION_CLOSE</strong></td><td style="text-align:left">0x00000102</td><td style="text-align:left">The connection is being terminated. Stream ID MUST be 0. Sender or Receiver of this frame MUST wait for outstanding streams to terminate before closing the connection. New requests MAY not be accepted.</td></tr>
+<tr><td style="text-align:left"><strong>APPLICATION_ERROR</strong></td><td style="text-align:left">0x00000201</td><td style="text-align:left">Application layer logic generating a Reactive Streams <em>onError</em> event. Stream ID MUST be &gt; 0.</td></tr>
+<tr><td style="text-align:left"><strong>REJECTED</strong></td><td style="text-align:left">0x00000202</td><td style="text-align:left">Despite being a valid request, the Responder decided to reject it. The Responder guarantees that it didn't process the request. The reason for the rejection is explained in the Error Data section. Stream ID MUST be &gt; 0.</td></tr>
+<tr><td style="text-align:left"><strong>CANCELED</strong></td><td style="text-align:left">0x00000203</td><td style="text-align:left">The Responder canceled the request but may have started processing it (similar to REJECTED but doesn't guarantee lack of side-effects). Stream ID MUST be &gt; 0.</td></tr>
+<tr><td style="text-align:left"><strong>INVALID</strong></td><td style="text-align:left">0x00000204</td><td style="text-align:left">The request is invalid. Stream ID MUST be &gt; 0.</td></tr>
+<tr><td style="text-align:left"><strong>RESERVED</strong></td><td style="text-align:left">0xFFFFFFFF</td><td style="text-align:left"><strong>Reserved for Extension Use</strong></td></tr>
+</tbody>
+</table>
+<p><strong>NOTE</strong>: Unsed values in the range of 0x0001 to 0x00300 are reserved for future protocol use. Values in the range of 0x00301 to 0xFFFFFFFE are reserved for application layer errors.</p>
+<p>When this document refers to a specific Error Code as a frame, it uses this pattern: ERROR[error_code] or ERROR[error_code|error_code]</p>
+<p>For example:</p>
+<ul>
+<li>ERROR[INVALID_SETUP] means the ERROR frame with the INVALID_SETUP code</li>
+<li>ERROR[REJECTED] means the ERROR frame with the REJECTED code</li>
+<li>ERROR[CONNECTION_ERROR|REJECTED_RESUME] means the ERROR frame with either the CONNECTION_ERROR or REJECTED_RESUME code</li>
+</ul>
+<p><a name="frame-lease"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="lease-frame-0x02"></a><a href="#lease-frame-0x02" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>LEASE Frame (0x02)</h3>
+<p>Lease frames MAY be sent by the client-side or server-side Responders and inform the
+Requester that it may send Requests for a period of time and how many it may send during that duration.
+See <a href="#lease-semantics">Lease Semantics</a> for more information.</p>
+<p>The last received LEASE frame overrides all previous LEASE frame values.</p>
+<p>Lease frames MUST always use Stream ID 0 as they pertain to the Connection.</p>
+<p>Frame Contents</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                         Stream ID = <span class="hljs-number">0</span>                         |
+    +-----------+-+-+---------------+-------------------------------+
+    |Frame Type |<span class="hljs-number">0</span>|M|     Flags     |
+    +-----------+-+-+---------------+-------------------------------+
+    |<span class="hljs-number">0</span>|                       Time-To-Live                          |
+    +---------------------------------------------------------------+
+    |<span class="hljs-number">0</span>|                     Number of Requests                      |
+    +---------------------------------------------------------------+
+                                Metadata
+</code></pre>
+<ul>
+<li><strong>Frame Type</strong>: (6 bits) 0x02</li>
+<li><strong>Flags</strong>: (10 bits)
+<ul>
+<li>(<strong>M</strong>)etadata: Metadata present</li>
+</ul></li>
+<li><strong>Time-To-Live (TTL)</strong>: (31 bits = max value 2^31-1 = 2,147,483,647) Unsigned 31-bit integer of Time (in milliseconds) for validity of LEASE from time of reception. Value MUST be &gt; 0.</li>
+<li><strong>Number of Requests</strong>: (31 bits = max value 2^31-1 = 2,147,483,647) Unsigned 31-bit integer of Number of Requests that may be sent until next LEASE. Value MUST be &gt; 0.</li>
+</ul>
+<p>A Responder implementation MAY stop all further requests by sending a LEASE with a value of 0 for <strong>Number of Requests</strong> or <strong>Time-To-Live</strong>.</p>
+<p>When a LEASE expires due to time, the value of the <strong>Number of Requests</strong> that a Requester may make is implicitly 0.</p>
+<p>This frame only supports Metadata, so the Metadata Length header MUST NOT be included, even if the (M)etadata flag is set true.</p>
+<p><a name="frame-keepalive"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="keepalive-frame-0x03"></a><a href="#keepalive-frame-0x03" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>KEEPALIVE Frame (0x03)</h3>
+<p>KEEPALIVE frames MUST always use Stream ID 0 as they pertain to the Connection.</p>
+<p>KEEPALIVE frames MUST be initiated by the client and sent periodically with the (<strong>R</strong>)espond flag set.</p>
+<p>KEEPALIVE frames MAY be initiated by the server and sent upon application request with the (<strong>R</strong>)espond flag set.</p>
+<p>Reception of a KEEPALIVE frame with the (<strong>R</strong>)espond flag set MUST cause a client or server to send
+back a KEEPALIVE with the (<strong>R</strong>)espond flag <strong>NOT</strong> set. The data in the received KEEPALIVE MUST be
+echoed back in the generated KEEPALIVE.</p>
+<p>Reception of a KEEPALIVE by a server indicates to the server that the client is alive.</p>
+<p>Reception of a KEEPALIVE by a client indicates to the client that the server is alive.</p>
+<p>Frame Contents</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                         Stream ID = <span class="hljs-number">0</span>                         |
+    +-----------+-+-+-+-------------+-------------------------------+
+    |Frame Type |<span class="hljs-number">0</span>|<span class="hljs-number">0</span>|R|    Flags    |
+    +-----------+-+-+-+-------------+-------------------------------+
+    |<span class="hljs-number">0</span>|                  Last Received Position                     |
+    +                                                               +
+    |                                                               |
+    +---------------------------------------------------------------+
+                                  Data
+</code></pre>
+<ul>
+<li><strong>Frame Type</strong>: (6 bits) 0x03</li>
+<li><strong>Flags</strong>: (10 bits)
+<ul>
+<li>(<strong>R</strong>)espond with KEEPALIVE or not</li>
+</ul></li>
+<li><strong>Last Received Position</strong>: (63 bits = max value 2^63-1) Unsigned 63-bit long of Resume Last Received Position. Value MUST be &gt; 0. (optional. Set to all 0s when not supported.)</li>
+<li><strong>Data</strong>: Data attached to a KEEPALIVE.</li>
+</ul>
+<p><a name="frame-request-response"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="request-response-frame-0x04"></a><a href="#request-response-frame-0x04" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>REQUEST_RESPONSE Frame (0x04)</h3>
+<p>Frame Contents</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                           Stream ID                           |
+    +-----------+-+-+-+-------------+-------------------------------+
+    |Frame Type |<span class="hljs-number">0</span>|M|F|     Flags   |
+    +-------------------------------+
+                         Metadata &amp; Request Data
+</code></pre>
+<ul>
+<li><strong>Frame Type</strong>: (6 bits) 0x04</li>
+<li><strong>Flags</strong>: (10 bits)
+<ul>
+<li>(<strong>M</strong>)etadata: Metadata present</li>
+<li>(<strong>F</strong>)ollows: More fragments follow this fragment.</li>
+</ul></li>
+<li><strong>Request Data</strong>: identification of the service being requested along with parameters for the request.</li>
+</ul>
+<p><a name="frame-fnf"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="request-fnf-fire-n-forget-frame-0x05"></a><a href="#request-fnf-fire-n-forget-frame-0x05" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>REQUEST_FNF (Fire-n-Forget) Frame (0x05)</h3>
+<p>Frame Contents</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                           Stream ID                           |
+    +-----------+-+-+-+-------------+-------------------------------+
+    |Frame Type |<span class="hljs-number">0</span>|M|F|    Flags    |
+    +-------------------------------+
+                          Metadata &amp; Request Data
+</code></pre>
+<ul>
+<li><strong>Frame Type</strong>: (6 bits) 0x05</li>
+<li><strong>Flags</strong>: (10 bits)
+<ul>
+<li>(<strong>M</strong>)etadata: Metadata present</li>
+<li>(<strong>F</strong>)ollows: More fragments follow this fragment.</li>
+</ul></li>
+<li><strong>Request Data</strong>: identification of the service being requested along with parameters for the request.</li>
+</ul>
+<p><a name="frame-request-stream"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="request-stream-frame-0x06"></a><a href="#request-stream-frame-0x06" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>REQUEST_STREAM Frame (0x06)</h3>
+<p>Frame Contents</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                           Stream ID                           |
+    +-----------+-+-+-+-------------+-------------------------------+
+    |Frame Type |<span class="hljs-number">0</span>|M|F|    Flags    |
+    +-------------------------------+-------------------------------+
+    |<span class="hljs-number">0</span>|                    Initial Request N                        |
+    +---------------------------------------------------------------+
+                          Metadata &amp; Request Data
+</code></pre>
+<ul>
+<li><strong>Frame Type</strong>: (6 bits) 0x06</li>
+<li><strong>Flags</strong>: (10 bits)
+<ul>
+<li>(<strong>M</strong>)etadata: Metadata present</li>
+<li>(<strong>F</strong>)ollows: More fragments follow this fragment.</li>
+</ul></li>
+<li><strong>Initial Request N</strong>: (31 bits = max value 2^31-1 = 2,147,483,647) Unsigned 31-bit integer representing the initial number of items to request. Value MUST be &gt; 0.</li>
+<li><strong>Request Data</strong>: identification of the service being requested along with parameters for the request.</li>
+</ul>
+<p>See <a href="#flow-control-reactive-streams">Flow Control: Reactive Streams Semantics</a> for more information on RequestN behavior.</p>
+<p><a name="frame-request-channel"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="request-channel-frame-0x07"></a><a href="#request-channel-frame-0x07" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>REQUEST_CHANNEL Frame (0x07)</h3>
+<p>Frame Contents</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                           Stream ID                           |
+    +-----------+-+-+-+-+-----------+-------------------------------+
+    |Frame Type |<span class="hljs-number">0</span>|M|F|C|  Flags    |
+    +-------------------------------+-------------------------------+
+    |<span class="hljs-number">0</span>|                    Initial Request N                        |
+    +---------------------------------------------------------------+
+                           Metadata &amp; Request Data
+</code></pre>
+<ul>
+<li><strong>Frame Type</strong>: (6 bits) 0x07</li>
+<li><strong>Flags</strong>: (10 bits)
+<ul>
+<li>(<strong>M</strong>)etadata: Metadata present</li>
+<li>(<strong>F</strong>)ollows: More fragments follow this fragment.</li>
+<li>(<strong>C</strong>)omplete: bit to indicate stream completion.
+<ul>
+<li>If set, <code>onComplete()</code> or equivalent will be invoked on Subscriber/Observer.</li>
+</ul></li>
+</ul></li>
+<li><strong>Initial Request N</strong>: (31 bits = max value 2^31-1 = 2,147,483,647) Unsigned 31-bit integer representing the initial request N value for channel. Value MUST be &gt; 0.</li>
+<li><strong>Request Data</strong>: identification of the service being requested along with parameters for the request.</li>
+</ul>
+<p>A requester MUST send only <strong>one</strong> REQUEST_CHANNEL frame. Subsequent messages from requester to responder MUST be sent as PAYLOAD frames.</p>
+<p>A requester MUST <strong>not</strong> send PAYLOAD frames after the REQUEST_CHANNEL frame until the responder sends a REQUEST_N frame granting credits for number of PAYLOADs able to be sent.</p>
+<p>See Flow Control: Reactive Streams Semantics for more information on RequestN behavior.</p>
+<p><a name="frame-request-n"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="request-n-frame-0x08"></a><a href="#request-n-frame-0x08" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>REQUEST_N Frame (0x08)</h3>
+<p>Frame Contents</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                           Stream ID                           |
+    +-----------+-+-+---------------+-------------------------------+
+    |Frame Type |<span class="hljs-number">0</span>|<span class="hljs-number">0</span>|     Flags     |
+    +-------------------------------+-------------------------------+
+    |<span class="hljs-number">0</span>|                         Request N                           |
+    +---------------------------------------------------------------+
+</code></pre>
+<ul>
+<li><strong>Frame Type</strong>: (6 bits) 0x08</li>
+<li><strong>Request N</strong>: (31 bits = max value 2^31-1 = 2,147,483,647) Unsigned 31-bit integer representing the number of items to request. Value MUST be &gt; 0.</li>
+</ul>
+<p>See Flow Control: Reactive Streams Semantics for more information on RequestN behavior.</p>
+<p><a name="frame-cancel"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="cancel-frame-0x09"></a><a href="#cancel-frame-0x09" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>CANCEL Frame (0x09)</h3>
+<p>Frame Contents</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                           Stream ID                           |
+    +-----------+-+-+---------------+-------------------------------+
+    |Frame Type |<span class="hljs-number">0</span>|<span class="hljs-number">0</span>|    Flags      |
+    +-------------------------------+-------------------------------+
+</code></pre>
+<ul>
+<li><strong>Frame Type</strong>: (6 bits) 0x09</li>
+</ul>
+<p><a name="frame-payload"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="payload-frame-0x0a"></a><a href="#payload-frame-0x0a" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>PAYLOAD Frame (0x0A)</h3>
+<p>Frame Contents</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                           Stream ID                           |
+    +-----------+-+-+-+-+-+---------+-------------------------------+
+    |Frame Type |<span class="hljs-number">0</span>|M|F|C|N|  Flags  |
+    +-------------------------------+-------------------------------+
+                         Metadata &amp; Data
+</code></pre>
+<ul>
+<li><strong>Frame Type</strong>: (6 bits) 0x0A</li>
+<li><strong>Flags</strong>: (10 bits)
+<ul>
+<li>(<strong>M</strong>)etadata: Metadata Present.</li>
+<li>(<strong>F</strong>)ollows: More fragments follow this fragment.</li>
+<li>(<strong>C</strong>)omplete: bit to indicate stream completion.
+<ul>
+<li>If set, <code>onComplete()</code> or equivalent will be invoked on Subscriber/Observer.</li>
+</ul></li>
+<li>(<strong>N</strong>)ext: bit to indicate Next (Payload Data and/or Metadata present).
+<ul>
+<li>If set, <code>onNext(Payload)</code> or equivalent will be invoked on Subscriber/Observer.</li>
+</ul></li>
+</ul></li>
+<li><strong>Payload Data</strong>: payload for Reactive Streams onNext.</li>
+</ul>
+<p>Valid combinations of (C)omplete and (N)ext flags are:</p>
+<ul>
+<li>Both (C)omplete and (N)ext set meaning PAYLOAD contains data and signals stream completion.
+<ul>
+<li>For example: An Observable stream receiving <code>onNext(payload)</code> followed by <code>onComplete()</code>.</li>
+</ul></li>
+<li>Just (C)omplete set meaning PAYLOAD contains no data and only signals stream completion.
+<ul>
+<li>For example: An Observable stream receiving <code>onComplete()</code>.</li>
+</ul></li>
+<li>Just (N)ext set meaning PAYLOAD contains data stream is NOT completed.
+<ul>
+<li>For example: An Observable stream receiving <code>onNext(payload)</code>.</li>
+</ul></li>
+</ul>
+<p>A PAYLOAD MUST NOT have both (C)complete and (N)ext empty (false).</p>
+<p>The reason for the (N)ext flag instead of just deriving from Data length being &gt; 0 is that 0 length data can be considered a valid PAYLOAD resulting in a delivery to the application layer with a PAYLOAD containing 0 bytes of data.</p>
+<p>For example: An Observable stream receiving data via <code>onNext(payload)</code> where payload contains 0 bytes of data.</p>
+<p><a name="frame-metadata-push"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="metadata-push-frame-0x0c"></a><a href="#metadata-push-frame-0x0c" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>METADATA_PUSH Frame (0x0C)</h3>
+<p>A Metadata Push frame can be used to send asynchronous metadata notifications from a Requester or
+Responder to its peer.</p>
+<p>METADATA_PUSH frames MUST always use Stream ID 0 as they pertain to the Connection.</p>
+<p>Metadata tied to a particular stream uses the individual Payload frame Metadata flag.</p>
+<p>Frame Contents</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                         Stream ID = <span class="hljs-number">0</span>                         |
+    +-----------+-+-+---------------+-------------------------------+
+    |Frame Type |<span class="hljs-number">0</span>|<span class="hljs-number">1</span>|     Flags     |
+    +-------------------------------+-------------------------------+
+                                Metadata
+</code></pre>
+<ul>
+<li><strong>Frame Type</strong>: (6 bits) 0x0C</li>
+</ul>
+<p>This frame only supports Metadata, so the Metadata Length header MUST NOT be included.</p>
+<p><a name="frame-ext"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="ext-extension-frame-0x3f"></a><a href="#ext-extension-frame-0x3f" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>EXT (Extension) Frame (0x3F)</h3>
+<p>The general format for an extension frame is given below.</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                           Stream ID                           |
+    +-----------+-+-+---------------+-------------------------------+
+    |Frame Type |I|M|    Flags      |
+    +-------------------------------+-------------------------------+
+    |<span class="hljs-number">0</span>|                      Extended Type                          |
+    +---------------------------------------------------------------+
+                          Depends on Extended Type...
+</code></pre>
+<ul>
+<li><strong>Frame Type</strong>: (6 bits) 0x3F</li>
+<li><strong>Flags</strong>: (10 bits)
+<ul>
+<li>(<strong>I</strong>)gnore: Can the frame be ignored if not understood?</li>
+<li>(<strong>M</strong>)etadata: Metadata Present.</li>
+</ul></li>
+<li><strong>Extended Type</strong>: (31 bits = max value 2^31-1 = 2,147,483,647) Unsigned 31-bit integer of Extended type information. Value MUST be &gt; 0.</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="resuming-operation"></a><a href="#resuming-operation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Resuming Operation</h2>
+<p>Due to the large number of active requests for RSocket, it is often necessary to provide the ability for resuming operation on transport failure. This behavior is totally optional for operation and may be supported or not based on an implementation choice.</p>
+<h3><a class="anchor" aria-hidden="true" id="assumptions"></a><a href="#assumptions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Assumptions</h3>
+<p>RSocket resumption exists only for specific cases. It is not intended to be an “always works” solution. If resuming operation is not possible, the connection should be terminated with an ERROR as specified by the protocol definition.</p>
+<ol>
+<li>Resumption is optional behavior for implementations. But highly suggested. Clients and Servers should assume NO resumption capability by default.</li>
+<li>Resumption is an optimistic operation. It may not always succeed.</li>
+<li>Resumption is desired to be fast and require a minimum of state to be exchanged.</li>
+<li>Resumption is designed for loss of connectivity and assumes client and server state is maintained across connectivity loss. I.e. there is no assumption of loss of state by either end. This is very important as without it, all the requirements of &quot;guaranteed messaging&quot; come into play.</li>
+<li>Resumption assumes no changes to Lease, Data format (encoding), etc. for resuming operation. i.e. A client is not allowed to change the metadata MIME type or the data MIME type or version, etc. when resuming operation.</li>
+<li>Resumption is always initiated by the client and either allowed or denied by the server.</li>
+<li>Resumption makes no assumptions of application state for delivered frames with respect to atomicity, transactionality, etc. See above.</li>
+</ol>
+<h3><a class="anchor" aria-hidden="true" id="implied-position"></a><a href="#implied-position" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Implied Position</h3>
+<p>Resuming operation requires knowing the position of data reception of the previous connection. For this to be simplified, the underlying transport is assumed to support contiguous delivery of data on a per frame basis. In other words, partial frames are not delivered for processing nor are gaps allowed in the stream of frames sent by either the client or server. The current list of supported transports (TCP, WebSocket, and Aeron) all satisfy this requirement or can be made to do so in the case of TCP.</p>
+<p>As a Requester or Responder <strong>sends</strong> REQUEST, CANCEL, or PAYLOAD frames, it maintains a <strong>position</strong> of that frame within the connection in that direction. This is a 64-bit value that starts at 0. As a Requester or Responder <strong>receives</strong> REQUEST, CANCEL, or PAYLOAD frames, it maintains an <strong>implied position</strong> of that frame within the connection in that direction. This is also a 64-bit value that starts at 0.</p>
+<p>The reason this is “implied” is that the position is not included in each frame and is inferred simply by the message being sent/received on the connection in relation to previous frames.</p>
+<p>This position will be used to identify the location for resuming operation to begin.</p>
+<p>Frame types outside REQUEST, CANCEL, ERROR, and PAYLOAD do not have assigned (nor implied) positions.</p>
+<p>When a client sends a RESUME frame, it sends two implied positions: the last frame that was received from the server; the earliest frame position it still retains.  The server can make a determination on whether resumption is possible: have all frames past the client's last-received position been retained? and has the client retained all frames past the server's last-retained position.  If resumption is allowed to continue, the server sends a RESUME_OK frame, indicating its last-received position.</p>
+<h3><a class="anchor" aria-hidden="true" id="client-lifetime-management"></a><a href="#client-lifetime-management" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Client Lifetime Management</h3>
+<p>Client lifetime management for servers MUST be extended to incorporate the length of time a client may successfully attempt resumption passed a transport disconnect. The means of client lifetime management are totally up to the implementation.</p>
+<h3><a class="anchor" aria-hidden="true" id="resume-operation"></a><a href="#resume-operation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Resume Operation</h3>
+<p>All ERROR frames sent MUST be CONNECTION_ERROR or REJECTED_RESUME error code.</p>
+<p>Client side resumption operation starts when the client desires to try to resume and starts a new transport connection. The operation then proceeds as the following:</p>
+<ul>
+<li>Client sends RESUME frame. The client MUST NOT send any other frame types until resumption succeeds. The RESUME Identification Token MUST be the token used in the original SETUP frame. The RESUME Last Received Position field MUST be the last successfully received implied position from the server.</li>
+<li>Client waits for either a RESUME_OK or ERROR[CONNECTION_ERROR|REJECTED_RESUME] frame from the server.</li>
+<li>On receiving an ERROR[REJECTED_RESUME] frame, the client MUST NOT attempt resumption again.</li>
+<li>On receiving a RESUME_OK, the client:
+<ul>
+<li>MUST assume that the next REQUEST, CANCEL, ERROR, and PAYLOAD frames have an implied position commencing from the last implied positions</li>
+<li>MAY retransmit <em>all</em> REQUEST, CANCEL, ERROR, and PAYLOAD frames starting at the RESUME_OK Last Received Position field value from the server.</li>
+<li>MAY send an ERROR[CONNECTION_ERROR|CONNECTION_CLOSE] frame indicating the end of the connection and MUST NOT attempt resumption again</li>
+</ul></li>
+</ul>
+<p>Server side resumption operation starts when the client sends a RESUME frame. The operation then proceeds as the following:</p>
+<ul>
+<li>On receiving a RESUME frame, the server:
+<ul>
+<li>MUST send an ERROR[REJECTED_RESUME] frame if the server does not support resuming operation.</li>
+<li>use the RESUME Identification Token field to determine which client the resume pertains to. If the client is identified successfully, resumption MAY be continued. If not identified, then the server MUST send an ERROR[REJECTED_RESUME] frame.</li>
+<li>if successfully identified, then the server MAY send a RESUME_OK and then:
+<ul>
+<li>MUST assume that the next REQUEST, CANCEL, ERROR, and PAYLOAD frames have an implied position commencing from the last implied positions</li>
+<li>MAY retransmit <em>all</em> REQUEST, CANCEL, ERROR, and PAYLOAD frames starting at the RESUME Last Received Position field value from the client.</li>
+</ul></li>
+<li>if successfully identified, then the server MAY send an ERROR[REJECTED_RESUME] frame if the server can not resume operation given the value of RESUME Last Received Position if the position is not one it deems valid to resume operation from or other extenuating circumstances.</li>
+</ul></li>
+</ul>
+<p>A Server that receives a RESUME frame after a SETUP frame, SHOULD send an ERROR[CONNECTION_ERROR].</p>
+<p>A Server that receives a RESUME frame after a previous RESUME frame, SHOULD send an ERROR[CONNECTION_ERROR].</p>
+<p>Leasing semantics are NOT assumed to carry over from previous connections when resuming. LEASE semantics MUST be restarted upon a new connection by sending a LEASE frame from the server.</p>
+<p><a name="frame-resume"></a></p>
+<h4><a class="anchor" aria-hidden="true" id="resume-frame-0x0d"></a><a href="#resume-frame-0x0d" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>RESUME Frame (0x0D)</h4>
+<p>The general format for a Resume frame is given below.</p>
+<p>RESUME frames MUST always use Stream ID 0 as they pertain to the connection.</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                         Stream ID = <span class="hljs-number">0</span>                         |
+    +-----------+-+-+---------------+-------------------------------+
+    |Frame Type |<span class="hljs-number">0</span>|<span class="hljs-number">0</span>|    Flags      |
+    +-------------------------------+-------------------------------+
+    |        Major Version          |         Minor Version         |
+    +-------------------------------+-------------------------------+
+    |         Token Length          | Resume Identification Token  ...
+    +---------------------------------------------------------------+
+    |<span class="hljs-number">0</span>|                                                             |
+    +                 Last Received Server Position                 +
+    |                                                               |
+    +---------------------------------------------------------------+
+    |<span class="hljs-number">0</span>|                                                             |
+    +                First Available Client Position                +
+    |                                                               |
+    +---------------------------------------------------------------+
+</code></pre>
+<ul>
+<li><strong>Frame Type</strong>: (6 bits) 0x0D</li>
+<li><strong>Major Version</strong>: (16 bits = max value 65,535) Unsigned 16-bit integer of Major version number of the protocol.</li>
+<li><strong>Minor Version</strong>: (16 bits = max value 65,535) Unsigned 16-bit integer of Minor version number of the protocol.</li>
+<li><strong>Resume Identification Token Length</strong>: (16 bits = max value 65,535) Unsigned 16-bit integer of Resume Identification Token Length in bytes.</li>
+<li><strong>Resume Identification Token</strong>: Token used for client resume identification. Same Resume Identification used in the initial SETUP by the client.</li>
+<li><strong>Last Received Server Position</strong>: (63 bits = max value 2^63-1) Unsigned 63-bit long of the last implied position the client received from the server.</li>
+<li><strong>First Available Client Position</strong>: (63 bits = max value 2^63-1) Unsigned 63-bit long of the earliest position that the client can rewind back to prior to resending frames.</li>
+</ul>
+<p><a name="frame-resume-ok"></a></p>
+<h4><a class="anchor" aria-hidden="true" id="resume-ok-frame-0x0e"></a><a href="#resume-ok-frame-0x0e" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>RESUME_OK Frame (0x0E)</h4>
+<p>The general format for a Resume OK frame is given below.</p>
+<p>RESUME OK frames MUST always use Stream ID 0 as they pertain to the connection.</p>
+<pre><code class="hljs">     <span class="hljs-number">0</span>                   <span class="hljs-number">1</span>                   <span class="hljs-number">2</span>                   <span class="hljs-number">3</span>
+     <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">5</span> <span class="hljs-number">6</span> <span class="hljs-number">7</span> <span class="hljs-number">8</span> <span class="hljs-number">9</span> <span class="hljs-number">0</span> <span class="hljs-number">1</span>
+    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    |                         Stream ID = <span class="hljs-number">0</span>                         |
+    +-----------+-+-+---------------+-------------------------------+
+    |Frame Type |<span class="hljs-number">0</span>|<span class="hljs-number">0</span>|    Flags      |
+    +-------------------------------+-------------------------------+
+    |<span class="hljs-number">0</span>|                                                             |
+    +               Last Received Client Position                   +
+    |                                                               |
+    +---------------------------------------------------------------+
+</code></pre>
+<ul>
+<li><strong>Frame Type</strong>: (6 bits) 0x0E</li>
+<li><strong>Last Received Client Position</strong>: (63 bits = max value 2^63-1) Unsigned 63-bit long of the last implied position the server received from the client.</li>
+</ul>
+<h4><a class="anchor" aria-hidden="true" id="keepalive-position-field"></a><a href="#keepalive-position-field" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Keepalive Position Field</h4>
+<p>Keepalive frames include the implied position of the client (or server). When sent, they act as a means for the other end of the connection to know the position of the other side.</p>
+<p>This information MAY be used to update state for possible retransmission, such as trimming a retransmit buffer, or possible associations with individual stream status.</p>
+<h3><a class="anchor" aria-hidden="true" id="identification-token-handling"></a><a href="#identification-token-handling" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Identification Token Handling</h3>
+<p>The requirements for the Resume Identification Token are implementation dependent. However, some guidelines and considerations are:</p>
+<ul>
+<li>Tokens may be generated by the client.</li>
+<li>Tokens may be generated outside the client and the server and managed externally to the protocol.</li>
+<li>Tokens should uniquely identify a connection on the server. The server should not assume a generation method of the token and should consider the token opaque. This allows a client to be compatible with any RSocket implementation that supports resuming operation and allows the client full control of Identification Token generation.</li>
+<li>Tokens MUST be valid for the lifetime of an individual RSocket including possible resumption.</li>
+<li>A server should not accept a SETUP with a Token that is currently already being used</li>
+<li>Tokens should be resilient to replay attacks and thus should only be valid for the lifetime of an individual connection</li>
+<li>Tokens should not be predictable by an attacking 3rd party</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="connection-establishment"></a><a href="#connection-establishment" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Connection Establishment</h2>
+<p><strong>NOTE</strong>: The semantics are similar to <a href="https://tools.ietf.org/html/draft-bmoeller-tls-falsestart-00">TLS False Start</a>.</p>
+<p>Immediately upon successful connection, the client MUST send either a SETUP or RESUME frame with
+Stream ID of 0. Any other frame received that is NOT a SETUP|RESUME frame or a SETUP|RESUME frame with
+a Stream ID &gt; 0, MUST cause the server to send an ERROR[INVALID_SETUP] and close the connection.</p>
+<p>See <a href="#resume-operation">Resume Operation</a> for more information about resuming. The rest of this section assumes use of SETUP for establishing a connection.</p>
+<p>The client-side Requester can inform the server-side Responder as to whether it will
+honor LEASEs or not based on the presence of the <strong>L</strong> flag in the SETUP frame.</p>
+<p>The client-side Requester that has NOT set the <strong>L</strong> flag in the SETUP frame may send
+requests immediately if it so desires without waiting for a LEASE from the server.</p>
+<p>The client-side Requester that has set the <strong>L</strong> flag in the SETUP frame MUST wait
+for the server-side Responder to send a LEASE frame before it can send requests.</p>
+<p>If the server accepts the contents of the SETUP frame, it MUST send a LEASE frame if
+the SETUP frame set the <strong>L</strong> flag. The server-side Requester may send requests
+immediately upon receiving a SETUP frame that it accepts if the <strong>L</strong> flag is not set in the SETUP frame.</p>
+<p>If the server does NOT accept the contents of the SETUP frame, the server MUST send
+back an ERROR[INVALID_SETUP|UNSUPPORTED_SETUP] and then close the connection.</p>
+<p>The server-side Requester mirrors the LEASE requests of the client-side Requester. If a client-side
+Requester sets the <strong>L</strong> flag in the SETUP frame, the server-side Requester MUST wait for a LEASE
+frame from the client-side Responder before it can send a request. The client-side Responder MUST
+send a LEASE frame after a SETUP frame with the <strong>L</strong> flag set.</p>
+<p>A client assumes a SETUP is accepted if it receives a response to a request, a LEASE
+frame, or if it sees a REQUEST type.</p>
+<p>A client assumes a SETUP is rejected if it receives an ERROR.</p>
+<p>Until connection establishment is complete, a Requester MUST NOT send any Request frames.</p>
+<p>Until connection establishment is complete, a Responder MUST NOT emit any PAYLOAD frames.</p>
+<h3><a class="anchor" aria-hidden="true" id="negotiation"></a><a href="#negotiation" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Negotiation</h3>
+<p>The assumption is that the client will be dictating to the server what it desires to do. The server will decide to support
+that SETUP (accept it) or not (reject it). The ERROR[INVALID_SETUP|UNSUPPORTED_SETUP|REJECTED_SETUP] error code indicates the reason for the rejection.</p>
+<h3><a class="anchor" aria-hidden="true" id="sequences-without-lease"></a><a href="#sequences-without-lease" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Sequences without LEASE</h3>
+<p>The possible sequences without LEASE are below.</p>
+<ol>
+<li>Client-side Request, Server-side <strong>accepts</strong> SETUP
+<ul>
+<li>Client connects &amp; sends SETUP &amp; sends REQUEST</li>
+<li>Server accepts SETUP, handles REQUEST, sends back normal sequence based on REQUEST type</li>
+</ul></li>
+<li>Client-side Request, Server-side <strong>rejects</strong> SETUP
+<ul>
+<li>Client connects &amp; sends SETUP &amp; sends REQUEST</li>
+<li>Server rejects SETUP, sends back ERROR[INVALID_SETUP|UNSUPPORTED_SETUP|REJECTED_SETUP], closes connection</li>
+</ul></li>
+<li>Server-side Request, Server-side <strong>accepts</strong> SETUP
+<ul>
+<li>Client connects &amp; sends SETUP</li>
+<li>Server accepts SETUP, sends back REQUEST type</li>
+</ul></li>
+<li>Server-side Request, Server-side <strong>rejects</strong> SETUP
+<ul>
+<li>Client connects &amp; sends SETUP</li>
+<li>Server rejects SETUP, sends back ERROR[INVALID_SETUP|UNSUPPORTED_SETUP|REJECTED_SETUP], closes connection</li>
+</ul></li>
+</ol>
+<h3><a class="anchor" aria-hidden="true" id="sequences-with-lease"></a><a href="#sequences-with-lease" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Sequences with LEASE</h3>
+<p>The possible sequences with LEASE are below.</p>
+<ol>
+<li>Client-side Request, Server-side <strong>accepts</strong> SETUP
+<ul>
+<li>Client connects &amp; sends SETUP with <strong>L</strong> flag</li>
+<li>Server accepts SETUP, sends back LEASE frame</li>
+<li>Client-side sends REQUEST</li>
+</ul></li>
+<li>Client-side Request, Server-side <strong>rejects</strong> SETUP
+<ul>
+<li>Client connects &amp; sends SETUP with <strong>L</strong> flag</li>
+<li>Server rejects SETUP, sends back ERROR[INVALID_SETUP|UNSUPPORTED_SETUP|REJECTED_SETUP], closes connection</li>
+</ul></li>
+<li>Server-side Request, Server-side <strong>accepts</strong> SETUP
+<ul>
+<li>Client connects &amp; sends SETUP with <strong>L</strong> flag</li>
+<li>Server accepts SETUP, sends back LEASE frame</li>
+<li>Client sends LEASE frame</li>
+<li>Server sends REQUEST</li>
+</ul></li>
+<li>Server-side Request, Server-side <strong>rejects</strong> SETUP
+<ul>
+<li>Client connects &amp; sends SETUP with <strong>L</strong> flag</li>
+<li>Server rejects SETUP, sends back ERROR[INVALID_SETUP|UNSUPPORTED_SETUP|REJECTED_SETUP], closes connection</li>
+</ul></li>
+</ol>
+<h2><a class="anchor" aria-hidden="true" id="fragmentation-and-reassembly"></a><a href="#fragmentation-and-reassembly" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Fragmentation And Reassembly</h2>
+<p>PAYLOAD frames and all REQUEST frames may represent a large object and MAY need to be fragmented to fit within the Frame Data size. When this occurs, the <strong>F</strong> flag indicates if more fragments follow the current frame (or not).</p>
+<p>Fragmentation does not change the request(n) or lease counts. In other words, a fragmented PAYLOAD frame counts as a single request(n) credit, and a request counts against a single lease count, regardless of how many fragments the frame is split into.</p>
+<h4><a class="anchor" aria-hidden="true" id="payload-frame"></a><a href="#payload-frame" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>PAYLOAD Frame</h4>
+<p>When a PAYLOAD frame needs to be fragmented, a sequence of PAYLOAD frames is delivered using the (F)ollows flag.</p>
+<p>When a PAYLOAD is fragmented, the Metadata MUST be transmitted completely before the Data.</p>
+<p>For example, a single PAYLOAD with 20MB of Metadata and 25MB of Data that is fragmented into 3 frames:</p>
+<pre><code class="hljs css language-bash">-- PAYLOAD frame 1
+Frame length <span class="token operator">=</span> 16MB
+<span class="token punctuation">(</span>M<span class="token punctuation">)</span>etadata present <span class="token operator">=</span> 1
+<span class="token punctuation">(</span>F<span class="token punctuation">)</span>ollows <span class="token operator">=</span> 1 <span class="token punctuation">(</span>fragments coming<span class="token punctuation">)</span>
+Metadata Length <span class="token operator">=</span> 16MB
+
+16MB of METADATA
+0MB of Data
+
+-- PAYLOAD frame 2
+Frame length <span class="token operator">=</span> 16MB
+<span class="token punctuation">(</span>M<span class="token punctuation">)</span>etadata present <span class="token operator">=</span> 1
+<span class="token punctuation">(</span>F<span class="token punctuation">)</span>ollows <span class="token operator">=</span> 1 <span class="token punctuation">(</span>fragments coming<span class="token punctuation">)</span>
+Metadata Length <span class="token operator">=</span> 4MB
+
+4MB of METADATA
+12MB of Data
+
+-- PAYLOAD frame 3
+Frame length <span class="token operator">=</span> 13MB
+<span class="token punctuation">(</span>M<span class="token punctuation">)</span>etadata present <span class="token operator">=</span> 0
+<span class="token punctuation">(</span>F<span class="token punctuation">)</span>ollows <span class="token operator">=</span> 0
+
+0MB of METADATA
+13MB of Data
+</code></pre>
+<p>If the sender (Requester or Responder) wants to cancel sending a fragmented sequence, it MAY send a CANCEL frame without finishing delivery of the fragments.</p>
+<h4><a class="anchor" aria-hidden="true" id="request-frames"></a><a href="#request-frames" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>REQUEST Frames</h4>
+<p>When REQUEST_RESPONSE, REQUEST_FNF, REQUEST_STREAM, or REQUEST_CHANNEL frames need to be fragmented, the first frame is the REQUEST_* frame with the (F)ollows flag set, followed by a sequence of PAYLOAD frames.</p>
+<p>When fragmented, the Metadata MUST be transmitted completely before the Data.</p>
+<p>For example, a single PAYLOAD with 20MB of Metadata and 25MB of Data that is fragmented into 3 frames:</p>
+<pre><code class="hljs css language-bash">-- REQUEST_RESPONSE frame 1
+Frame length <span class="token operator">=</span> 16MB
+<span class="token punctuation">(</span>M<span class="token punctuation">)</span>etadata present <span class="token operator">=</span> 1
+<span class="token punctuation">(</span>F<span class="token punctuation">)</span>ollows <span class="token operator">=</span> 1 <span class="token punctuation">(</span>fragments coming<span class="token punctuation">)</span>
+Metadata Length <span class="token operator">=</span> 16MB
+
+16MB of METADATA
+0MB of Data
+
+-- PAYLOAD frame 2
+Frame length <span class="token operator">=</span> 16MB
+<span class="token punctuation">(</span>M<span class="token punctuation">)</span>etadata present <span class="token operator">=</span> 1
+<span class="token punctuation">(</span>F<span class="token punctuation">)</span>ollows <span class="token operator">=</span> 1 <span class="token punctuation">(</span>fragments coming<span class="token punctuation">)</span>
+Metadata Length <span class="token operator">=</span> 4MB
+
+4MB of METADATA
+12MB of Data
+
+-- PAYLOAD frame 3
+Frame length <span class="token operator">=</span> 13MB
+<span class="token punctuation">(</span>M<span class="token punctuation">)</span>etadata present <span class="token operator">=</span> 0
+<span class="token punctuation">(</span>F<span class="token punctuation">)</span>ollows <span class="token operator">=</span> 0
+
+0MB of METADATA
+13MB of Data
+</code></pre>
+<p>If the Requester wants to cancel sending a fragmented sequence, it MAY send a CANCEL frame without finishing delivery of the fragments.</p>
+<h2><a class="anchor" aria-hidden="true" id="stream-sequences-and-lifetimes"></a><a href="#stream-sequences-and-lifetimes" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Stream Sequences and Lifetimes</h2>
+<p>Streams exists for a specific period of time. So an implementation may assume that Stream IDs are valid for a finite period of time. This period of time is bound by either a) the lifetime of the underlying transport protocol connection, or b) the lifetime of a session if resumability is used to extend the session across multiple transport protocol connections. Beyond that, each interaction pattern imposes lifetime based on a sequence of interactions between Requester and Responder.</p>
+<p>In the section below, &quot;RQ -&gt; RS&quot; refers to Requester sending a frame to a Responder. And &quot;RS -&gt; RQ&quot; refers to Responder sending
+a frame to a Requester.</p>
+<p>In the section below, &quot;*&quot; refers to 0 or more and &quot;+&quot; refers to 1 or more.</p>
+<p>Once a stream has &quot;terminated&quot;, the Stream ID can be &quot;forgotten&quot; by the Requester and Responder, but the Stream ID MUST NOT be re-used. See <a href="#stream-identifiers">Stream Identifier</a> for more information.</p>
+<p><a name="stream-sequences-request-response"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="request-response"></a><a href="#request-response" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Request Response</h3>
+<ol>
+<li>RQ -&gt; RS: REQUEST_RESPONSE</li>
+<li>RS -&gt; RQ: PAYLOAD with COMPLETE</li>
+</ol>
+<p>or</p>
+<ol>
+<li>RQ -&gt; RS: REQUEST_RESPONSE</li>
+<li>RS -&gt; RQ: ERROR[APPLICATION_ERROR|REJECTED|CANCELED|INVALID]</li>
+</ol>
+<p>or</p>
+<ol>
+<li>RQ -&gt; RS: REQUEST_RESPONSE</li>
+<li>RQ -&gt; RS: CANCEL</li>
+</ol>
+<p>Upon sending a response, the stream is terminated on the Responder.</p>
+<p>Upon receiving a CANCEL, the stream is terminated on the Responder and the response SHOULD not be sent.</p>
+<p>Upon sending a CANCEL, the stream is terminated on the Requester.</p>
+<p>Upon receiving a COMPLETE or ERROR[APPLICATION_ERROR|REJECTED|CANCELED|INVALID], the stream is terminated on the Requester.</p>
+<p><a name="stream-sequences-fire-and-forget"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="request-fire-n-forget"></a><a href="#request-fire-n-forget" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Request Fire-n-Forget</h3>
+<ol>
+<li>RQ -&gt; RS: REQUEST_FNF</li>
+</ol>
+<p>Upon reception, the stream is terminated by the Responder.</p>
+<p>Upon being sent, the stream is terminated by the Requester.</p>
+<p>REQUEST_FNF are assumed to be best effort and MAY not be processed due to: (1) SETUP rejection, (2) mis-formatting, (3) etc.</p>
+<p><a name="stream-sequences-request-stream"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="request-stream"></a><a href="#request-stream" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Request Stream</h3>
+<ol>
+<li>RQ -&gt; RS: REQUEST_STREAM</li>
+<li>RS -&gt; RQ: PAYLOAD*</li>
+<li>RS -&gt; RQ: ERROR[APPLICATION_ERROR|REJECTED|CANCELED|INVALID]</li>
+</ol>
+<p>or</p>
+<ol>
+<li>RQ -&gt; RS: REQUEST_STREAM</li>
+<li>RS -&gt; RQ: PAYLOAD*</li>
+<li>RS -&gt; RQ: COMPLETE</li>
+</ol>
+<p>or</p>
+<ol>
+<li>RQ -&gt; RS: REQUEST_STREAM</li>
+<li>RS -&gt; RQ: PAYLOAD*</li>
+<li>RQ -&gt; RS: CANCEL</li>
+</ol>
+<p>At any time, the Requester may send REQUEST_N frames.</p>
+<p>Upon receiving a CANCEL, the stream is terminated on the Responder.</p>
+<p>Upon sending a CANCEL, the stream is terminated on the Requester.</p>
+<p>Upon receiving a COMPLETE or ERROR[APPLICATION_ERROR|REJECTED|CANCELED|INVALID], the stream is terminated on the Requester.</p>
+<p>Upon sending a COMPLETE or ERROR[APPLICATION_ERROR|REJECTED|CANCELED|INVALID], the stream is terminated on the Responder.</p>
+<p><a name="stream-sequences-channel"></a></p>
+<h3><a class="anchor" aria-hidden="true" id="request-channel"></a><a href="#request-channel" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Request Channel</h3>
+<h4><a class="anchor" aria-hidden="true" id="complete-from-requester-and-responder"></a><a href="#complete-from-requester-and-responder" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>COMPLETE from Requester and Responder</h4>
+<ol>
+<li>RQ -&gt; RS: REQUEST_CHANNEL</li>
+<li>RQ -&gt; RS: PAYLOAD*</li>
+<li>RQ -&gt; RS: COMPLETE</li>
+</ol>
+<p>intermixed with</p>
+<ol>
+<li>RS -&gt; RQ: PAYLOAD*</li>
+<li>RS -&gt; RQ: COMPLETE</li>
+</ol>
+<h4><a class="anchor" aria-hidden="true" id="error-from-requester-responder-terminates"></a><a href="#error-from-requester-responder-terminates" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Error from Requester, Responder terminates</h4>
+<ol>
+<li>RQ -&gt; RS: REQUEST_CHANNEL</li>
+<li>RQ -&gt; RS: PAYLOAD*</li>
+<li>RQ -&gt; RS: ERROR[APPLICATION_ERROR]</li>
+</ol>
+<p>intermixed with</p>
+<ol>
+<li>RS -&gt; RQ: PAYLOAD*</li>
+</ol>
+<h4><a class="anchor" aria-hidden="true" id="error-from-requester-responder-already-completed"></a><a href="#error-from-requester-responder-already-completed" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Error from Requester, Responder already Completed</h4>
+<ol>
+<li>RQ -&gt; RS: REQUEST_CHANNEL</li>
+<li>RQ -&gt; RS: PAYLOAD*</li>
+<li>RQ -&gt; RS: ERROR[APPLICATION_ERROR]</li>
+</ol>
+<p>intermixed with</p>
+<ol>
+<li>RS -&gt; RQ: PAYLOAD*</li>
+<li>RS -&gt; RQ: COMPLETE</li>
+</ol>
+<h4><a class="anchor" aria-hidden="true" id="error-from-responder-requester-terminates"></a><a href="#error-from-responder-requester-terminates" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Error from Responder, Requester terminates</h4>
+<ol>
+<li>RQ -&gt; RS: REQUEST_CHANNEL</li>
+<li>RQ -&gt; RS: PAYLOAD*</li>
+</ol>
+<p>intermixed with</p>
+<ol>
+<li>RS -&gt; RQ: PAYLOAD*</li>
+<li>RS -&gt; RQ: ERROR[APPLICATION_ERROR|REJECTED|CANCELED|INVALID]</li>
+</ol>
+<h4><a class="anchor" aria-hidden="true" id="error-from-responder-requester-already-completed"></a><a href="#error-from-responder-requester-already-completed" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Error from Responder, Requester already Completed</h4>
+<ol>
+<li>RQ -&gt; RS: REQUEST_CHANNEL</li>
+<li>RQ -&gt; RS: PAYLOAD*</li>
+<li>RQ -&gt; RS: COMPLETE</li>
+</ol>
+<p>intermixed with</p>
+<ol>
+<li>RS -&gt; RQ: PAYLOAD*</li>
+<li>RS -&gt; RQ: ERROR[APPLICATION_ERROR|REJECTED|CANCELED|INVALID]</li>
+</ol>
+<h4><a class="anchor" aria-hidden="true" id="cancel-from-requester-responder-terminates"></a><a href="#cancel-from-requester-responder-terminates" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Cancel from Requester, Responder terminates</h4>
+<ol>
+<li>RQ -&gt; RS: REQUEST_CHANNEL</li>
+<li>RQ -&gt; RS: PAYLOAD*</li>
+<li>RQ -&gt; RS: COMPLETE</li>
+<li>RQ -&gt; RS: CANCEL</li>
+</ol>
+<p>intermixed with</p>
+<ol>
+<li>RS -&gt; RQ: PAYLOAD*</li>
+</ol>
+<p>At any time, a Requester may send PAYLOAD frames.</p>
+<p>At any time, a Requester, as well as a Responder, may send REQUEST_N frames.</p>
+<p>An implementation MUST only send a single initial REQUEST_CHANNEL frame from the Requester to the Responder. And
+a Responder MUST respond to an initial REQUEST_CHANNEL frame with a REQUEST_N frame.</p>
+<p>Upon receiving a CANCEL, the stream is terminated on the Responder.</p>
+<p>Upon sending a CANCEL, the stream is terminated on the Requester.</p>
+<p>Upon receiving an ERROR[APPLICATION_ERROR|REJECTED|CANCELED|INVALID], the stream is terminated on both Requester and Responder.</p>
+<p>Upon sending an ERROR[APPLICATION_ERROR|REJECTED|CANCELED|INVALID], the stream is terminated on both the Requester and Responder.</p>
+<p>In absence of ERROR or CANCEL, the stream is terminated after both Requester and Responder have sent and received COMPLETE.</p>
+<p>A Requester may indicate COMPLETE by setting the C bit on either the initial REQUEST_CHANNEL frame, or on the last PAYLOAD frame sent. A Requester MUST NOT send any additional PAYLOAD frames after sending a frame with the C bit set.</p>
+<h3><a class="anchor" aria-hidden="true" id="flow-control"></a><a href="#flow-control" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Flow Control</h3>
+<p>There are multiple flow control mechanics provided by the protocol.</p>
+<p><a name="flow-control-reactive-streams"></a></p>
+<h4><a class="anchor" aria-hidden="true" id="reactive-streams-semantics"></a><a href="#reactive-streams-semantics" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Reactive Streams Semantics</h4>
+<p><a href="http://www.reactive-streams.org/">Reactive Streams</a> semantics are used for flow control of Streams, Subscriptions, and Channels. This is a credit-based model where the Requester grants the Responder credit for the number of PAYLOADs it can send. It is sometimes referred to as &quot;request-n&quot; or &quot;request(n)&quot;.</p>
+<p>Credits are cumulative. Once credits are granted from Requester to Responder, they cannot be revoked. For example, sending <code>request(3)</code> and <code>request(2)</code> accumulates to a value of 5, allowing the Responder to send 5 PAYLOADs.</p>
+<p>Please note that this explicitly does NOT follow rule number 17 in <a href="https://github.com/reactive-streams/reactive-streams-jvm/blob/v1.0.0/README.md#3-subscription-code">https://github.com/reactive-streams/reactive-streams-jvm/blob/v1.0.0/README.md#3-subscription-code</a></p>
+<p>While Reactive Streams support a demand of up to 2^63-1, and treats 2^63-1 as a magic number signaling to not track demand, this is not the case for RSocket. RSocket prioritizes byte size and only uses 4 bytes instead of 8 so the magic number is unavailable.</p>
+<p>The Requester and the Responder MUST respect the Reactive Streams semantics.</p>
+<p>e.g. here's an example of a successful stream call with flow-control.</p>
+<ol>
+<li>RQ -&gt; RS: REQUEST_STREAM (REQUEST_N=3)</li>
+<li>RS -&gt; RQ: PAYLOAD</li>
+<li>RS -&gt; RQ: PAYLOAD</li>
+<li>RS -&gt; RQ: PAYLOAD</li>
+<li>RS needs to wait for a new REQUEST_N at that point</li>
+<li>RQ -&gt; RS: REQUEST_N (N=3)</li>
+<li>RS -&gt; RQ: PAYLOAD</li>
+<li>RS -&gt; RQ: PAYLOAD with COMPLETE</li>
+</ol>
+<p><a name="flow-control-lease"></a></p>
+<h4><a class="anchor" aria-hidden="true" id="lease-semantics"></a><a href="#lease-semantics" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Lease Semantics</h4>
+<p>The LEASE semantics are to control the number of individual requests (all types) that a Requester may send in a given period.
+The only responsibility the protocol implementation has for the LEASE is to honor it on the Requester side. The Responder application
+is responsible for the logic of generation and informing the Responder it should send a LEASE to the peer Requester.</p>
+<p>Requester MUST respect the LEASE contract. The Requester MUST NOT send more than <strong>Number of Requests</strong> specified
+in the LEASE frame within the <strong>Time-To-Live</strong> value in the LEASE.</p>
+<p>A Responder that receives a REQUEST that it can not honor due to LEASE restrictions MUST respond with an ERROR[REJECTED]. This includes an initial LEASE sent as part of <a href="#connection-establishment">Connection Establishment</a>.</p>
+<p><a name="flow-control-qos"></a></p>
+<h4><a class="anchor" aria-hidden="true" id="qos-and-prioritization"></a><a href="#qos-and-prioritization" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>QoS and Prioritization</h4>
+<p>Quality of Service and Prioritization of streams are considered application or network layer concerns and are better dealt with
+at those layers. The metadata capabilities, including METADATA_PUSH, are tools that applications can use for effective prioritization.
+DiffServ via IP QoS are best handled by the underlying network layer protocols.</p>
+<h3><a class="anchor" aria-hidden="true" id="handling-the-unexpected"></a><a href="#handling-the-unexpected" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Handling the Unexpected</h3>
+<p>This protocol attempts to be very lenient in processing of received frames and SHOULD ignore
+conditions that do not make sense given the current context. Clarifications are given below:</p>
+<ol>
+<li><p>TCP half-open connections (and WebSockets) or other dead transports are detectable by lack of KEEPALIVE frames as specified under <a href="#frame-keepalive">Keepalive Frame</a>. The decision to close a connection due to inactivity is the applications choice.</p></li>
+<li><p>Request keepalive and timeout semantics are the responsibility of the application.</p></li>
+<li><p>Lack of REQUEST_N frames that stops a stream is an application concern and SHALL NOT be handled by the protocol.</p></li>
+<li><p>Lack of LEASE frames that stops new Requests is an application concern and SHALL NOT be handled by the protocol.</p></li>
+<li><p>If a PAYLOAD for a REQUEST_RESPONSE is received that does not have a COMPLETE flag set, the implementation MUST</p></li>
+</ol>
+<p>assume it is set and act accordingly.</p>
+<ol>
+<li><p>Reassembly of PAYLOADs and REQUEST_CHANNELs MUST assume the possibility of an infinite stream.</p></li>
+<li><p>A PAYLOAD with both <strong>F</strong> and <strong>C</strong> flags set, implicitly ignores the <strong>F</strong> flag.</p></li>
+<li><p>Flag bits not specified for a particular frame MUST be ignored.</p></li>
+<li><p>All other received frames that are not accounted for in previous sections MUST be ignored. Thus, for example:</p>
+<ol>
+<li>Receiving a Request frame on a Stream ID that is already in use MUST be ignored.</li>
+<li>Receiving a CANCEL on an unknown Stream ID (including 0) MUST be ignored.</li>
+<li>Receiving an ERROR on an unknown Stream ID MUST be ignored.</li>
+<li>Receiving a PAYLOAD on an unknown Stream ID (including 0) MUST be ignored.</li>
+<li>Receiving a METADATA_PUSH with a non-0 Stream ID MUST be ignored.</li>
+<li>A server MUST ignore a SETUP frame after it has accepted a previous SETUP.</li>
+<li>A server MUST ignore an ERROR[INVALID_SETUP|UNSUPPORTED_SETUP|REJECTED_SETUP|REJECTED_RESUME] frame.</li>
+<li>A client MUST ignore an ERROR[INVALID_SETUP|UNSUPPORTED_SETUP|REJECTED_SETUP|REJECTED_RESUME] frame after it has completed connection establishment.</li>
+<li>A client MUST ignore a SETUP frame.</li>
+</ol></li>
+</ol>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/Motivations"><span class="arrow-prev">← </span><span>Motivations</span></a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"><img src="/img/r-socket-pink.svg" alt="RSocket" width="66" height="58"/></a><div><h5>Docs</h5><a href="/docs/en/FAQ.html">FAQ</a><a href="/docs/en/Motivations.html">Motivations</a><a href="/docs/en/Protocol.html">Protocol</a></div><div><h5>Community</h5><a href="https://community.netifi.com">RSocket Forums</a><a href="https://stackoverflow.com/questions/tagged/rsocket" target="_blank" rel="noreferrer noopener">Stack Overflow</a><a href="/slack">Slack</a><a href="https://twitter.com/RSocketIO" target="_blank" rel="noreferrer noopener">Twitter</a></div><div><h5>More</h5><a href="/blog">Blog</a><a href="https://github.com/rsocket">GitHub</a><a class="github-button" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright"><span>Copyright © 2019 RSocket Contributors</span></section></footer></div><script>window.twttr=(function(d,s, id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return t;js=d.createElement(s);js.id=id;js.src='https://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js, fjs);t._e = [];t.ready = function(f) {t._e.push(f);};return t;}(document, 'script', 'twitter-wjs'));</script></body></html>

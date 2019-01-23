@@ -1,0 +1,25 @@
+plugins {
+    id 'base'
+    id 'distribution'
+    id 'com.moowork.node' version '1.2.0'
+}
+
+// Installing node modules
+npm_run_build.dependsOn npmInstall
+npm_start.dependsOn npmInstall
+
+// Builds the site
+task buildSite(dependsOn: npm_run_build) {}
+
+// Run the site with live reloading for local development
+task runSite(dependsOn: npm_start) {}
+
+// Builds the site for release and copies it to the /docs folder for GitHub pages deployment
+task deploySite(type: Copy, dependsOn: npm_run_build) {
+    from "${project.buildDir}/rsocket"
+    into "${rootProject.projectDir}/docs"
+}
+
+clean {
+    delete 'node_modules'
+}
