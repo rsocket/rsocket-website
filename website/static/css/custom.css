@@ -60,6 +60,7 @@ a {
 
 .container ul {
     margin: auto;
+    margin-bottom: 1em;
 
     /* One most likely needs to realign flow content */
     text-align: initial;
