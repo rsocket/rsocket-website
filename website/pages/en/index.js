@@ -134,7 +134,7 @@ class Index extends React.Component {
                 </ul>
               </div>
             </p>
-            <p>It supports session resumption, to allow resuming long-lived streams across different transport connections. This is particularly useful for mobile&lsaquo;&ndash;&rsaquo;server communication when network connections drop, switch, and reconnect frequently. </p>
+            <p>It supports session resumption, to allow resuming long-lived streams across different transport connections. This is particularly useful for mobile⬄server communication when network connections drop, switch, and reconnect frequently. </p>
             <p>Detailed information can be found in these documents:</p>
             <div className="container">
               <ul>
@@ -145,7 +145,7 @@ class Index extends React.Component {
             </div>
             <p>Join the <a href="https://community.netifi.com/c/rsocket">RSocket Community Forums</a> to learn more about RSocket, get your RSocket questions answered, and interact with other RSocket developers.</p>
             <p>Following is a brief example of a server and client in Java:</p>
-            <p>Example Java Server:</p>
+            <p><b>Example Java Server:</b></p>
             <div className="homeCodeSnippet">
               <MarkdownBlock>
               {
@@ -161,7 +161,7 @@ RSocketFactory.receive()
               }
               </MarkdownBlock>
             </div>
-            <p>Example Java Client:</p>
+            <p><b>Example Java Client:</b></p>
             <div className="homeCodeSnippet">
               <MarkdownBlock className="homeCodeSnippet">
                   {

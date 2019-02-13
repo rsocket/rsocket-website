@@ -10,7 +10,7 @@ Current version of the protocol is __0.2__ (Major Version: 0, Minor Version: 2).
 
 ## Introduction
 
-Specify an application protocol for [Reactive Streams](http://www.reactive-streams.org/) semantics across an asynchronous, binary
+Specify an application protocol for [Reactive Streams] semantics across an asynchronous, binary
 boundary. For more information, please see [rsocket.io](http://rsocket.io/).
 
 RSocket assumes an operating paradigm. These assumptions are:
@@ -21,7 +21,7 @@ RSocket assumes an operating paradigm. These assumptions are:
 
 - no state preserved across [transport protocol](#transport-protocol) sessions by the protocol
 
-Key words used by this document conform to the meanings in [RFC 2119](https://tools.ietf.org/html/rfc2119).
+Key words used by this document conform to the meanings in [RFC 2119].
 
 Byte ordering is big endian for all fields.
 
@@ -56,11 +56,11 @@ Byte ordering is big endian for all fields.
 * __Frame__: A single message containing a request, response, or protocol processing.
 * __Fragment__: A portion of an application message that has been partitioned for inclusion in a Frame.
 See [Fragmentation and Reassembly](#fragmentation-and-reassembly).
-* __Transport__: Protocol used to carry RSocket protocol. One of WebSockets, TCP, or Aeron. The transport MUST
+* __Transport__: Protocol used to carry RSocket protocol. One of WebSockets, TCP, or [Aeron]. The transport MUST
 provide capabilities mentioned in the [transport protocol](#transport-protocol) section.
 * __Stream__: Unit of operation (request/response, etc.). See [Motivations](Motivations.md).
 * __Request__: A stream request. May be one of four types. As well as request for more items or cancellation of previous request.
-* __Payload__: A stream message (upstream or downstream). Contains data associated with a stream created by a previous request. In Reactive Streams and Rx this is the 'onNext' event.
+* __Payload__: A stream message (upstream or downstream). Contains data associated with a stream created by a previous request. In [Reactive Streams] and Rx this is the 'onNext' event.
 * __Complete__: Terminal event sent on a stream to signal successful completion. In Reactive Streams and Rx this is the 'onComplete' event.
   * A frame (PAYLOAD or REQUEST_CHANNEL) with the Complete bit set is sometimes referred to as COMPLETE in this document when reference to the frame is semantically about the Complete bit/event.
 * __Client__: The side initiating a connection.
@@ -103,7 +103,7 @@ The RSocket protocol uses a lower level transport protocol to carry RSocket fram
 
 An implementation MAY "close" a transport connection due to protocol processing. When this occurs, it is assumed that the connection will have no further frames sent and all frames will be ignored.
 
-RSocket as specified here has been designed for and tested with TCP, WebSocket, Aeron, and [HTTP/2 streams](https://http2.github.io/http2-spec/#StreamsLayer) as transport protocols.
+RSocket as specified here has been designed for and tested with TCP, WebSocket, [Aeron], and [HTTP/2 streams](https://http2.github.io/http2-spec/#StreamsLayer) as transport protocols.
 
 ### Framing Protocol Usage
 
@@ -275,7 +275,7 @@ It is RECOMMENDED that Stream ID re-use only be used in combination with resumab
 | [__REQUEST_FNF__](#frame-fnf)                     | 0x05 | __Fire And Forget__: A single one-way message. |
 | [__REQUEST_STREAM__](#frame-request-stream)       | 0x06 | __Request Stream__: Request a completable stream. |
 | [__REQUEST_CHANNEL__](#frame-request-channel)     | 0x07 | __Request Channel__: Request a completable stream in both directions. |
-| [__REQUEST_N__](#frame-request-n)                 | 0x08 | __Request N__: Request N more items with Reactive Streams semantics. |
+| [__REQUEST_N__](#frame-request-n)                 | 0x08 | __Request N__: Request N more items with [Reactive Streams] semantics. |
 | [__CANCEL__](#frame-cancel)                       | 0x09 | __Cancel Request__: Cancel outstanding request. |
 | [__PAYLOAD__](#frame-payload)                     | 0x0A | __Payload__: Payload on a stream. For example, response to a request, or message on a channel. |
 | [__ERROR__](#frame-error)                         | 0x0B | __Error__: Error at connection or application level. |
@@ -341,7 +341,7 @@ Frame Contents
 * __MIME Length__: Encoding MIME Type Length in bytes.
 * __Encoding MIME Type__: MIME Type for encoding of Data and Metadata. This SHOULD be a US-ASCII string
 that includes the [Internet media type](https://en.wikipedia.org/wiki/Internet_media_type) specified
-in [RFC 2045](https://tools.ietf.org/html/rfc2045). Many are registered with
+in [RFC 2045]. Many are registered with
 [IANA](https://www.iana.org/assignments/media-types/media-types.xhtml) such as
 [CBOR](https://www.iana.org/assignments/media-types/application/cbor).
 [Suffix](http://www.iana.org/assignments/media-type-structured-suffix/media-type-structured-suffix.xml)
@@ -392,7 +392,7 @@ The Error Data is typically an Exception message, but could include stringified 
 | __REJECTED_RESUME__            | 0x00000004 | The server rejected the resume, it can specify the reason in the payload. Stream ID MUST be 0. |
 | __CONNECTION_ERROR__           | 0x00000101 | The connection is being terminated. Stream ID MUST be 0. Sender or Receiver of this frame MAY close the connection immediately without waiting for outstanding streams to terminate.|
 | __CONNECTION_CLOSE__           | 0x00000102 | The connection is being terminated. Stream ID MUST be 0. Sender or Receiver of this frame MUST wait for outstanding streams to terminate before closing the connection. New requests MAY not be accepted.|
-| __APPLICATION_ERROR__          | 0x00000201 | Application layer logic generating a Reactive Streams _onError_ event. Stream ID MUST be > 0. |
+| __APPLICATION_ERROR__          | 0x00000201 | Application layer logic generating a [Reactive Streams] _onError_ event. Stream ID MUST be > 0. |
 | __REJECTED__                   | 0x00000202 | Despite being a valid request, the Responder decided to reject it. The Responder guarantees that it didn't process the request. The reason for the rejection is explained in the Error Data section. Stream ID MUST be > 0. |
 | __CANCELED__                   | 0x00000203 | The Responder canceled the request but may have started processing it (similar to REJECTED but doesn't guarantee lack of side-effects). Stream ID MUST be > 0. |
 | __INVALID__                    | 0x00000204 | The request is invalid. Stream ID MUST be > 0. |
@@ -590,7 +590,7 @@ A requester MUST send only __one__ REQUEST_CHANNEL frame. Subsequent messages fr
 
 A requester MUST __not__ send PAYLOAD frames after the REQUEST_CHANNEL frame until the responder sends a REQUEST_N frame granting credits for number of PAYLOADs able to be sent.
 
-See Flow Control: Reactive Streams Semantics for more information on RequestN behavior.
+See [Flow Control: Reactive Streams Semantics](#flow-control-reactive-streams) for more information on RequestN behavior.
 
 <a name="frame-request-n"></a>
 ### REQUEST_N Frame (0x08)
@@ -612,7 +612,7 @@ Frame Contents
 * __Frame Type__: (6 bits) 0x08
 * __Request N__: (31 bits = max value 2^31-1 = 2,147,483,647) Unsigned 31-bit integer representing the number of items to request. Value MUST be > 0.
 
-See Flow Control: Reactive Streams Semantics for more information on RequestN behavior.
+See [Flow Control: Reactive Streams Semantics](#flow-control-reactive-streams) for more information on RequestN behavior.
 
 <a name="frame-cancel"></a>
 ### CANCEL Frame (0x09)
@@ -655,7 +655,7 @@ Frame Contents
        * If set, `onComplete()` or equivalent will be invoked on Subscriber/Observer.
     * (__N__)ext: bit to indicate Next (Payload Data and/or Metadata present).
        * If set, `onNext(Payload)` or equivalent will be invoked on Subscriber/Observer.
-* __Payload Data__: payload for Reactive Streams onNext.
+* __Payload Data__: payload for [Reactive Streams] onNext.
 
 Valid combinations of (C)omplete and (N)ext flags are:
 
@@ -741,7 +741,7 @@ RSocket resumption exists only for specific cases. It is not intended to be an â
 
 ### Implied Position
 
-Resuming operation requires knowing the position of data reception of the previous connection. For this to be simplified, the underlying transport is assumed to support contiguous delivery of data on a per frame basis. In other words, partial frames are not delivered for processing nor are gaps allowed in the stream of frames sent by either the client or server. The current list of supported transports (TCP, WebSocket, and Aeron) all satisfy this requirement or can be made to do so in the case of TCP.
+Resuming operation requires knowing the position of data reception of the previous connection. For this to be simplified, the underlying transport is assumed to support contiguous delivery of data on a per frame basis. In other words, partial frames are not delivered for processing nor are gaps allowed in the stream of frames sent by either the client or server. The current list of supported transports (TCP, WebSocket, and [Aeron]) all satisfy this requirement or can be made to do so in the case of TCP.
 
 As a Requester or Responder __sends__ REQUEST, CANCEL, or PAYLOAD frames, it maintains a __position__ of that frame within the connection in that direction. This is a 64-bit value that starts at 0. As a Requester or Responder __receives__ REQUEST, CANCEL, or PAYLOAD frames, it maintains an __implied position__ of that frame within the connection in that direction. This is also a 64-bit value that starts at 0.
 
@@ -1203,7 +1203,7 @@ There are multiple flow control mechanics provided by the protocol.
 
 #### Reactive Streams Semantics
 
-[Reactive Streams](http://www.reactive-streams.org/) semantics are used for flow control of Streams, Subscriptions, and Channels. This is a credit-based model where the Requester grants the Responder credit for the number of PAYLOADs it can send. It is sometimes referred to as "request-n" or "request(n)". 
+[Reactive Streams] semantics are used for flow control of Streams, Subscriptions, and Channels. This is a credit-based model where the Requester grants the Responder credit for the number of PAYLOADs it can send. It is sometimes referred to as "request-n" or "request(n)". 
 
 Credits are cumulative. Once credits are granted from Requester to Responder, they cannot be revoked. For example, sending `request(3)` and `request(2)` accumulates to a value of 5, allowing the Responder to send 5 PAYLOADs.
 
@@ -1275,3 +1275,8 @@ assume it is set and act accordingly.
     1. A server MUST ignore an ERROR[INVALID_SETUP|UNSUPPORTED_SETUP|REJECTED_SETUP|REJECTED_RESUME] frame.
     1. A client MUST ignore an ERROR[INVALID_SETUP|UNSUPPORTED_SETUP|REJECTED_SETUP|REJECTED_RESUME] frame after it has completed connection establishment.
     1. A client MUST ignore a SETUP frame.
+
+[Aeron]: https://github.com/real-logic/Aeron "Efficient reliable UDP unicast, UDP multicast, and IPC message transport."
+[Reactive Streams]: http://www.reactive-streams.org "Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure."
+[RFC 2045]: https://tools.ietf.org/html/rfc2045 "Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies"
+[RFC 2119]: https://tools.ietf.org/html/rfc2119 "Key words for use in RFCs to Indicate Requirement Levels"
