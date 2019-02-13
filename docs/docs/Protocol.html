@@ -45,7 +45,7 @@
 <p>This protocol is currently a draft for the final specifications.
 Current version of the protocol is <strong>0.2</strong> (Major Version: 0, Minor Version: 2). This is currently considered a 1.0 Release Candidate. Final testing is being done in Java and C++ implementations with goal to release 1.0 in the near future.</p>
 <h2><a class="anchor" aria-hidden="true" id="introduction"></a><a href="#introduction" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Introduction</h2>
-<p>Specify an application protocol for <a href="http://www.reactive-streams.org/">Reactive Streams</a> semantics across an asynchronous, binary
+<p>Specify an application protocol for <a href="http://www.reactive-streams.org" title="Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure.">Reactive Streams</a> semantics across an asynchronous, binary
 boundary. For more information, please see <a href="http://rsocket.io/">rsocket.io</a>.</p>
 <p>RSocket assumes an operating paradigm. These assumptions are:</p>
 <ul>
@@ -53,7 +53,7 @@ boundary. For more information, please see <a href="http://rsocket.io/">rsocket.
 <li><p>non-proxied communication. Or if proxied, the RSocket semantics and assumptions are preserved across the proxy.</p></li>
 <li><p>no state preserved across <a href="#transport-protocol">transport protocol</a> sessions by the protocol</p></li>
 </ul>
-<p>Key words used by this document conform to the meanings in <a href="https://tools.ietf.org/html/rfc2119">RFC 2119</a>.</p>
+<p>Key words used by this document conform to the meanings in <a href="https://tools.ietf.org/html/rfc2119" title="Key words for use in RFCs to Indicate Requirement Levels">RFC 2119</a>.</p>
 <p>Byte ordering is big endian for all fields.</p>
 <h2><a class="anchor" aria-hidden="true" id="table-of-contents"></a><a href="#table-of-contents" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Table of Contents</h2>
 <ul>
@@ -92,11 +92,11 @@ boundary. For more information, please see <a href="http://rsocket.io/">rsocket.
 <li><strong>Frame</strong>: A single message containing a request, response, or protocol processing.</li>
 <li><strong>Fragment</strong>: A portion of an application message that has been partitioned for inclusion in a Frame.
 See <a href="#fragmentation-and-reassembly">Fragmentation and Reassembly</a>.</li>
-<li><strong>Transport</strong>: Protocol used to carry RSocket protocol. One of WebSockets, TCP, or Aeron. The transport MUST
+<li><strong>Transport</strong>: Protocol used to carry RSocket protocol. One of WebSockets, TCP, or <a href="https://github.com/real-logic/Aeron" title="Efficient reliable UDP unicast, UDP multicast, and IPC message transport.">Aeron</a>. The transport MUST
 provide capabilities mentioned in the <a href="#transport-protocol">transport protocol</a> section.</li>
 <li><strong>Stream</strong>: Unit of operation (request/response, etc.). See <a href="/docs/Motivations">Motivations</a>.</li>
 <li><strong>Request</strong>: A stream request. May be one of four types. As well as request for more items or cancellation of previous request.</li>
-<li><strong>Payload</strong>: A stream message (upstream or downstream). Contains data associated with a stream created by a previous request. In Reactive Streams and Rx this is the 'onNext' event.</li>
+<li><strong>Payload</strong>: A stream message (upstream or downstream). Contains data associated with a stream created by a previous request. In <a href="http://www.reactive-streams.org" title="Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure.">Reactive Streams</a> and Rx this is the 'onNext' event.</li>
 <li><strong>Complete</strong>: Terminal event sent on a stream to signal successful completion. In Reactive Streams and Rx this is the 'onComplete' event.
 <ul>
 <li>A frame (PAYLOAD or REQUEST_CHANNEL) with the Complete bit set is sometimes referred to as COMPLETE in this document when reference to the frame is semantically about the Complete bit/event.</li>
@@ -132,7 +132,7 @@ between the types in an application is left to the application.</p>
 <li><a href="https://en.wikipedia.org/wiki/Frame_check_sequence">FCS</a> is assumed to be in use either at the transport protocol or at each MAC layer hop. But no protection against malicious corruption is assumed.</li>
 </ol>
 <p>An implementation MAY &quot;close&quot; a transport connection due to protocol processing. When this occurs, it is assumed that the connection will have no further frames sent and all frames will be ignored.</p>
-<p>RSocket as specified here has been designed for and tested with TCP, WebSocket, Aeron, and <a href="https://http2.github.io/http2-spec/#StreamsLayer">HTTP/2 streams</a> as transport protocols.</p>
+<p>RSocket as specified here has been designed for and tested with TCP, WebSocket, <a href="https://github.com/real-logic/Aeron" title="Efficient reliable UDP unicast, UDP multicast, and IPC message transport.">Aeron</a>, and <a href="https://http2.github.io/http2-spec/#StreamsLayer">HTTP/2 streams</a> as transport protocols.</p>
 <h3><a class="anchor" aria-hidden="true" id="framing-protocol-usage"></a><a href="#framing-protocol-usage" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Framing Protocol Usage</h3>
 <p>Some of the supported transport protocols for RSocket may not support specific framing that preserves message boundaries. For these protocols, a framing protocol MUST be used with the RSocket frame that prepends the RSocket Frame Length.</p>
 <p>The frame length field MUST be omitted if the transport protocol preserves message boundaries e.g. provides compatible framing. If, however, the transport protocol only provides a stream abstraction or can merge messages without preserving boundaries, or multiple transport protocols may be used, then the frame header MUST be used.</p>
@@ -275,7 +275,7 @@ to odd/even values. In other words, a client MUST generate odd Stream IDs and a 
 <tr><td style="text-align:left"><a href="#frame-fnf"><strong>REQUEST_FNF</strong></a></td><td style="text-align:left">0x05</td><td style="text-align:left"><strong>Fire And Forget</strong>: A single one-way message.</td></tr>
 <tr><td style="text-align:left"><a href="#frame-request-stream"><strong>REQUEST_STREAM</strong></a></td><td style="text-align:left">0x06</td><td style="text-align:left"><strong>Request Stream</strong>: Request a completable stream.</td></tr>
 <tr><td style="text-align:left"><a href="#frame-request-channel"><strong>REQUEST_CHANNEL</strong></a></td><td style="text-align:left">0x07</td><td style="text-align:left"><strong>Request Channel</strong>: Request a completable stream in both directions.</td></tr>
-<tr><td style="text-align:left"><a href="#frame-request-n"><strong>REQUEST_N</strong></a></td><td style="text-align:left">0x08</td><td style="text-align:left"><strong>Request N</strong>: Request N more items with Reactive Streams semantics.</td></tr>
+<tr><td style="text-align:left"><a href="#frame-request-n"><strong>REQUEST_N</strong></a></td><td style="text-align:left">0x08</td><td style="text-align:left"><strong>Request N</strong>: Request N more items with <a href="http://www.reactive-streams.org" title="Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure.">Reactive Streams</a> semantics.</td></tr>
 <tr><td style="text-align:left"><a href="#frame-cancel"><strong>CANCEL</strong></a></td><td style="text-align:left">0x09</td><td style="text-align:left"><strong>Cancel Request</strong>: Cancel outstanding request.</td></tr>
 <tr><td style="text-align:left"><a href="#frame-payload"><strong>PAYLOAD</strong></a></td><td style="text-align:left">0x0A</td><td style="text-align:left"><strong>Payload</strong>: Payload on a stream. For example, response to a request, or message on a channel.</td></tr>
 <tr><td style="text-align:left"><a href="#frame-error"><strong>ERROR</strong></a></td><td style="text-align:left">0x0B</td><td style="text-align:left"><strong>Error</strong>: Error at connection or application level.</td></tr>
@@ -339,7 +339,7 @@ concern only.</p>
 <li><strong>MIME Length</strong>: Encoding MIME Type Length in bytes.</li>
 <li><strong>Encoding MIME Type</strong>: MIME Type for encoding of Data and Metadata. This SHOULD be a US-ASCII string
 that includes the <a href="https://en.wikipedia.org/wiki/Internet_media_type">Internet media type</a> specified
-in <a href="https://tools.ietf.org/html/rfc2045">RFC 2045</a>. Many are registered with
+in <a href="https://tools.ietf.org/html/rfc2045" title="Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies">RFC 2045</a>. Many are registered with
 <a href="https://www.iana.org/assignments/media-types/media-types.xhtml">IANA</a> such as
 <a href="https://www.iana.org/assignments/media-types/application/cbor">CBOR</a>.
 <a href="http://www.iana.org/assignments/media-type-structured-suffix/media-type-structured-suffix.xml">Suffix</a>
@@ -387,7 +387,7 @@ Setup header.</li>
 <tr><td style="text-align:left"><strong>REJECTED_RESUME</strong></td><td style="text-align:left">0x00000004</td><td style="text-align:left">The server rejected the resume, it can specify the reason in the payload. Stream ID MUST be 0.</td></tr>
 <tr><td style="text-align:left"><strong>CONNECTION_ERROR</strong></td><td style="text-align:left">0x00000101</td><td style="text-align:left">The connection is being terminated. Stream ID MUST be 0. Sender or Receiver of this frame MAY close the connection immediately without waiting for outstanding streams to terminate.</td></tr>
 <tr><td style="text-align:left"><strong>CONNECTION_CLOSE</strong></td><td style="text-align:left">0x00000102</td><td style="text-align:left">The connection is being terminated. Stream ID MUST be 0. Sender or Receiver of this frame MUST wait for outstanding streams to terminate before closing the connection. New requests MAY not be accepted.</td></tr>
-<tr><td style="text-align:left"><strong>APPLICATION_ERROR</strong></td><td style="text-align:left">0x00000201</td><td style="text-align:left">Application layer logic generating a Reactive Streams <em>onError</em> event. Stream ID MUST be &gt; 0.</td></tr>
+<tr><td style="text-align:left"><strong>APPLICATION_ERROR</strong></td><td style="text-align:left">0x00000201</td><td style="text-align:left">Application layer logic generating a <a href="http://www.reactive-streams.org" title="Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure.">Reactive Streams</a> <em>onError</em> event. Stream ID MUST be &gt; 0.</td></tr>
 <tr><td style="text-align:left"><strong>REJECTED</strong></td><td style="text-align:left">0x00000202</td><td style="text-align:left">Despite being a valid request, the Responder decided to reject it. The Responder guarantees that it didn't process the request. The reason for the rejection is explained in the Error Data section. Stream ID MUST be &gt; 0.</td></tr>
 <tr><td style="text-align:left"><strong>CANCELED</strong></td><td style="text-align:left">0x00000203</td><td style="text-align:left">The Responder canceled the request but may have started processing it (similar to REJECTED but doesn't guarantee lack of side-effects). Stream ID MUST be &gt; 0.</td></tr>
 <tr><td style="text-align:left"><strong>INVALID</strong></td><td style="text-align:left">0x00000204</td><td style="text-align:left">The request is invalid. Stream ID MUST be &gt; 0.</td></tr>
@@ -565,7 +565,7 @@ echoed back in the generated KEEPALIVE.</p>
 </ul>
 <p>A requester MUST send only <strong>one</strong> REQUEST_CHANNEL frame. Subsequent messages from requester to responder MUST be sent as PAYLOAD frames.</p>
 <p>A requester MUST <strong>not</strong> send PAYLOAD frames after the REQUEST_CHANNEL frame until the responder sends a REQUEST_N frame granting credits for number of PAYLOADs able to be sent.</p>
-<p>See Flow Control: Reactive Streams Semantics for more information on RequestN behavior.</p>
+<p>See <a href="#flow-control-reactive-streams">Flow Control: Reactive Streams Semantics</a> for more information on RequestN behavior.</p>
 <p><a name="frame-request-n"></a></p>
 <h3><a class="anchor" aria-hidden="true" id="request-n-frame-0x08"></a><a href="#request-n-frame-0x08" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>REQUEST_N Frame (0x08)</h3>
 <p>Frame Contents</p>
@@ -583,7 +583,7 @@ echoed back in the generated KEEPALIVE.</p>
 <li><strong>Frame Type</strong>: (6 bits) 0x08</li>
 <li><strong>Request N</strong>: (31 bits = max value 2^31-1 = 2,147,483,647) Unsigned 31-bit integer representing the number of items to request. Value MUST be &gt; 0.</li>
 </ul>
-<p>See Flow Control: Reactive Streams Semantics for more information on RequestN behavior.</p>
+<p>See <a href="#flow-control-reactive-streams">Flow Control: Reactive Streams Semantics</a> for more information on RequestN behavior.</p>
 <p><a name="frame-cancel"></a></p>
 <h3><a class="anchor" aria-hidden="true" id="cancel-frame-0x09"></a><a href="#cancel-frame-0x09" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>CANCEL Frame (0x09)</h3>
 <p>Frame Contents</p>
@@ -625,7 +625,7 @@ echoed back in the generated KEEPALIVE.</p>
 <li>If set, <code>onNext(Payload)</code> or equivalent will be invoked on Subscriber/Observer.</li>
 </ul></li>
 </ul></li>
-<li><strong>Payload Data</strong>: payload for Reactive Streams onNext.</li>
+<li><strong>Payload Data</strong>: payload for <a href="http://www.reactive-streams.org" title="Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure.">Reactive Streams</a> onNext.</li>
 </ul>
 <p>Valid combinations of (C)omplete and (N)ext flags are:</p>
 <ul>
@@ -702,7 +702,7 @@ Responder to its peer.</p>
 <li>Resumption makes no assumptions of application state for delivered frames with respect to atomicity, transactionality, etc. See above.</li>
 </ol>
 <h3><a class="anchor" aria-hidden="true" id="implied-position"></a><a href="#implied-position" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Implied Position</h3>
-<p>Resuming operation requires knowing the position of data reception of the previous connection. For this to be simplified, the underlying transport is assumed to support contiguous delivery of data on a per frame basis. In other words, partial frames are not delivered for processing nor are gaps allowed in the stream of frames sent by either the client or server. The current list of supported transports (TCP, WebSocket, and Aeron) all satisfy this requirement or can be made to do so in the case of TCP.</p>
+<p>Resuming operation requires knowing the position of data reception of the previous connection. For this to be simplified, the underlying transport is assumed to support contiguous delivery of data on a per frame basis. In other words, partial frames are not delivered for processing nor are gaps allowed in the stream of frames sent by either the client or server. The current list of supported transports (TCP, WebSocket, and <a href="https://github.com/real-logic/Aeron" title="Efficient reliable UDP unicast, UDP multicast, and IPC message transport.">Aeron</a>) all satisfy this requirement or can be made to do so in the case of TCP.</p>
 <p>As a Requester or Responder <strong>sends</strong> REQUEST, CANCEL, or PAYLOAD frames, it maintains a <strong>position</strong> of that frame within the connection in that direction. This is a 64-bit value that starts at 0. As a Requester or Responder <strong>receives</strong> REQUEST, CANCEL, or PAYLOAD frames, it maintains an <strong>implied position</strong> of that frame within the connection in that direction. This is also a 64-bit value that starts at 0.</p>
 <p>The reason this is “implied” is that the position is not included in each frame and is inferred simply by the message being sent/received on the connection in relation to previous frames.</p>
 <p>This position will be used to identify the location for resuming operation to begin.</p>
@@ -1091,7 +1091,7 @@ a Responder MUST respond to an initial REQUEST_CHANNEL frame with a REQUEST_N fr
 <p>There are multiple flow control mechanics provided by the protocol.</p>
 <p><a name="flow-control-reactive-streams"></a></p>
 <h4><a class="anchor" aria-hidden="true" id="reactive-streams-semantics"></a><a href="#reactive-streams-semantics" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Reactive Streams Semantics</h4>
-<p><a href="http://www.reactive-streams.org/">Reactive Streams</a> semantics are used for flow control of Streams, Subscriptions, and Channels. This is a credit-based model where the Requester grants the Responder credit for the number of PAYLOADs it can send. It is sometimes referred to as &quot;request-n&quot; or &quot;request(n)&quot;.</p>
+<p><a href="http://www.reactive-streams.org" title="Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure.">Reactive Streams</a> semantics are used for flow control of Streams, Subscriptions, and Channels. This is a credit-based model where the Requester grants the Responder credit for the number of PAYLOADs it can send. It is sometimes referred to as &quot;request-n&quot; or &quot;request(n)&quot;.</p>
 <p>Credits are cumulative. Once credits are granted from Requester to Responder, they cannot be revoked. For example, sending <code>request(3)</code> and <code>request(2)</code> accumulates to a value of 5, allowing the Responder to send 5 PAYLOADs.</p>
 <p>Please note that this explicitly does NOT follow rule number 17 in <a href="https://github.com/reactive-streams/reactive-streams-jvm/blob/v1.0.0/README.md#3-subscription-code">https://github.com/reactive-streams/reactive-streams-jvm/blob/v1.0.0/README.md#3-subscription-code</a></p>
 <p>While Reactive Streams support a demand of up to 2^63-1, and treats 2^63-1 as a magic number signaling to not track demand, this is not the case for RSocket. RSocket prioritizes byte size and only uses 4 bytes instead of 8 so the magic number is unavailable.</p>
