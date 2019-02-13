@@ -46,7 +46,7 @@ class Footer extends React.Component {
           </div>
           <div>
             <h5>Community</h5>
-            <a href="https://community.netifi.com/c/rsocket">RSocket Forums</a>
+            <a href="https://community.netifi.com">RSocket Forums</a>
             <a
               href="https://stackoverflow.com/questions/tagged/rsocket"
               target="_blank"
