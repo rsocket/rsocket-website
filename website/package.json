@@ -9,10 +9,10 @@
     "rename-version": "docusaurus-rename-version"
   },
   "devDependencies": {
-    "docusaurus": "^1.4.0"
+    "docusaurus": "^1.7.2"
   },
   "dependencies": {
-    "docusaurus": "^1.4.0",
+    "docusaurus": "^1.7.2",
     "highlight.js": "^9.12.0"
   }
 }
