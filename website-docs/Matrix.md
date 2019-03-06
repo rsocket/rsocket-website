@@ -1,7 +1,7 @@
 ---
 id: Matrix
-title: Supported Features by Implementation 
-sidebar_label: Supported Features by Implementation
+title: Supported Features
+sidebar_label: Supported Features
 ---
 
 # Mandatory Core Protocol Features
@@ -31,7 +31,7 @@ The core scope includes the following (and is not limited to) :
 | rsocket-py |  <ul><li>asyncio (TCP)</li></ul>  | 1.0  |    |   |    |   |  
 
 
-# Supported Extensions by driver
+# Supported Extensions
 
 | Driver | Composite Metadata | Routing | Well Known Mime Types | Tracing  |  
 |------|------|------|------|------|
