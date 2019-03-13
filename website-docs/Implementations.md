@@ -1,7 +1,7 @@
 ---
-id: Matrix
-title: Supported Features
-sidebar_label: Supported Features
+id: Implementations
+title: Implementations
+sidebar_label: Implementations Features
 ---
 
 # Mandatory Core Protocol Features
@@ -29,16 +29,3 @@ The core scope includes the following (and is not limited to) :
 | rsocket-go |  <ul><li>Go NET (TCP)</li></ul>  | 1.0   |   |   |    |  | 
 | rsocket-kotlin |  <ul><li>reactor-netty <br />(TCP, websocket)</li><li>OkHttp <br />(websocket _client only_)</li></ul>   | 1.0 | x |   |  |    |  
 | rsocket-py |  <ul><li>asyncio (TCP)</li></ul>  | 1.0  |    |   |    |   |  
-
-
-# Supported Extensions
-
-| Driver | Composite Metadata | Routing | Well Known Mime Types | Tracing  |  
-|------|------|------|------|------|
-| rsocket-java |   |  |  |   |
-| rsocket-js   |   |   | |   | 
-| rsocket-net |    |    |  |   |
-| rsocket-cpp |  |    |    |   | 
-| rsocket-go |   |    |    |   | 
-| rsocket-kotlin |   |  |    |    | 
-| rsocket-py |   |   |    |   |  

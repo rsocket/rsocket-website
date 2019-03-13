@@ -9,9 +9,9 @@
         "title": "FAQ",
         "sidebar_label": "FAQ"
       },
-      "Matrix": {
-        "title": "Supported Features by Implementation",
-        "sidebar_label": "Supported Features by Implementation"
+      "Implementations": {
+        "title": "Implementations",
+        "sidebar_label": "Implementations Features"
       },
       "Motivations": {
         "title": "Motivations",
