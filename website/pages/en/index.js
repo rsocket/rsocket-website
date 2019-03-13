@@ -141,7 +141,7 @@ class Index extends React.Component {
                 <li><a href={docUrl('FAQ')}>FAQ</a> - Frequently Asked Questions</li>
                 <li><a href={docUrl('Motivations')}>Motivations</a> - Why RSocket?</li>
                 <li><a href={docUrl('Protocol')}>Protocol</a> - The Protocol</li>
-                <li><a href={docUrl('Matrix')}>Matrix</a> - Supported Features by Implementation</li>
+                <li><a href={docUrl('Implementations')}>Implementations</a> - Supported Features by Implementation</li>
               </ul>
             </div>
             <p>Join the <a href="https://community.netifi.com">RSocket Community Forums</a> to learn more about RSocket, get your RSocket questions answered, and interact with other RSocket developers.</p>

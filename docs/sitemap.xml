@@ -6,7 +6,7 @@
 <url> <loc>https://rsocket.io/users</loc> <changefreq>weekly</changefreq> <priority>0.5</priority> <xhtml:link rel="alternate" hreflang="en" href="https://rsocket.io/en/users" /> </url>
 <url> <loc>https://rsocket.io/blog/2018/10/08</loc> <changefreq>weekly</changefreq> <priority>0.3</priority> </url>
 <url> <loc>https://rsocket.io/docs/FAQ</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://rsocket.io/docs/FAQ" /> </url>
-<url> <loc>https://rsocket.io/docs/Matrix</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://rsocket.io/docs/Matrix" /> </url>
+<url> <loc>https://rsocket.io/docs/Implementations</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://rsocket.io/docs/Implementations" /> </url>
 <url> <loc>https://rsocket.io/docs/Motivations</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://rsocket.io/docs/Motivations" /> </url>
 <url> <loc>https://rsocket.io/docs/Protocol</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://rsocket.io/docs/Protocol" /> </url>
 </urlset>
