@@ -16,7 +16,7 @@ const siteConfig = {
   // url: 'https://reasonml.github.io',
   // baseUrl: '/reason-react/',
 
-  customDocsPath: 'website-docs',
+  customDocsPath: '/website-docs',
 
   defaultVersionShown: '1.0.0',
   organizationName: 'rsocket',
