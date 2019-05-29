@@ -45,7 +45,7 @@ const siteConfig = {
   disableTitleTagline: true,
   separateCss: ['static/css/non-docusaurus', 'static/assets/separate-css'],
   footerIcon: 'img/r-socket-pink.svg',
-  gaTrackingId: 'UA-12345678-9',
+  gaTrackingId: 'UA-122364851-2',
   highlight: {
     theme: "default"
   },
