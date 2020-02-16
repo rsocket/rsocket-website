@@ -46,14 +46,19 @@ class Footer extends React.Component {
           </div>
           <div>
             <h5>Community</h5>
-            <a href="https://community.netifi.com">RSocket Forums</a>
+            <a
+              href="https://community.reactive.foundation/"
+              target="_blank"
+              rel="noreferrer noopener">
+              RSocket Forums
+            </a>
             <a
               href="https://stackoverflow.com/questions/tagged/rsocket"
               target="_blank"
               rel="noreferrer noopener">
               Stack Overflow
             </a>
-            <a href={this.pageUrl('slack')}>Slack</a>
+            {/*<a href={this.pageUrl('slack')}>Slack</a>*/}
             <a
               href="https://twitter.com/RSocketIO"
               target="_blank"
