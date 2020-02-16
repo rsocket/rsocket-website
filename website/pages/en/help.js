@@ -27,7 +27,7 @@ class Help extends React.Component {
         title: 'Browse Documentation',
       },
       {
-        content: `Ask questions about the documentation and project on the <a href="https://community.netifi.com/c/rsocket">RSocket Forums</a>.`,
+        content: `Ask questions about the documentation and project on the <a href="https://community.reactive.foundation/">RSocket Forums</a>.`,
         title: 'Join the Community',
       },
     ];
