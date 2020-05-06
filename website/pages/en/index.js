@@ -152,11 +152,9 @@ class Index extends React.Component {
               <MarkdownBlock>
               {
 `\`\`\`java
-RSocketFactory.receive()
-    .frameDecoder(Frame::retain)
-    .acceptor(new PingHandler())
-    .transport(TcpServerTransport.create(7878))
-    .start()
+RSocketServer.create(new PingHandler())
+    .payloadDecoder(PayloadDecoder.ZERO)
+    .bind(TcpServerTransport.create(7878))
     .block()
     .onClose();
 `
@@ -169,8 +167,8 @@ RSocketFactory.receive()
                   {
 `\`\`\`java
 Mono<RSocket> client =
-    RSocketFactory.connect()
-        .frameDecoder(Frame::retain)
+    RSocketConnector.create()
+        .payloadDecoder(PayloadDecoder.ZERO)
         .transport(TcpClientTransport.create(7878))
         .start();
 
