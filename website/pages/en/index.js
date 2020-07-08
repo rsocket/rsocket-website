@@ -145,7 +145,7 @@ class Index extends React.Component {
                 <li><a href={docUrl('Implementations')}>Implementations</a> - Supported Features by Implementation</li>
               </ul>
             </div>
-            <p>Join the <a href="https://community.netifi.com">RSocket Community Forums</a> to learn more about RSocket, get your RSocket questions answered, and interact with other RSocket developers.</p>
+            <p>Join the <a href="https://community.reactive.foundation/">RSocket Community Forums</a> to learn more about RSocket, get your RSocket questions answered, and interact with other RSocket developers.</p>
             <p>Following is a brief example of a server and client in Java:</p>
             <p><b>Example Java Server:</b></p>
             <div className="homeCodeSnippet">
@@ -153,7 +153,7 @@ class Index extends React.Component {
               {
 `\`\`\`java
 RSocketServer.create(new PingHandler())
-    .payloadDecoder(PayloadDecoder.ZERO)
+    .payloadDecoder(PayloadDecoder.ZERO_COPY)
     .bind(TcpServerTransport.create(7878))
     .block()
     .onClose();
@@ -168,9 +168,8 @@ RSocketServer.create(new PingHandler())
 `\`\`\`java
 Mono<RSocket> client =
     RSocketConnector.create()
-        .payloadDecoder(PayloadDecoder.ZERO)
-        .transport(TcpClientTransport.create(7878))
-        .start();
+        .payloadDecoder(PayloadDecoder.ZERO_COPY)
+        .connect(TcpClientTransport.create(7878));
 
 PingClient pingClient = new PingClient(client);
 
@@ -179,7 +178,7 @@ Recorder recorder = pingClient.startTracker(Duration.ofSeconds(1));
 int count = 1_000;
 
 pingClient
-    .startPingPong(count, recorder)
+    .requestResponsePingPong(count, recorder)
     .doOnTerminate(() -> System.out.println("Sent " + count + " messages."))
     .blockLast();
 `
