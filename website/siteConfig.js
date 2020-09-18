@@ -29,6 +29,7 @@ const siteConfig = {
       href: 'https://github.com/rsocket',
       label: 'GitHub',
     },
+    {page: 'blog', label: 'Blog'},
     {page: 'help', label: 'Help'},
   ],
   headerIcon: 'img/r-socket-pink.svg',

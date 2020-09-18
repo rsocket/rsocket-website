@@ -40,8 +40,20 @@
     /* respect the section's max width, from .mainContainer .wrapper p */
     max-width: 40rem;
 }
-.homeCodeSnippet pre {
+
+.wrapper pre {
     background-color: white;
+    display: flex;
+    align-content: center;
+    align-items: center;
+}
+
+.docMainWrapper pre code {
+    margin-left: 0;
+    /* margin: 0 auto; */
+    width: auto;
+    align-content: center;
+    max-width: max-content;
 }
 
 .homeCodeSnippet code {
