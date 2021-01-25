@@ -65,6 +65,17 @@ export default {
   ],
   "plugins": [],
   "themeConfig": {
+    "colorMode": {
+      "defaultMode": "light",
+      "disableSwitch": true,
+      "respectPrefersColorScheme": false,
+      "switchConfig": {
+        "darkIcon": "🌜",
+        "darkIconStyle": {},
+        "lightIcon": "🌞",
+        "lightIconStyle": {}
+      }
+    },
     "navbar": {
       "title": "RSocket",
       "logo": {
@@ -79,7 +90,7 @@ export default {
         {
           "href": "https://github.com/rsocket",
           "label": "GitHub",
-          "position": "right"
+          "position": "left"
         },
         {
           "to": "/blog",
@@ -103,6 +114,10 @@ export default {
             {
               "label": "Twitter",
               "to": "https://twitter.com/RSocketIO"
+            },
+            {
+              "label": "Gitter",
+              "to": "https://gitter.im/rsocket-routing/community#"
             }
           ]
         }
@@ -115,17 +130,6 @@ export default {
     },
     "gtag": {
       "trackingID": "UA-122364851-2"
-    },
-    "colorMode": {
-      "defaultMode": "light",
-      "disableSwitch": false,
-      "respectPrefersColorScheme": false,
-      "switchConfig": {
-        "darkIcon": "🌜",
-        "darkIconStyle": {},
-        "lightIcon": "🌞",
-        "lightIconStyle": {}
-      }
     },
     "docs": {
       "versionPersistence": "localStorage"

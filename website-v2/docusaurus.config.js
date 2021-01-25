@@ -67,6 +67,14 @@ module.exports = {
   ],
   "plugins": [],
   "themeConfig": {
+    "colorMode": {
+      // "light" | "dark"
+      "defaultMode": 'light',
+
+      // Hides the switch in the navbar
+      // Useful if you want to support a single color mode
+      "disableSwitch": true,
+    },
     "navbar": {
       "title": "RSocket",
       "logo": {
@@ -81,7 +89,7 @@ module.exports = {
         {
           "href": "https://github.com/rsocket",
           "label": "GitHub",
-          "position": "right"
+          "position": "left"
         },
         {
           "to": "/blog",
@@ -104,9 +112,13 @@ module.exports = {
             {
               "label": "Twitter",
               "to": "https://twitter.com/RSocketIO"
+            },
+            {
+              "label": "Gitter",
+              "to": "https://gitter.im/rsocket-routing/community#"
             }
           ]
-        }
+        },
       ],
       "copyright": "Copyright © 2021 RSocket Contributors",
       "logo": {
