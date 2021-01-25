@@ -1,6 +1,6 @@
 const path = require("path");
 
-module.exports={
+module.exports = {
   "title": "RSocket",
   "tagline": "Application protocol providing Reactive Streams semantics",
   "url": "https://rsocket.io",
@@ -50,7 +50,7 @@ module.exports={
       "@docusaurus/preset-classic",
       {
         "docs": {
-          "path":  path.resolve("../website-docs"),
+          "path": path.resolve("../website-docs"),
           "showLastUpdateAuthor": true,
           "showLastUpdateTime": true,
           "editUrl": "https://github.com/facebook/docusaurus/edit/master/docs/",
