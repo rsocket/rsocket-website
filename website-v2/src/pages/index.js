@@ -1,11 +1,90 @@
 import React from 'react';
 import classnames from 'classnames';
 import Layout from '@theme/Layout';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 import CodeBlock from '@theme/CodeBlock';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import {useBaseUrlUtils} from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
+
+function Examples () {
+  const values = [
+    { label: "Java", value: "java" },
+    { label: "C++", value: "cpp" },
+  ];
+  return (
+    <>
+      <Tabs defaultValue="java" values={values}>
+        <TabItem value={"java"}>
+          <div style={{ marginBottom: 10 }}>
+            <h3>Server Example</h3>
+            <CodeBlock className="language-java">
+              {`
+RSocketServer.create(new PingHandler())
+  .payloadDecoder(PayloadDecoder.ZERO)
+  .bind(TcpServerTransport.create(7878))
+  .block()
+  .onClose();
+                    `}
+            </CodeBlock>
+          </div>
+          <div>
+            <h3>Client Example</h3>
+            <CodeBlock className="language-java">
+              {`
+Mono<RSocket> client =
+    RSocketConnector.create()
+        .payloadDecoder(PayloadDecoder.ZERO)
+        .transport(TcpClientTransport.create(7878))
+        .start();
+
+PingClient pingClient = new PingClient(client);
+
+Recorder recorder = pingClient.startTracker(Duration.ofSeconds(1));
+
+int count = 1_000;
+
+pingClient
+    .startPingPong(count, recorder)
+    .doOnTerminate(() -> System.out.println("Sent " + count + " messages."))
+    .blockLast();
+                    `}
+            </CodeBlock>
+          </div>
+        </TabItem>
+        <TabItem value={"cpp"}>
+          <div style={{ marginBottom: 10 }}>
+            <h3>Server Example</h3>
+            <CodeBlock className="language-cpp">
+              {`
+  // RSocket server accepting on TCP
+  auto rs = RSocket::createServer(TcpConnectionAcceptor::create(FLAGS_port));
+  // global request handler
+  auto handler = std::make_shared<HelloStreamRequestHandler>();
+  // start accepting connections
+  rs->startAndPark([handler](auto r) { return handler; });
+                    `}
+            </CodeBlock>
+          </div>
+          <div>
+            <h3>Client Example</h3>
+            <CodeBlock className="language-cpp">
+              {`
+auto rsf = RSocket::createClient(TcpConnectionFactory::create(host, port));
+auto s = std::make_shared<ExampleSubscriber>(5, 6);
+auto rs = rsf->connect().get();
+rs->requestStream(Payload("Jane"), s);
+                    `}
+            </CodeBlock>
+          </div>
+        </TabItem>
+      </Tabs>
+
+    </>
+  );
+};
 
 function Home() {
   const {withBaseUrl} = useBaseUrlUtils();
@@ -192,41 +271,8 @@ function Home() {
                 ))}
               </div>
               <div>
-                <div style={{ marginBottom: 10 }}>
-                  <h3>Java Server Example</h3>
-                  <CodeBlock className="language-java">
-                    {`
-RSocketServer.create(new PingHandler())
-  .payloadDecoder(PayloadDecoder.ZERO)
-  .bind(TcpServerTransport.create(7878))
-  .block()
-  .onClose();
-                    `}
-                  </CodeBlock>
-                </div>
-                <div>
-                  <h3>Java Client Example</h3>
-                  <CodeBlock className="language-java">
-                    {`
-Mono<RSocket> client =
-    RSocketConnector.create()
-        .payloadDecoder(PayloadDecoder.ZERO)
-        .transport(TcpClientTransport.create(7878))
-        .start();
-
-PingClient pingClient = new PingClient(client);
-
-Recorder recorder = pingClient.startTracker(Duration.ofSeconds(1));
-
-int count = 1_000;
-
-pingClient
-    .startPingPong(count, recorder)
-    .doOnTerminate(() -> System.out.println("Sent " + count + " messages."))
-    .blockLast();
-                    `}
-                  </CodeBlock>
-                </div>
+                <h3>Basic Examples</h3>
+                <Examples />
               </div>
             </div>
           </section>
