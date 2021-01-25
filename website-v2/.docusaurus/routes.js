@@ -53,6 +53,11 @@ export default [
   exact: true,
 },
 {
+  path: '/help',
+  component: ComponentCreator('/help','6a6'),
+  exact: true,
+},
+{
   path: '/docs',
   component: ComponentCreator('/docs','520'),
   

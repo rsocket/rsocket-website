@@ -1,5 +1,6 @@
 export default {
   'allContent---docusaurus-debug-content-4-c-9-f03': [() => import(/* webpackChunkName: 'allContent---docusaurus-debug-content-4-c-9-f03' */ "~debug/default\\docusaurus-debug-all-content-673.json"), "~debug/default\\docusaurus-debug-all-content-673.json", require.resolveWeak("~debug/default\\docusaurus-debug-all-content-673.json")],
+  'component---site-src-pages-help-js-374-183': [() => import(/* webpackChunkName: 'component---site-src-pages-help-js-374-183' */ "@site/src\\pages\\help.js"), "@site/src\\pages\\help.js", require.resolveWeak("@site/src\\pages\\help.js")],
   'component---site-src-pages-index-jsece-a18': [() => import(/* webpackChunkName: 'component---site-src-pages-index-jsece-a18' */ "@site/src\\pages\\index.js"), "@site/src\\pages\\index.js", require.resolveWeak("@site/src\\pages\\index.js")],
   'component---theme-blog-list-pagea-6-a-7ba': [() => import(/* webpackChunkName: 'component---theme-blog-list-pagea-6-a-7ba' */ "@theme/BlogListPage"), "@theme/BlogListPage", require.resolveWeak("@theme/BlogListPage")],
   'component---theme-blog-post-pageccc-cab': [() => import(/* webpackChunkName: 'component---theme-blog-post-pageccc-cab' */ "@theme/BlogPostPage"), "@theme/BlogPostPage", require.resolveWeak("@theme/BlogPostPage")],

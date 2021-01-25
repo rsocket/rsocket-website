@@ -40,6 +40,10 @@
     "sidebar": "sidebar---blog-833-86f",
     "content": "content---blog-2018-10-08-e-3-c-b44"
   },
+  "/help-6a6": {
+    "component": "component---site-src-pages-help-js-374-183",
+    "config": "config---5-e-9-4f3"
+  },
   "/docs-520": {
     "component": "component---theme-doc-page-1-be-9be",
     "versionMetadata": "versionMetadata---docsf-97-b71"
