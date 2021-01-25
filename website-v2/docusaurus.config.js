@@ -3,10 +3,10 @@ const path = require("path");
 module.exports = {
   "title": "RSocket",
   "tagline": "Application protocol providing Reactive Streams semantics",
-  "url": "https://rsocket.io",
-  "baseUrl": "/",
-  "organizationName": "rsocket",
-  "projectName": "rsocket",
+  "url": process.env.URL || "https://rsocket.io",
+  "baseUrl": process.env.BASE_URL || "/",
+  "organizationName": process.env.ORGANIZATION_NAME || "rsocket",
+  "projectName": process.env.PROJECT_NAME ||  "rsocket-website",
   "noIndex": false,
   "scripts": [
     "https://docusaurus.io/slash.js",
