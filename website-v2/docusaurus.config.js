@@ -73,7 +73,10 @@ module.exports = {
 
       // Hides the switch in the navbar
       // Useful if you want to support a single color mode
-      "disableSwitch": true,
+      "disableSwitch": true
+    },
+    "prism": {
+      "theme": require('prism-react-renderer/themes/dracula')
     },
     "navbar": {
       "title": "RSocket",

@@ -1,6 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import Layout from '@theme/Layout';
+import CodeBlock from '@theme/CodeBlock';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import {useBaseUrlUtils} from '@docusaurus/useBaseUrl';
@@ -175,7 +176,7 @@ function Home() {
                 <h2>Implementations</h2>
                 <p>Drivers are assumed to implement all core features defined in the {protocolLink}.</p>
               </div>
-              <div>
+              <div style={{ marginBottom: 20 }}>
                 {implementations.map(({title, url}, idx) => (
                   <Link
                     key={idx}
@@ -189,6 +190,43 @@ function Home() {
                     {title}
                   </Link>
                 ))}
+              </div>
+              <div>
+                <div style={{ marginBottom: 10 }}>
+                  <h3>Java Server Example</h3>
+                  <CodeBlock className="language-java">
+                    {`
+RSocketServer.create(new PingHandler())
+  .payloadDecoder(PayloadDecoder.ZERO)
+  .bind(TcpServerTransport.create(7878))
+  .block()
+  .onClose();
+                    `}
+                  </CodeBlock>
+                </div>
+                <div>
+                  <h3>Java Client Example</h3>
+                  <CodeBlock className="language-java">
+                    {`
+Mono<RSocket> client =
+    RSocketConnector.create()
+        .payloadDecoder(PayloadDecoder.ZERO)
+        .transport(TcpClientTransport.create(7878))
+        .start();
+
+PingClient pingClient = new PingClient(client);
+
+Recorder recorder = pingClient.startTracker(Duration.ofSeconds(1));
+
+int count = 1_000;
+
+pingClient
+    .startPingPong(count, recorder)
+    .doOnTerminate(() -> System.out.println("Sent " + count + " messages."))
+    .blockLast();
+                    `}
+                  </CodeBlock>
+                </div>
               </div>
             </div>
           </section>
