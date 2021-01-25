@@ -115,10 +115,6 @@ module.exports = {
             {
               "label": "Twitter",
               "to": "https://twitter.com/RSocketIO"
-            },
-            {
-              "label": "Gitter",
-              "to": "https://gitter.im/rsocket-routing/community#"
             }
           ]
         },

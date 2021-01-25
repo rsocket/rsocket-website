@@ -25,10 +25,13 @@ function Help() {
     },
     {
       content: (() => {
-        const gitterLink = (<Link to={"https://gitter.im/rsocket-routing/community#"}>Gitter community</Link>);
         return (
           <>
-            Ask questions about the documentation and project on the {gitterLink}.
+            Ask questions about the documentation and project on the Gitter communities:
+            <ul style={{ marginTop: 10 }}>
+              <li><Link to={"https://gitter.im/rsocket/rsocket-java"}>RSocket Java</Link></li>
+              <li><Link to={"https://gitter.im/rsocket-routing/community"}>RSocket Routing</Link></li>
+            </ul>
           </>
         )
       })(),
