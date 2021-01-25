@@ -5,19 +5,19 @@
     "previous": "Previous",
     "tagline": "Application protocol providing Reactive Streams semantics",
     "docs": {
-      "FAQ": {
+      "faq": {
         "title": "FAQ",
         "sidebar_label": "FAQ"
       },
-      "Implementations": {
+      "implementations": {
         "title": "Implementations",
-        "sidebar_label": "Implementations Features"
+        "sidebar_label": "Implementations"
       },
-      "Motivations": {
+      "motivations": {
         "title": "Motivations",
         "sidebar_label": "Motivations"
       },
-      "Protocol": {
+      "protocol": {
         "title": "Protocol",
         "sidebar_label": "Protocol"
       }

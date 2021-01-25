@@ -1,0 +1,24 @@
+{
+  "unversionedId": "Motivations",
+  "id": "Motivations",
+  "isDocsHomePage": false,
+  "title": "Motivations",
+  "description": "Large, distributed systems are often implemented in a modular fashion by different teams using a variety of technologies and programming languages. The pieces need to communicate reliably and support rapid, independent evolution. Effective and scalable communication between modules is a crucial concern in distributed systems. It significantly affects how much latency users experience and the amount of resources required to build and run the system.",
+  "source": "@site/..\\website-docs\\Motivations.md",
+  "slug": "/motivations",
+  "permalink": "/docs/motivations",
+  "editUrl": "https://github.com/facebook/docusaurus/edit/master/docs/../website-docs/Motivations.md",
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "sidebar_label": "Motivations",
+  "sidebar": "docs",
+  "previous": {
+    "title": "FAQ",
+    "permalink": "/docs/"
+  },
+  "next": {
+    "title": "Protocol",
+    "permalink": "/docs/Protocol"
+  }
+}

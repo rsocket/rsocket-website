@@ -1,0 +1,38 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/docs",
+          "mainDocId": "faq",
+          "docs": [
+            {
+              "id": "faq",
+              "path": "/docs/",
+              "sidebar": "docs"
+            },
+            {
+              "id": "implementations",
+              "path": "/docs/implementations",
+              "sidebar": "docs"
+            },
+            {
+              "id": "motivations",
+              "path": "/docs/motivations",
+              "sidebar": "docs"
+            },
+            {
+              "id": "protocol",
+              "path": "/docs/protocol",
+              "sidebar": "docs"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,5 +1,5 @@
 ---
-id: Protocol
+slug: /protocol
 title: Protocol
 sidebar_label: Protocol
 ---
@@ -58,7 +58,7 @@ Byte ordering is big endian for all fields.
 See [Fragmentation and Reassembly](#fragmentation-and-reassembly).
 * __Transport__: Protocol used to carry RSocket protocol. One of WebSockets, TCP, or [Aeron]. The transport MUST
 provide capabilities mentioned in the [transport protocol](#transport-protocol) section.
-* __Stream__: Unit of operation (request/response, etc.). See [Motivations](Motivations.md).
+* __Stream__: Unit of operation (request/response, etc.). See [Motivations](motivations.md).
 * __Request__: A stream request. May be one of four types. As well as request for more items or cancellation of previous request.
 * __Payload__: A stream message (upstream or downstream). Contains data associated with a stream created by a previous request. In [Reactive Streams] and Rx this is the 'onNext' event.
 * __Complete__: Terminal event sent on a stream to signal successful completion. In Reactive Streams and Rx this is the 'onComplete' event.

@@ -1,0 +1,24 @@
+{
+  "unversionedId": "Protocol",
+  "id": "Protocol",
+  "isDocsHomePage": false,
+  "title": "Protocol",
+  "description": "Status",
+  "source": "@site/..\\website-docs\\Protocol.md",
+  "slug": "/Protocol",
+  "permalink": "/docs/Protocol",
+  "editUrl": "https://github.com/facebook/docusaurus/edit/master/docs/../website-docs/Protocol.md",
+  "version": "current",
+  "lastUpdatedBy": "Oleh Dokuka",
+  "lastUpdatedAt": 1600460351,
+  "sidebar_label": "Protocol",
+  "sidebar": "docs",
+  "previous": {
+    "title": "Motivations",
+    "permalink": "/docs/Motivations"
+  },
+  "next": {
+    "title": "Implementations",
+    "permalink": "/docs/Implementations"
+  }
+}

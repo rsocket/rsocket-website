@@ -1,0 +1,20 @@
+{
+  "unversionedId": "faq",
+  "id": "faq",
+  "isDocsHomePage": false,
+  "title": "Frequently Asked Questions",
+  "description": "Why a new protocol?",
+  "source": "@site/..\\website-docs\\faq.md",
+  "slug": "/",
+  "permalink": "/docs/",
+  "editUrl": "https://github.com/facebook/docusaurus/edit/master/docs/../website-docs/faq.md",
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "sidebar_label": "FAQ",
+  "sidebar": "docs",
+  "next": {
+    "title": "Motivations",
+    "permalink": "/docs/motivations"
+  }
+}

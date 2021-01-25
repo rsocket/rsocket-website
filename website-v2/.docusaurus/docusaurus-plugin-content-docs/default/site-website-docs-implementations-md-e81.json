@@ -1,0 +1,20 @@
+{
+  "unversionedId": "Implementations",
+  "id": "Implementations",
+  "isDocsHomePage": false,
+  "title": "Implementations",
+  "description": "Mandatory Core Protocol Features",
+  "source": "@site/..\\website-docs\\Implementations.md",
+  "slug": "/Implementations",
+  "permalink": "/docs/Implementations",
+  "editUrl": "https://github.com/facebook/docusaurus/edit/master/docs/../website-docs/Implementations.md",
+  "version": "current",
+  "lastUpdatedBy": "Author",
+  "lastUpdatedAt": 1539502055,
+  "sidebar_label": "Implementations Features",
+  "sidebar": "docs",
+  "previous": {
+    "title": "Protocol",
+    "permalink": "/docs/Protocol"
+  }
+}

@@ -1,10 +1,10 @@
 ---
-id: Implementations
+slug: /implementations
 title: Implementations
-sidebar_label: Implementations Features
+sidebar_label: Implementations
 ---
 
-# Mandatory Core Protocol Features
+## Mandatory Core Protocol Features
 
 Drivers are assumed to implement all core features defined in the [Protocol](Protocol) document.
 The core scope includes the following (and is not limited to) :
@@ -18,7 +18,7 @@ The core scope includes the following (and is not limited to) :
 * Handling the unexpected : If Resumption, Leasing or an extension is not supported, rejected error frames must be used
 
 
-# Supported Core Protocol Features
+## Supported Core Protocol Features Matrix
 
 | Driver | Transport(s) | Version | Core Support | Resumption | Leasing | RPC |  
 |------|------|------|------|------|------|------| 
