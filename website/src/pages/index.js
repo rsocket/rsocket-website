@@ -23,10 +23,10 @@ function Examples () {
             <CodeBlock className="language-java">
               {`
 RSocketServer.create(new PingHandler())
-  .payloadDecoder(PayloadDecoder.ZERO)
-  .bind(TcpServerTransport.create(7878))
-  .block()
-  .onClose();
+    .payloadDecoder(PayloadDecoder.ZERO_COPY)
+    .bind(TcpServerTransport.create(7878))
+    .block()
+    .onClose();
                     `}
             </CodeBlock>
           </div>
@@ -36,9 +36,8 @@ RSocketServer.create(new PingHandler())
               {`
 Mono<RSocket> client =
     RSocketConnector.create()
-        .payloadDecoder(PayloadDecoder.ZERO)
-        .transport(TcpClientTransport.create(7878))
-        .start();
+        .payloadDecoder(PayloadDecoder.ZERO_COPY)
+        .connect(TcpClientTransport.create(7878));
 
 PingClient pingClient = new PingClient(client);
 
@@ -47,7 +46,7 @@ Recorder recorder = pingClient.startTracker(Duration.ofSeconds(1));
 int count = 1_000;
 
 pingClient
-    .startPingPong(count, recorder)
+    .requestResponsePingPong(count, recorder)
     .doOnTerminate(() -> System.out.println("Sent " + count + " messages."))
     .blockLast();
                     `}
