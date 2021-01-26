@@ -18,7 +18,7 @@ Fork using the command line:
 
 ### Make your changes
 
-Most changes will be expected to be documentation updates in the [markdown docs](/docs). If you are changing more than the Markdown documentation pages, then you should be familiar with comfortable with Node JS, Docusaurus, and ReactJS.
+Most changes will be expected to be documentation updates in the [markdown docs](/website-docs). If you are changing more than the Markdown documentation pages, then you should be familiar with comfortable with Node JS, Docusaurus, and ReactJS.
 
 Review the [Docusaurus docs](https://v2.docusaurus.io/docs/markdown-features) for how to edit Markdown files.
 
