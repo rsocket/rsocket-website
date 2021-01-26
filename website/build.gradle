@@ -19,7 +19,7 @@ task deploySite (type: Copy, dependsOn: npm_run_build) {
     into rootProject.projectDir
 
     into("docs") {
-        from "${project.buildDir}/rsocket"
+        from "${project.projectDir}/build"
         from "${project.projectDir}/CNAME"
     }
 }
