@@ -63,7 +63,7 @@ module.exports = {
           "path": path.resolve("../website-docs"),
           "showLastUpdateAuthor": true,
           "showLastUpdateTime": true,
-          "editUrl": "https://github.com/facebook/docusaurus/edit/master/docs/",
+          "editUrl": "https://github.com/rsocket/rsocket-website/edit/master/website-docs/",
           "sidebarPath": path.resolve("./sidebars.js"),
         },
         "blog": {
