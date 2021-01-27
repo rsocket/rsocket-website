@@ -202,7 +202,12 @@ function Home() {
     >
       <header className={classnames('hero hero--primary', styles.heroBanner)}>
         <div className="container">
-          <h1 className="hero__title">{siteConfig.title}</h1>
+          <h1 className="hero__title">
+            <img
+              alt="RSocket Logo"
+              className="header__logo"
+              src={withBaseUrl("img/r-socket-horizontal-pink.svg")} />
+          </h1>
           <p className="hero__subtitle">{siteConfig.tagline}</p>
           <div className={styles.buttons}>
             <Link

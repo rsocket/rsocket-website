@@ -16,3 +16,7 @@
 .footer__logo {
   max-width: 4rem;
 }
+
+.header__logo {
+  max-width: 30rem;
+}
