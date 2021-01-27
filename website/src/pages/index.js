@@ -6,10 +6,10 @@ import TabItem from '@theme/TabItem';
 import CodeBlock from '@theme/CodeBlock';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import {useBaseUrlUtils} from '@docusaurus/useBaseUrl';
+import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
 import styles from './styles.module.css';
 
-function Examples () {
+function Examples() {
   const values = [
     { label: "Java", value: "java" },
     { label: "C++", value: "cpp" },
@@ -80,15 +80,14 @@ rs->requestStream(Payload("Jane"), s);
           </div>
         </TabItem>
       </Tabs>
-
     </>
   );
 };
 
 function Home() {
-  const {withBaseUrl} = useBaseUrlUtils();
+  const { withBaseUrl } = useBaseUrlUtils();
   const context = useDocusaurusContext();
-  const {siteConfig = {}} = context;
+  const { siteConfig = {} } = context;
 
   const implementationLink = (
     <Link
@@ -136,7 +135,7 @@ function Home() {
   const features = [
     {
       title: <>What is RSocket?</>,
-      imageUrl: 'img/undraw_Questions_re_1fy7.svg',
+      imageUrl: 'img/undraw_Faq_re_31cw.svg',
       description: (
         <>
           RSocket is a binary protocol for use on byte stream transports such as TCP, WebSockets, and Aeron.
@@ -156,10 +155,10 @@ function Home() {
     },
     {
       title: <>What does RSocket do?</>,
-      imageUrl: 'img/undraw_server_q2pb.svg',
+      imageUrl: 'img/undraw_server_cluster_jwwq.svg',
       description: (
         <>
-          RSocket provides a protocol for Reactive Streams semantics between clients-server, and server-server communication.
+          RSocket provides a protocol for Reactive Streams semantics between client-server, and server-server communication.
         </>
       ),
       button: (
@@ -223,7 +222,7 @@ function Home() {
           <section className={styles.features}>
             <div className="container">
               <div className="row">
-                {features.map(({imageUrl, title, description, button}, idx) => (
+                {features.map(({ imageUrl, title, description, button }, idx) => (
                   <div
                     key={idx}
                     className={classnames('col col--4', styles.feature)}
@@ -255,7 +254,7 @@ function Home() {
                 <p>Drivers are assumed to implement all core features defined in the {protocolLink}.</p>
               </div>
               <div style={{ marginBottom: 20 }}>
-                {implementations.map(({title, url}, idx) => (
+                {implementations.map(({ title, url }, idx) => (
                   <Link
                     key={idx}
                     style={{ marginRight: 4, marginBottom: 4 }}
