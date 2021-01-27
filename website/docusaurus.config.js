@@ -129,8 +129,9 @@ module.exports = {
           ]
         },
       ],
-      "copyright": "Copyright © 2021 RSocket Contributors",
+      "copyright": `Copyright © ${new Date().getFullYear()} RSocket Contributors`,
       "logo": {
+        "alt": "RSocket Logo",
         "src": "img/r-socket-pink.svg"
       }
     },

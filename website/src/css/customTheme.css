@@ -12,3 +12,7 @@
 
   --ifm-link-color: var(--brand-color-accent);
 }
+
+.footer__logo {
+  max-width: 4rem;
+}
