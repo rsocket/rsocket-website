@@ -1,0 +1,22 @@
+:root{
+  --brand-color-primary: #2b323b;
+  --brand-color-accent: #ef0092;
+
+  --ifm-color-primary: var(--brand-color-primary);
+  --ifm-color-primary-dark: #272d35;
+  --ifm-color-primary-darker: #252b32;
+  --ifm-color-primary-darkest: #1e2329;
+  --ifm-color-primary-light: #2f3741;
+  --ifm-color-primary-lighter: #313a44;
+  --ifm-color-primary-lightest: #38414d;
+
+  --ifm-link-color: var(--brand-color-accent);
+}
+
+.footer__logo {
+  max-width: 4rem;
+}
+
+.header__logo {
+  max-width: 30rem;
+}

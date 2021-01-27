@@ -222,4 +222,6 @@ typings/
 # Serverless directories
 .serverless
 
+.docusaurus
+
 # End of https://www.gitignore.io/api/java,macos,gradle,intellij+all
