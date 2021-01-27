@@ -134,27 +134,7 @@ function Home() {
 
   const features = [
     {
-      title: <>What is RSocket?</>,
-      imageUrl: 'img/undraw_Faq_re_31cw.svg',
-      description: (
-        <>
-          RSocket is a binary protocol for use on byte stream transports such as TCP, WebSockets, and Aeron.
-        </>
-      ),
-      button: (
-        <Link
-          className={classnames(
-            'button button--secondary button--md',
-            styles.getStarted,
-          )}
-          to={withBaseUrl('docs/')}
-        >
-          Learn More
-        </Link>
-      )
-    },
-    {
-      title: <>What does RSocket do?</>,
+      title: <>Why RSocket?</>,
       imageUrl: 'img/undraw_server_cluster_jwwq.svg',
       description: (
         <>
@@ -169,7 +149,27 @@ function Home() {
           )}
           to={withBaseUrl('docs/motivations')}
         >
-          Learn More
+          Motivations
+        </Link>
+      )
+    },
+    {
+      title: <>What is RSocket?</>,
+      imageUrl: 'img/undraw_Faq_re_31cw.svg',
+      description: (
+        <>
+          RSocket is a binary protocol for use on byte stream transports such as TCP, WebSockets, and Aeron.
+        </>
+      ),
+      button: (
+        <Link
+          className={classnames(
+            'button button--secondary button--md',
+            styles.getStarted,
+          )}
+          to={withBaseUrl('docs/protocol')}
+        >
+          Protocol Spec
         </Link>
       )
     },
@@ -178,7 +178,7 @@ function Home() {
       imageUrl: 'img/undraw_building_blocks_n0nc.svg',
       description: (
         <>
-          RSocket is intended to be consumed via one of the various {implementationLink}.
+          RSocket is intended to be consumed via one of the various {implementationLink} which implement the RSocket Protocol.
         </>
       ),
       button: (
@@ -189,10 +189,10 @@ function Home() {
           )}
           to={withBaseUrl('docs/implementations')}
         >
-          Learn More
+          Browse Libraries
         </Link>
       )
-    },
+    }
   ];
 
   return (
@@ -217,7 +217,7 @@ function Home() {
               )}
               to={withBaseUrl('docs/')}
             >
-              Get Started
+              Read the FAQ
             </Link>
           </div>
         </div>
@@ -230,7 +230,7 @@ function Home() {
                 {features.map(({ imageUrl, title, description, button }, idx) => (
                   <div
                     key={idx}
-                    className={classnames('col col--4', styles.feature)}
+                    className={classnames('col', `col--${12 / features.length}`, styles.feature)}
                   >
                     {imageUrl && (
                       <div className="text--center">
