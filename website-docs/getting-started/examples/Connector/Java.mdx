@@ -1,13 +1,8 @@
 ```java
-// build.grade
+WebsocketClientTransport ws = WebsocketClientTransport.create(
+    URI.create("ws://rsocket-demo.herokuapp.com/ws"));
 
-repositories {
-    mavenCentral()
-    maven { url 'https://repo.spring.io/milestone' }  // Reactor milestones (if needed)
-}
-
-dependencies {
-    implementation 'io.rsocket:rsocket-core:1.1.0'
-    implementation 'io.rsocket:rsocket-transport-netty:1.1.0'
-}
+RSocket clientRSocket = RSocketConnector
+    .connectWith(ws)
+    .block();
 ```
