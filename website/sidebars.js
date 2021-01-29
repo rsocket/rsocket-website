@@ -1,7 +1,7 @@
 module.exports = {
   "docs": {
     "About": [
-      "getting-started",
+      "getting-started/index",
       "faq",
       "motivations",
       "protocol",
