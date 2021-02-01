@@ -12,6 +12,7 @@ import styles from './styles.module.css';
 function Examples() {
   const values = [
     { label: "Java", value: "java" },
+    { label: "Kotlin", value: "kotlin" },
     { label: "C++", value: "cpp" },
   ];
   return (
@@ -50,6 +51,45 @@ pingClient
     .doOnTerminate(() -> System.out.println("Sent " + count + " messages."))
     .blockLast();
                     `}
+            </CodeBlock>
+          </div>
+        </TabItem>
+        <TabItem value={"kotlin"}>
+          <div style={{ marginBottom: 10 }}>
+            <h3>Server Example</h3>
+            <CodeBlock className="language-kotlin">
+              {`embeddedServer(CIO) { // create and configure ktor server
+    install(WebSockets)
+    install(RSocketSupport)
+    routing {
+        rSocket("rsocket") { // configure route 'url:port/rsocket' 
+            RSocketRequestHandler { // create simple request handler
+                requestStream { request: Payload -> // register request/stream handler
+                    flow {
+                        repeat(1000) { i -> emit(buildPayload { data("data: $i") }) }
+                    }
+                }
+            }
+        }
+    }
+}.start(wait = true)`}
+            </CodeBlock>
+          </div>
+          <div>
+            <h3>Client Example</h3>
+            <CodeBlock className="language-kotlin">
+              {`val client = HttpClient { //create and configure ktor client
+    install(WebSockets)
+    install(RSocketSupport)
+}
+// connect to some url
+val rSocket: RSocket = client.rSocket("wss://rsocket-demo.herokuapp.com/rsocket")
+// request stream
+val stream: Flow<Payload> = rSocket.requestStream(Payload.Empty)
+// collect stream
+stream.take(10).collect { payload: Payload ->
+    println(payload.data.readText())
+}`}
             </CodeBlock>
           </div>
         </TabItem>
