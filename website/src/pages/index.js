@@ -58,15 +58,16 @@ pingClient
           <div style={{ marginBottom: 10 }}>
             <h3>Server Example</h3>
             <CodeBlock className="language-kotlin">
-              {`embeddedServer(CIO) { // create and configure ktor server
+              {`embeddedServer(CIO, port = 9000) { // create and configure ktor server and start it on localhost:9000
     install(WebSockets)
     install(RSocketSupport)
     routing {
-        rSocket("rsocket") { // configure route 'url:port/rsocket' 
+        rSocket("rsocket") { // configure route 'localhost:9000/rsocket' 
             RSocketRequestHandler { // create simple request handler
                 requestStream { request: Payload -> // register request/stream handler
+                    println("Received request: '\${request.data.readText()}'")
                     flow {
-                        repeat(1000) { i -> emit(buildPayload { data("data: $i") }) }
+                        repeat(10) { i -> emit(buildPayload { data("data: $i") }) }
                     }
                 }
             }
@@ -82,13 +83,13 @@ pingClient
     install(WebSockets)
     install(RSocketSupport)
 }
-// connect to some url
-val rSocket: RSocket = client.rSocket("wss://rsocket-demo.herokuapp.com/rsocket")
+// connect to 'localhost:9000/rsocket'
+val rSocket: RSocket = client.rSocket(path = "rsocket", port = 9000)
 // request stream
-val stream: Flow<Payload> = rSocket.requestStream(Payload.Empty)
+val stream: Flow<Payload> = rSocket.requestStream(buildPayload { data("Hello") })
 // collect stream
-stream.take(10).collect { payload: Payload ->
-    println(payload.data.readText())
+stream.collect { payload: Payload ->
+    println("Received payload: '\${payload.data.readText()}'")
 }`}
             </CodeBlock>
           </div>
