@@ -12,6 +12,7 @@ import styles from './styles.module.css';
 function Examples() {
   const values = [
     { label: "Java", value: "java" },
+    { label: "Kotlin", value: "kotlin" },
     { label: "C++", value: "cpp" },
   ];
   return (
@@ -50,6 +51,46 @@ pingClient
     .doOnTerminate(() -> System.out.println("Sent " + count + " messages."))
     .blockLast();
                     `}
+            </CodeBlock>
+          </div>
+        </TabItem>
+        <TabItem value={"kotlin"}>
+          <div style={{ marginBottom: 10 }}>
+            <h3>Server Example</h3>
+            <CodeBlock className="language-kotlin">
+              {`embeddedServer(CIO, port = 9000) { // create and configure ktor server and start it on localhost:9000
+    install(WebSockets)
+    install(RSocketSupport)
+    routing {
+        rSocket("rsocket") { // configure route 'localhost:9000/rsocket' 
+            RSocketRequestHandler { // create simple request handler
+                requestStream { request: Payload -> // register request/stream handler
+                    println("Received request: '\${request.data.readText()}'")
+                    flow {
+                        repeat(10) { i -> emit(buildPayload { data("data: $i") }) }
+                    }
+                }
+            }
+        }
+    }
+}.start(wait = true)`}
+            </CodeBlock>
+          </div>
+          <div>
+            <h3>Client Example</h3>
+            <CodeBlock className="language-kotlin">
+              {`val client = HttpClient { //create and configure ktor client
+    install(WebSockets)
+    install(RSocketSupport)
+}
+// connect to 'localhost:9000/rsocket'
+val rSocket: RSocket = client.rSocket(path = "rsocket", port = 9000)
+// request stream
+val stream: Flow<Payload> = rSocket.requestStream(buildPayload { data("Hello") })
+// collect stream
+stream.collect { payload: Payload ->
+    println("Received payload: '\${payload.data.readText()}'")
+}`}
             </CodeBlock>
           </div>
         </TabItem>

@@ -27,5 +27,5 @@ The core scope includes the following (and is not limited to) :
 | rsocket-net |  <ul><li>System.Net <br />(TCP, websocket)</li></ul>   | 1.0   | x |   |   | x  | 
 | rsocket-cpp |  <ul><li>Folly (TCP)</li></ul> | 1.0   |  x  |x   |    | | 
 | rsocket-go |  <ul><li>Go NET (TCP)</li></ul>  | 1.0   |   |   |    |  | 
-| rsocket-kotlin |  <ul><li>reactor-netty <br />(TCP, websocket)</li><li>OkHttp <br />(websocket _client only_)</li></ul>   | 1.0 | x |   |  |    |  
+| rsocket-kotlin |  <ul><li>ktor multiplatform<br />(TCP, websocket)</li></ul>   | 1.0 | x |   |  |    |  
 | rsocket-py |  <ul><li>asyncio (TCP)</li></ul>  | 1.0  |    |   |    |   |  
