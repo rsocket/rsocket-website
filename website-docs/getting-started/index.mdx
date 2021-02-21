@@ -7,7 +7,7 @@ sidebar_label: Getting Started
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import CodeBlock from '@theme/CodeBlock';
-
+import ExampleTabs from '@theme/ExampleTabs';
 import DependenciesExamples from './examples/Dependencies';
 import ConnectorExamples from './examples/Connector';
 
@@ -17,39 +17,17 @@ import ConnectorExamples from './examples/Connector';
 
 ### Dependencies
 
-<Tabs
-  groupId="getting-started-code-examples"
-  defaultValue="java"
-  values={[
-    { label: 'Java', value: 'java' },
-    { label: 'Kotlin', value: 'kotlin' },
-  ]}
->
-  <TabItem value="java">
-    <DependenciesExamples.Java />
-  </TabItem>
-  <TabItem value="kotlin">
-    <DependenciesExamples.Kotlin />
-  </TabItem>
-</Tabs>
+<ExampleTabs
+  group="getting-started-code-examples"
+  examples={DependenciesExamples}
+/>
 
 ### Connectors
 
-<Tabs
-  groupId="getting-started-code-examples"
-  defaultValue="java"
-  values={[
-    { label: 'Java', value: 'java' },
-    { label: 'Kotlin', value: 'kotlin' },
-  ]}
->
-  <TabItem value="java">
-    <ConnectorExamples.Java />
-  </TabItem>
-  <TabItem value="kotlin">
-    <ConnectorExamples.Kotlin />
-  </TabItem>
-</Tabs>
+<ExampleTabs
+  group="getting-started-code-examples"
+  examples={ConnectorExamples}
+/>
 
 ### Working with Payloads (data & metadata)
 
