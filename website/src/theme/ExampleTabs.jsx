@@ -1,6 +1,18 @@
 import React from 'react';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import CodeBlock from '@theme/CodeBlock';
+
+const ExampleTabContent = ({ lang, content }) => {
+  const Content = content;
+  return typeof Content !== "undefined"
+    ? <Content />
+    : (
+      <CodeBlock lang="">
+        Sorry, no example available.
+      </CodeBlock>
+    );
+};
 
 const ExampleTabs = ({ group, examples }) => {
   return (
@@ -13,10 +25,10 @@ const ExampleTabs = ({ group, examples }) => {
       ]}
     >
       <TabItem value="java">
-        <examples.Java />
+        <ExampleTabContent content={examples.Java} />
       </TabItem>
       <TabItem value="kotlin">
-        <examples.Kotlin />
+        <ExampleTabContent content={examples.Kotlin} />
       </TabItem>
     </Tabs >
   );
