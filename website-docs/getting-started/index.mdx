@@ -11,11 +11,11 @@ import ExampleTabs from '@theme/ExampleTabs';
 import DependenciesExamples from './examples/Dependencies';
 import ConnectorExamples from './examples/Connector';
 
-## Getting Started with Vanilla RSocket
-
-> TODO
+The Vanilla RSocket getting started guide overviews key concepts and patterns that you will encounter when working with the various language specific RSocket reference implementations.
 
 ### Dependencies
+
+Each language specific RSocket reference implementation requires a number of different dependencies. While these dependencies will differ between the various language specific reference implementations, many common patterns are shared amongst them.
 
 <ExampleTabs
   group="getting-started-code-examples"
@@ -24,10 +24,18 @@ import ConnectorExamples from './examples/Connector';
 
 ### Connectors
 
+Connectors are the primary method for connecting an RSocket Client to an RSocket Server. Each connector implementation is geared towards supporting one of the various transports as described in the [transports protocol](protocol.md#transport-protocol).
+
+The below examples demonstrate creating a RSocket Connector in various languages using the WebSocket transport.
+
 <ExampleTabs
   group="getting-started-code-examples"
   examples={ConnectorExamples}
 />
+
+:::info
+RSocket has been designed for and tested with TCP, WebSocket, Aeron, and HTTP/2 streams as transport protocols.
+:::
 
 ### Working with Payloads (data & metadata)
 

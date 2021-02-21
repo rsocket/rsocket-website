@@ -1,4 +1,4 @@
-```kotlin {5-29}
+```kotlin
 //create ktor client
 val client = HttpClient(CIO) {
     install(WebSockets)
@@ -19,13 +19,6 @@ val client = HttpClient(CIO) {
                     data = "application/json",
                     metadata = "application/json"
                 )
-            }
-
-            //optional acceptor for server requests
-            acceptor {
-                RSocketRequestHandler {
-                    requestResponse { it } //echo request payload
-                }
             }
         }
     }
