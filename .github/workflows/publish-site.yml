@@ -1,0 +1,25 @@
+name: Publish page
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Build page
+        run: ./gradlew clean deploySite
+      - name: Setup git user
+        uses: fregante/setup-git-user@v1
+      - name: Publish page
+        run: |
+          git add docs/*
+          git commit -m "Publish page"
+          git push
