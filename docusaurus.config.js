@@ -66,9 +66,6 @@ module.exports = {
           "editUrl": "https://github.com/rsocket/rsocket-website/edit/master/website-docs/",
           "sidebarPath": path.resolve("./sidebars.js"),
         },
-        "blog": {
-          "path": "content-blog"
-        },
         "theme": {
           "customCss": path.resolve("./src/css/customTheme.css"),
         }
@@ -107,11 +104,6 @@ module.exports = {
         {
           "href": "https://github.com/rsocket",
           "label": "GitHub",
-          "position": "left"
-        },
-        {
-          "to": "/blog",
-          "label": "Blog",
           "position": "left"
         },
         {
