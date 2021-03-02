@@ -13,8 +13,8 @@ function fixBaseUrl(url) {
 module.exports = {
   "title": "RSocket",
   "tagline": "Application protocol providing Reactive Streams semantics",
-  "url": process.env.URL || "https://rsocket.io",
-  "baseUrl": fixBaseUrl(process.env.DEPLOY_URL || "/"),
+  "url": process.env.DEPLOY_URL || "https://rsocket.io",
+  "baseUrl": fixBaseUrl(process.env.PROJECT_BASE_URL || "/"),
   "organizationName": process.env.ORGANIZATION_NAME || "rsocket",
   "projectName": process.env.PROJECT_NAME || "rsocket-website",
   "noIndex": false,
@@ -28,7 +28,7 @@ module.exports = {
   "stylesheets": [
     "https://docusaurus.io/style.css",
     {
-      "href": "http://css.link",
+      "href": "https://css.link",
       "type": "text/css"
     }
   ],
