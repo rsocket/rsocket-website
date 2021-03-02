@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "docusaurus build",
-    "clear": "docusaurus clear",
+    "clear": "rm -rf docs/* && docusaurus clear",
     "deploy": "docusaurus build --out-dir docs/",
     "docusaurus": "docusaurus",
     "examples": "docusaurus-examples",
