@@ -16,7 +16,7 @@
                 "<node_internals>/**"
             ],
             "type": "pwa-node",
-            "cwd": "${workspaceFolder}/website"
+            "cwd": "${workspaceFolder}"
         }
     ]
 }
