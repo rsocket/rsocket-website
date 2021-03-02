@@ -1,29 +1,12 @@
 # RSocket Website
-Builds and deploys the [rsocket.io](http://rsocket.io) website hosted on GitHub Pages.
+Builds and deploys the <https://rsocket.io> website hosted on GitHub Pages.
 
-## Building the Site
-Run the following command to build the site:
+## Contributing
 
-    ./gradlew clean buildSite
-
-## Serving the Site Locally
-To view website changes locally before committing to Github, run the following command:
-
-    ./gradlew runSite
-
-## Deploying the Site to GitHub Pages
-Follow the steps below to build the site and deploy it to GitHub pages:
-
-1. Run the following command to build the site and stage it for release:
-
-        ./gradlew deploySite
-        
-    If successful, this command will generate the static website and put the contents into the `docs` folder.
-
-2. Commit the changes to the `master` branch in GitHub.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to start making changes to this website.
 
 ## Bugs and Feedback
-For bugs, questions, and discussions please use the [Github Issues](https://github.com/rsocket/rsocket.github.io/issues).
+For bugs, questions, and discussions please use the [Github Issues](https://github.com/rsocket/rsocket-website/issues).
 
 ## License
 Copyright 2018 - Present the original author or authors.

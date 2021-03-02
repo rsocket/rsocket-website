@@ -14,7 +14,7 @@ module.exports = {
   "title": "RSocket",
   "tagline": "Application protocol providing Reactive Streams semantics",
   "url": process.env.URL || "https://rsocket.io",
-  "baseUrl": fixBaseUrl(process.env.PROJECT_BASE_URL || "/"),
+  "baseUrl": fixBaseUrl(process.env.DEPLOY_URL || "/"),
   "organizationName": process.env.ORGANIZATION_NAME || "rsocket",
   "projectName": process.env.PROJECT_NAME || "rsocket-website",
   "noIndex": false,
@@ -60,14 +60,14 @@ module.exports = {
       "@docusaurus/preset-classic",
       {
         "docs": {
-          "path": path.resolve("../website-docs"),
+          "path": path.resolve("content-docs"),
           "showLastUpdateAuthor": true,
           "showLastUpdateTime": true,
           "editUrl": "https://github.com/rsocket/rsocket-website/edit/master/website-docs/",
           "sidebarPath": path.resolve("./sidebars.js"),
         },
         "blog": {
-          "path": "blog"
+          "path": "content-blog"
         },
         "theme": {
           "customCss": path.resolve("./src/css/customTheme.css"),
