@@ -9,16 +9,21 @@ jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 11
-        uses: actions/setup-java@v1
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Set up Node.js 14
+        uses: actions/setup-node@v2
         with:
-          java-version: 11
-      - name: Build page
-        run: ./gradlew clean deploySite
+          node-version: '14'
+      - name: Install dependencies
+        run: npm install
+      - name: Ensure fresh build
+        run: npm run clear
+      - name: Build Website
+        run: npm run deploy
       - name: Setup git user
         uses: fregante/setup-git-user@v1
-      - name: Publish page
+      - name: Publish Website
         run: |
           git add docs/*
           git commit -m "Publish page"

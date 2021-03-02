@@ -18,7 +18,7 @@ Fork using the command line:
 
 ### Make your changes
 
-Most changes will be expected to be documentation updates in the [markdown docs](/website-docs). If you are changing more than the Markdown documentation pages, then you should be familiar with comfortable with Node JS, Docusaurus, and ReactJS.
+Most changes will be expected to be documentation updates in the [markdown docs](/content-docs). If you are changing more than the Markdown documentation pages, then you should be familiar with comfortable with Node JS, Docusaurus, and ReactJS.
 
 Review the [Docusaurus docs](https://v2.docusaurus.io/docs/markdown-features) for how to edit Markdown files.
 
@@ -30,37 +30,34 @@ When you're done making changes and you'd like to propose them for review, use o
 
 ### Running the development server
 
-You can run the development server one of two ways:
+You will need to install the [Node.js](https://nodejs.org/en/download/) runtime, and then from 
+within the root of this directory run the following commands:
 
-#### NodeJS
-
-Change directories into `/website` and run `npm run dev`
-
-#### Gradle
-
-Use Gradle via the command line or your IDE to run the Gradle commands inside of `/website`.
-
-Example:
-
-```shell script
-./gradlew runSite
-```
+    npm install
+    npm run start
 
 ### Verifying via GitHub Pages Deployment (Optional)
 
-You can test your changes live via a [GitHub Pages](https://pages.github.com/) deployment, which can be useful for demoing changes in a pull request, etc.
+TODO: @flyinprogrammer needs to fix this because it's all garbage once we start using Netlify.
+Starting with the fact that PROJECT_BASE_URL will likely become DEPLOY_URL from Netlify, but
+what will that value be for contributors or people who want to fork ¯\_(ツ)_/¯
 
-From within the `website/` directory, you can run the following command:
+You can test your changes live via a [GitHub Pages](https://pages.github.com/) deployment, 
+which can be useful for demoing changes in a pull request, etc.
+
+From within the root directory, you can run the following command:
 
 ```shell script
 npx cross-env \
   CURRENT_BRANCH=":OUR_BRANCH_NAME" \
   ORGANIZATION_NAME="YOUR_GITHUB_USERNAME" \
   PROJECT_NAME="YOUR_REPOSITORY_FORK_NAME" \
-  URL="https://YOUR_GITHUB_USERNAME.github.io/" \
+  DEPLOY_URL="https://YOUR_GITHUB_USERNAME.github.io/" \
   PROJECT_BASE_URL="YOUR_REPOSITORY_FORK_NAME" \
   GIT_USER="YOUR_GIT_USERNAME" \
   npm run deploy
 ```
 
-This command will create a `github-pages` branch and build & commit the documentation output. The `github-pages` branch will then be exposed at `https://YOUR_GITHUB_USERNAME.github.io/PROJECT_BASE_URL`
+This command will publish the static site into the `docs` directory, you'll then need to commit
+it so that the site goes live. Hopefully Netlify will make this unnecessary for us in the near
+future.

@@ -13,7 +13,7 @@ function fixBaseUrl(url) {
 module.exports = {
   "title": "RSocket",
   "tagline": "Application protocol providing Reactive Streams semantics",
-  "url": process.env.URL || "https://rsocket.io",
+  "url": process.env.DEPLOY_URL || "https://rsocket.io",
   "baseUrl": fixBaseUrl(process.env.PROJECT_BASE_URL || "/"),
   "organizationName": process.env.ORGANIZATION_NAME || "rsocket",
   "projectName": process.env.PROJECT_NAME || "rsocket-website",
@@ -28,7 +28,7 @@ module.exports = {
   "stylesheets": [
     "https://docusaurus.io/style.css",
     {
-      "href": "http://css.link",
+      "href": "https://css.link",
       "type": "text/css"
     }
   ],
@@ -60,14 +60,11 @@ module.exports = {
       "@docusaurus/preset-classic",
       {
         "docs": {
-          "path": path.resolve("../website-docs"),
+          "path": path.resolve("content-docs"),
           "showLastUpdateAuthor": true,
           "showLastUpdateTime": true,
-          "editUrl": "https://github.com/rsocket/rsocket-website/edit/master/website-docs/",
+          "editUrl": "https://github.com/rsocket/rsocket-website/edit/master/content-docs/",
           "sidebarPath": path.resolve("./sidebars.js"),
-        },
-        "blog": {
-          "path": "blog"
         },
         "theme": {
           "customCss": path.resolve("./src/css/customTheme.css"),
@@ -107,11 +104,6 @@ module.exports = {
         {
           "href": "https://github.com/rsocket",
           "label": "GitHub",
-          "position": "left"
-        },
-        {
-          "to": "/blog",
-          "label": "Blog",
           "position": "left"
         },
         {

@@ -1,42 +1,20 @@
 # RSocket Website
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8e20ceda-df0e-4ebe-a730-cde1c98a8c7d/deploy-status)](https://app.netlify.com/sites/rsocket/deploys)
+
 Builds and deploys the [rsocket.io](http://rsocket.io) website hosted on GitHub Pages.
 
 ## CI/CD
 
 The website will build and deploy automatically via a GitHub action with commits to the `master` branch.
 
-## Building the Site
-
-Run the following command to build the site:
-
-    ./gradlew clean buildSite
-
-## Serving the Site Locally
-
-To view website changes locally before committing to Github, run the following command:
-
-    ./gradlew runSite
-
-## Deploying the Site to GitHub Pages
-
-Follow the steps below to build the site and deploy it to GitHub pages:
-
-1.  Run the following command to build the site and stage it for release:
-
-        ./gradlew deploySite
-
-    If successful, this command will generate the static website and put the contents into the `docs` folder.
-
-2.  Commit the changes to the `master` branch in GitHub.
-
-## Bugs and Feedback
-
-For bugs, questions, and discussions please use the [Github Issues](https://github.com/rsocket/rsocket.github.io/issues).
-
 ## Contributing
 
-All contributions are welcome! Please see [Contributing](CONTRIBUTING.md) to get started.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to start making changes to this website.
+
+## Bugs and Feedback
+For bugs, questions, and discussions please use the [Github Issues](https://github.com/rsocket/rsocket-website/issues).
+
 
 ## License
 
