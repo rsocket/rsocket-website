@@ -13,6 +13,17 @@
   --ifm-link-color: var(--brand-color-accent);
 }
 
+html[data-theme='dark'] {
+  --brand-color-primary: var(--brand-color-accent);
+  --ifm-font-color-base-inverse: #f0f0f0;
+  --ifm-blockquote-color: #ececec;
+  --ifm-code-background: rgb(40, 42, 54);
+}
+
+html[data-theme='dark'] .hero {
+  --ifm-hero-background-color: var(--ifm-color-primary-light);
+}
+
 .footer__logo {
   max-width: 4rem;
 }
