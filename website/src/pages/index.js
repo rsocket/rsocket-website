@@ -62,7 +62,7 @@ pingClient
     install(WebSockets)
     install(RSocketSupport)
     routing {
-        rSocket("rsocket") { // configure route 'localhost:9000/rsocket' 
+        rSocket("rsocket") { // configure route 'localhost:9000/rsocket'
             RSocketRequestHandler { // create simple request handler
                 requestStream { request: Payload -> // register request/stream handler
                     println("Received request: '\${request.data.readText()}'")
@@ -176,7 +176,7 @@ function Home() {
   const features = [
     {
       title: <>Why RSocket?</>,
-      imageUrl: 'img/undraw_server_cluster_jwwq.svg',
+      imageUrl: 'img/undraw_server_cluster_jwwq_dark.svg',
       description: (
         <>
           RSocket provides a protocol for Reactive Streams semantics between client-server, and server-server communication.
@@ -216,7 +216,7 @@ function Home() {
     },
     {
       title: <>How do I use RSocket?</>,
-      imageUrl: 'img/undraw_building_blocks_n0nc.svg',
+      imageUrl: 'img/undraw_building_blocks_n0nc_dark.svg',
       description: (
         <>
           RSocket is intended to be consumed via one of the various {implementationLink} which implement the RSocket Protocol.
