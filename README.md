@@ -1,5 +1,7 @@
 # RSocket Website
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/8e20ceda-df0e-4ebe-a730-cde1c98a8c7d/deploy-status)](https://app.netlify.com/sites/upbeat-kare-7e7d48/deploys)
+
 Builds and deploys the [rsocket.io](http://rsocket.io) website hosted on GitHub Pages.
 
 ## CI/CD
