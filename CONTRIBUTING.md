@@ -34,23 +34,18 @@ You can run the development server one of two ways:
 
 #### NodeJS
 
-Change directories into `/website` and run `npm run dev`
-
-#### Gradle
-
-Use Gradle via the command line or your IDE to run the Gradle commands inside of `/website`.
-
-Example:
-
-```shell script
-./gradlew runSite
-```
+Change directories into run `npm run start`
 
 ### Verifying via GitHub Pages Deployment (Optional)
 
-You can test your changes live via a [GitHub Pages](https://pages.github.com/) deployment, which can be useful for demoing changes in a pull request, etc.
+TODO: @flyinprogrammer needs to fix this because it's all garbage once we start using Netlify.
+Starting with the fact that PROJECT_BASE_URL will likely become DEPLOY_URL from Netlify, but
+what will that value be for contributors or people who want to fork ¯\_(ツ)_/¯
 
-From within the `website/` directory, you can run the following command:
+You can test your changes live via a [GitHub Pages](https://pages.github.com/) deployment, 
+which can be useful for demoing changes in a pull request, etc.
+
+From within the root directory, you can run the following command:
 
 ```shell script
 npx cross-env \
@@ -63,4 +58,6 @@ npx cross-env \
   npm run deploy
 ```
 
-This command will create a `github-pages` branch and build & commit the documentation output. The `github-pages` branch will then be exposed at `https://YOUR_GITHUB_USERNAME.github.io/PROJECT_BASE_URL`
+This command will publish the static site into the `docs` directory, you'll then need to commit
+it so that the site goes live. Hopefully Netlify will make this unnecessary for us in the near
+future.

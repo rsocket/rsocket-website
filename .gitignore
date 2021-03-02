@@ -286,3 +286,6 @@ gradle-app.setting
 **/build/
 
 # End of https://www.toptal.com/developers/gitignore/api/java,node,macos,gradle,vscode,intellij+all
+
+# Specifically ignore docusaurus output
+.docusaurus
