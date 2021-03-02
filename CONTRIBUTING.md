@@ -18,7 +18,7 @@ Fork using the command line:
 
 ### Make your changes
 
-Most changes will be expected to be documentation updates in the [markdown docs](/website-docs). If you are changing more than the Markdown documentation pages, then you should be familiar with comfortable with Node JS, Docusaurus, and ReactJS.
+Most changes will be expected to be documentation updates in the [markdown docs](/content-docs). If you are changing more than the Markdown documentation pages, then you should be familiar with comfortable with Node JS, Docusaurus, and ReactJS.
 
 Review the [Docusaurus docs](https://v2.docusaurus.io/docs/markdown-features) for how to edit Markdown files.
 
@@ -52,7 +52,7 @@ npx cross-env \
   CURRENT_BRANCH=":OUR_BRANCH_NAME" \
   ORGANIZATION_NAME="YOUR_GITHUB_USERNAME" \
   PROJECT_NAME="YOUR_REPOSITORY_FORK_NAME" \
-  URL="https://YOUR_GITHUB_USERNAME.github.io/" \
+  DEPLOY_URL="https://YOUR_GITHUB_USERNAME.github.io/" \
   PROJECT_BASE_URL="YOUR_REPOSITORY_FORK_NAME" \
   GIT_USER="YOUR_GIT_USERNAME" \
   npm run deploy
