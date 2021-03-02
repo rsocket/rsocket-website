@@ -30,7 +30,7 @@ When you're done making changes and you'd like to propose them for review, use o
 
 ### Running the development server
 
-You will need to install the [Node.js](https://nodejs.org/en/download/) run time, and then from 
+You will need to install the [Node.js](https://nodejs.org/en/download/) runtime, and then from 
 within the root of this directory run the following commands:
 
     npm install
