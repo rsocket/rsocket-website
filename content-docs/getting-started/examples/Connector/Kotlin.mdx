@@ -20,13 +20,6 @@ val client = HttpClient(CIO) {
                     metadata = "application/json"
                 )
             }
-
-            //optional acceptor for server requests
-            acceptor {
-                RSocketRequestHandler {
-                    requestResponse { it } //echo request payload
-                }
-            }
         }
     }
 }
