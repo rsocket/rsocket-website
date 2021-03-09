@@ -19,24 +19,25 @@ Fork using the command line:
 ### Make your changes
 
 Most changes will be expected to be documentation updates in the [markdown docs](/content-docs). If you are changing
-more than the Markdown documentation pages, then you should be familiar with comfortable with Node JS, Docusaurus,
+more than the Markdown documentation pages, then you should be familiar and comfortable with Node JS, Docusaurus,
 and ReactJS.
 
 Review the [Docusaurus v2 docs](https://v2.docusaurus.io/docs/markdown-features) for how to edit Markdown files.
 
 ### Open a pull request
 
-When you're done making changes, and you'd like to propose them for review, push your changes to your fork, and then
-open a pull request (PR). Inside the PR a Netlify bot will create some Github Checks, as well as build and deploy your
-site to a temporary domain.
+Once you are done pushing changes to your fork, then you'll need to open a pull request (PR) to propose them for review.
+Inside the PR a Netlify bot will create some Github Checks. Those checks include building and deploy your site to a temporary
+domain so that you may preview them before they go live.
 
-The `Pages changed - rsocket` check will show you a list of pages Netlify has detected as changing, this can make it
-easy to verify only the pages you've edited.
+The `Pages changed - rsocket` check will show you a list of pages Netlify has detected as changing; this can make it
+easy to verify only the pages you've edited. It might also list pages you didn't edit, and that's ok. We will all work
+together to ensure only your changes will impact our website.
 
 Similarly, the `netlify/rsocket/deploy-preview` check will take you to the root of the temporary domain so that you can
 validate the entire site.
 
-Once you've validated your changes feel free to let us know in a comment or by editing your initial comment of the PR.
+Once you've validated your changes feel free to let us know in a comment or edit your initial comment of the PR.
 We should be able to review and merge it quickly.
 
 ## Development
@@ -44,7 +45,7 @@ We should be able to review and merge it quickly.
 ### Running the development server
 
 You will need to install the [Node JS](https://nodejs.org/en/download/) runtime, and then from
-within the root of this directory run the following commands:
+within the root of this directory, run the following commands:
 
     npm install
     npm run start
@@ -52,7 +53,7 @@ within the root of this directory run the following commands:
 ### Forking and Publishing (Likely unnecessary)
 
 You can test your changes or fork and host this site via a [GitHub Pages](https://pages.github.com/) deployment,
-which can be useful for demoing large, Earth shattering, changes in a PR.
+which can be useful for demoing large, Earth-shattering changes in a PR.
 
 From within the root directory, you can run the following command:
 
