@@ -63,7 +63,7 @@ module.exports = {
           "path": path.resolve("content-docs"),
           "showLastUpdateAuthor": true,
           "showLastUpdateTime": true,
-          "editUrl": "https://github.com/rsocket/rsocket-website/edit/master/content-docs/",
+          "editUrl": "https://github.com/rsocket/rsocket-website/edit/master/",
           "sidebarPath": path.resolve("./sidebars.js"),
         },
         "theme": {
