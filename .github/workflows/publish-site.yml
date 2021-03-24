@@ -20,7 +20,7 @@ jobs:
       - name: Ensure fresh build
         run: npm run clear
       - name: Build Website
-        run: npm run deploy
+        run: npm run build
       - name: Setup git user
         uses: fregante/setup-git-user@v1
       - name: Publish Website

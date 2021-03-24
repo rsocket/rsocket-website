@@ -1,16 +1,13 @@
 {
   "scripts": {
-    "build": "docusaurus build",
+    "build": "docusaurus build --out-dir docs/",
     "clear": "rm -rf docs/* && docusaurus clear",
-    "deploy": "docusaurus build --out-dir docs/",
+    "deploy": "docusaurus deploy",
     "docusaurus": "docusaurus",
-    "examples": "docusaurus-examples",
-    "publish-gh-pages": "docusaurus-publish",
-    "rename-version": "docusaurus-rename-version",
     "start": "docusaurus start",
     "swizzle": "docusaurus swizzle",
-    "version": "docusaurus-version",
-    "write-translations": "docusaurus-write-translations"
+    "write-translations": "docusaurus write-translations",
+    "write-heading-ids": "docusaurus write-heading-ids"
   },
   "devDependencies": {},
   "dependencies": {
