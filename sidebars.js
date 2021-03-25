@@ -1,11 +1,16 @@
+const aboutItems = [
+  "about/faq",
+  "about/motivations",
+  "about/protocol",
+  "about/implementations"
+];
+
 module.exports = {
-  "docs": {
-    "About": [
-      "getting-started/index",
-      "faq",
-      "motivations",
-      "protocol",
-      "implementations"
-    ]
-  }
+  "docs": [
+    "docs/getting-started/index",
+    {
+      "About": aboutItems
+    }
+  ],
+  "about": aboutItems
 };

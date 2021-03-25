@@ -132,7 +132,7 @@ function Home() {
 
   const implementationLink = (
     <Link
-      to={withBaseUrl('docs/implementations')}
+      to={withBaseUrl('about/implementations')}
     >
       implementation libraries
     </Link>
@@ -140,7 +140,7 @@ function Home() {
 
   const protocolLink = (
     <Link
-      to={withBaseUrl('docs/protocol')}
+      to={withBaseUrl('about/protocol')}
     >
       Protocol document
     </Link>
@@ -188,7 +188,7 @@ function Home() {
             'button button--secondary button--md',
             styles.getStarted,
           )}
-          to={withBaseUrl('docs/motivations')}
+          to={withBaseUrl('about/motivations')}
         >
           Motivations
         </Link>
@@ -208,7 +208,7 @@ function Home() {
             'button button--secondary button--md',
             styles.getStarted,
           )}
-          to={withBaseUrl('docs/protocol')}
+          to={withBaseUrl('about/protocol')}
         >
           Protocol Spec
         </Link>
@@ -228,7 +228,7 @@ function Home() {
             'button button--secondary button--md',
             styles.getStarted,
           )}
-          to={withBaseUrl('docs/implementations')}
+          to={withBaseUrl('about/implementations')}
         >
           Browse Libraries
         </Link>
@@ -256,7 +256,7 @@ function Home() {
                 'button button--secondary button--lg',
                 styles.getStarted,
               )}
-              to={withBaseUrl('docs/')}
+              to={withBaseUrl('about/')}
             >
               Read the FAQ
             </Link>
@@ -337,7 +337,7 @@ function Home() {
               <div className="text--center padding-vert--lg">
                 <Link
                   className="button button--primary button--lg"
-                  to={withBaseUrl('docs/')}
+                  to={withBaseUrl('about/')}
                 >
                   Learn more about RSocket!
                 </Link>

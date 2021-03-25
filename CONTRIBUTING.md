@@ -3,6 +3,7 @@
 ## Getting started
 
 Before you begin:
+
 - This site is powered by [Docusaurus V2](https://v2.docusaurus.io/), which requires [Node JS](https://nodejs.org/en/).
 
 ### Ready to make a change? Fork the repo.
@@ -20,7 +21,7 @@ Fork using the command line:
 
 Most changes will be expected to be documentation updates in the [markdown docs](/content-docs). If you are changing more than the Markdown documentation pages, then you should be familiar with comfortable with Node JS, Docusaurus, and ReactJS.
 
-Review the [Docusaurus docs](https://v2.docusaurus.io/docs/markdown-features) for how to edit Markdown files.
+Review the [Docusaurus docs](https://v2.docusaurus.io/about/markdown-features) for how to edit Markdown files.
 
 ### Open a pull request
 
@@ -30,7 +31,7 @@ When you're done making changes and you'd like to propose them for review, use o
 
 ### Running the development server
 
-You will need to install the [Node.js](https://nodejs.org/en/download/) runtime, and then from 
+You will need to install the [Node.js](https://nodejs.org/en/download/) runtime, and then from
 within the root of this directory run the following commands:
 
     npm install
@@ -39,10 +40,10 @@ within the root of this directory run the following commands:
 ### Verifying via GitHub Pages Deployment (Optional)
 
 TODO: @flyinprogrammer needs to fix this because it's all garbage once we start using Netlify.
-Starting with the fact that PROJECT_BASE_URL will likely become DEPLOY_URL from Netlify, but
-what will that value be for contributors or people who want to fork ¯\_(ツ)_/¯
+Starting with the fact that PROJECT*BASE_URL will likely become DEPLOY_URL from Netlify, but
+what will that value be for contributors or people who want to fork ¯\_(ツ)*/¯
 
-You can test your changes live via a [GitHub Pages](https://pages.github.com/) deployment, 
+You can test your changes live via a [GitHub Pages](https://pages.github.com/) deployment,
 which can be useful for demoing changes in a pull request, etc.
 
 From within the root directory, you can run the following command:

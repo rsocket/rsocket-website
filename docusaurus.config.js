@@ -60,10 +60,11 @@ module.exports = {
       "@docusaurus/preset-classic",
       {
         "docs": {
+          "routeBasePath": "/",
           "path": path.resolve("content-docs"),
           "showLastUpdateAuthor": true,
           "showLastUpdateTime": true,
-          "editUrl": "https://github.com/rsocket/rsocket-website/edit/master/content-docs/",
+          "editUrl": "https://github.com/rsocket/rsocket-website/edit/master/content-docs/about",
           "sidebarPath": path.resolve("./sidebars.js"),
         },
         "theme": {
@@ -97,7 +98,12 @@ module.exports = {
       },
       "items": [
         {
-          "to": "docs/",
+          "to": "docs/getting-started",
+          "label": "Docs",
+          "position": "left"
+        },
+        {
+          "to": "about/faq",
           "label": "About",
           "position": "left"
         },

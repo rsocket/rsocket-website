@@ -1,0 +1,112 @@
+---
+slug: /docs/getting-started
+title: Getting Started
+sidebar_label: Getting Started
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import CodeBlock from '@theme/CodeBlock';
+import ExampleTabs from '@theme/ExampleTabs';
+import DependenciesExamples from './examples/Dependencies';
+import ConnectorExamples from './examples/Connector';
+import EncodingExamples from './examples/Encoding';
+
+The Vanilla RSocket getting started guide overviews key concepts and patterns that you will encounter when working with the various language specific RSocket reference implementations.
+
+### Dependencies
+
+Each language specific RSocket reference implementation requires a number of different dependencies. While these dependencies will differ between the various language specific reference implementations, many common patterns are shared amongst them.
+
+<ExampleTabs
+  group="getting-started-code-examples"
+  examples={DependenciesExamples}
+/>
+
+### Connectors (Clients)
+
+Connectors are the primary method for connecting an RSocket Client to an RSocket Server. Each connector implementation is geared towards supporting one of the various transports as described in the [transports protocol](about/protocol.md#transport-protocol).
+
+The below examples demonstrate creating a RSocket Connector in various languages using the WebSocket transport.
+
+<ExampleTabs
+  group="getting-started-code-examples"
+  examples={ConnectorExamples}
+/>
+
+:::info
+RSocket has been designed for and tested with TCP, WebSocket, Aeron, and HTTP/2 streams as transport protocols.
+:::
+
+### Servers
+
+> TODO
+
+### Working with Payloads (data & metadata)
+
+Payloads represent the concept of passing data back and forth between an RSocket Client and an RSocket Server, with a distinction between data and metadata. If we were to relate these concepts to HTTP, then data would represent the HTTP response/request `body,` and metadata would describe the HTTP request/response `headers.`
+
+A single RSocket `payload` is capable of containing both `data` as well as `metadata`, and each can leverage different encodings. For example, an RSocket payload could encode its data as JSON (`application/json`), and its metadata as protobuf (`application/vnd.google.protobuf`).
+
+:::note
+It is most common for data and metadata to leverage the same encoding, but is not required.
+:::
+
+### Specifying Encoding
+
+Encoding for the data/metadata [frames](about/protocol.md#framing) in an RSocket payload can be specified when the RSocket Client or RSocket Server is created.
+
+<ExampleTabs
+  group="getting-started-code-examples"
+  examples={EncodingExamples}
+/>
+
+### Composite Metadata
+
+> TODO
+
+### Request routing
+
+> TODO
+
+### Tracing
+
+> TODO
+
+### Authentication Metadata
+
+> TODO
+
+## Getting Started with RSocket RPC
+
+### Dependency Setup
+
+> TODO
+
+### Code Generation
+
+> TODO
+
+## Reactive API
+
+> TODO
+
+### Single
+
+> TODO
+
+### Flowable
+
+> TODO
+
+### Project Reactor
+
+> TODO
+
+## Tutorials
+
+> TODO
+
+### Chat App
+
+> TODO
