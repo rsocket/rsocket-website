@@ -28,4 +28,4 @@ The core scope includes the following (and is not limited to) :
 | rsocket-go     | <ul><li>Go NET (TCP)</li></ul>                                                          | 1.0     |              |            |         |     |
 | rsocket-kotlin | <ul><li>ktor multiplatform<br />(TCP, websocket)</li></ul>                              | 1.0     | x            |            |         |     |
 | rsocket-py     | <ul><li>asyncio (TCP)</li></ul>                                                         | 1.0     |              |            |         |     |
-| rsocket-swift  | <ul><li>websocket</li></ul>                                                             | 0.0.1   |              |            |         |     |
+| rsocket-swift  | <ul><li>SwiftNIO (TCP, WebSocket)</li><li>Network.framework through NIO Transport Services</li></ul>                                                             | 0.0.1   |              |            |         |     |
