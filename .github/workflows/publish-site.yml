@@ -1,9 +1,10 @@
-name: Publish page
+name: Deploy
 
 on:
   push:
     branches:
       - master
+      - fix/cleanup-npm-scripts
 
 jobs:
   build-and-publish:
@@ -11,15 +12,24 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+
       - name: Set up Node.js 14
         uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - name: Setup git user
-        uses: fregante/setup-git-user@v1
-      - name: Install dependencies
-        run: npm install
-      - name: Ensure fresh build
-        run: npm run clear
-      - name: Build Website
-        run: npm run deploy
+
+      - name: Deploy to Github Pages
+        env:
+          USE_SSH: true
+          GIT_USER: git
+        run: |
+          git config --global user.email "actions@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+          if [ -e yarn.lock ]; then
+          yarn install --frozen-lockfile
+          elif [ -e package-lock.json ]; then
+          npm ci
+          else
+          npm i
+          fi
+          npm run deploy
