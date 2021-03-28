@@ -93,8 +93,9 @@ module.exports = {
       "additionalLanguages": ["kotlin"],
     },
     "metadatas": [
-      { name: "og:image", content: `${baseUrl}img/social/rsocket-io-facebook-og.jpg` },
-      { name: "twitter:card", content: `${baseUrl}img/social/rsocket-io-twitter-card.jpg` },
+      { property: "og:image", content: `${baseUrl}img/social/rsocket-io-facebook-og.jpg` },
+      { name: "twitter:image", content: `${baseUrl}img/social/rsocket-io-twitter-card.jpg` },
+      { name: "twitter:site", content: "@rsocket" },
     ],
     "navbar": {
       "title": "RSocket",
