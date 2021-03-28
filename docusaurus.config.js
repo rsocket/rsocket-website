@@ -10,11 +10,13 @@ function normalizeBaseUrl(url) {
   return `/${slashesRemoved}/`;
 }
 
+const baseUrl = normalizeBaseUrl(process.env.PROJECT_BASE_URL || "/");
+
 module.exports = {
   "title": "RSocket",
   "tagline": "Application protocol providing Reactive Streams semantics",
   "url": process.env.DEPLOY_URL || "https://rsocket.io",
-  "baseUrl": normalizeBaseUrl(process.env.PROJECT_BASE_URL || "/"),
+  "baseUrl": baseUrl,
   "organizationName": process.env.ORGANIZATION_NAME || "rsocket",
   "projectName": process.env.PROJECT_NAME || "rsocket-website",
   "noIndex": false,
@@ -91,13 +93,13 @@ module.exports = {
       "additionalLanguages": ["kotlin"],
     },
     "metadatas": [
-      { name: "og:image", content: "/img/social/rsocket-io-facebook-og.jpg" },
-      { name: "twitter:card", content: "/img/social/rsocket-io-twitter-card.jpg" },
+      { name: "og:image", content: `${baseUrl}img/social/rsocket-io-facebook-og.jpg` },
+      { name: "twitter:card", content: `${baseUrl}img/social/rsocket-io-twitter-card.jpg` },
     ],
     "navbar": {
       "title": "RSocket",
       "logo": {
-        "src": "img/r-socket-pink.svg"
+        "src": `${baseUrl}img/r-socket-pink.svg`
       },
       "items": [
         {
