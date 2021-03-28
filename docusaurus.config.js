@@ -1,20 +1,22 @@
 const path = require("path");
 
-function fixBaseUrl(url) {
+function normalizeBaseUrl(url) {
   if (url === "/") {
     return url;
   }
 
-  const slashesRemoved = url.replace(/^\/|\/$/g, '');
+  const slashesRemoved = url.replace(/^\/|\/$/g, "");
 
   return `/${slashesRemoved}/`;
 }
+
+const baseUrl = normalizeBaseUrl(process.env.PROJECT_BASE_URL || "/");
 
 module.exports = {
   "title": "RSocket",
   "tagline": "Application protocol providing Reactive Streams semantics",
   "url": process.env.DEPLOY_URL || "https://rsocket.io",
-  "baseUrl": fixBaseUrl(process.env.PROJECT_BASE_URL || "/"),
+  "baseUrl": baseUrl,
   "organizationName": process.env.ORGANIZATION_NAME || "rsocket",
   "projectName": process.env.PROJECT_NAME || "rsocket-website",
   "noIndex": false,
@@ -76,7 +78,7 @@ module.exports = {
   "themeConfig": {
     "colorMode": {
       // "light" | "dark"
-      "defaultMode": 'light',
+      "defaultMode": "light",
 
       // Hides the switch in the navbar
       // Useful if you want to support a single color mode
@@ -87,13 +89,17 @@ module.exports = {
       "respectPrefersColorScheme": true,
     },
     "prism": {
-      "theme": require('prism-react-renderer/themes/dracula'),
+      "theme": require("prism-react-renderer/themes/dracula"),
       "additionalLanguages": ["kotlin"],
     },
+    "metadatas": [
+      { name: "og:image", content: `${baseUrl}img/social/rsocket-io-facebook-og.jpg` },
+      { name: "twitter:card", content: `${baseUrl}img/social/rsocket-io-twitter-card.jpg` },
+    ],
     "navbar": {
       "title": "RSocket",
       "logo": {
-        "src": "img/r-socket-pink.svg"
+        "src": `${baseUrl}img/r-socket-pink.svg`
       },
       "items": [
         {
@@ -113,7 +119,6 @@ module.exports = {
         }
       ]
     },
-    "image": "img/r-rsocket-pink.png",
     "footer": {
       "links": [
         {
