@@ -289,3 +289,6 @@ gradle-app.setting
 
 # Specifically ignore docusaurus output
 .docusaurus
+
+# Ignore the output directory created after running build
+/docs
