@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - fix/cleanup-npm-scripts
 
 jobs:
   build-and-publish:
