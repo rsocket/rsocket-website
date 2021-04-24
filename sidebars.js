@@ -10,6 +10,18 @@ module.exports = {
     "docs/getting-started/index",
     {
       "About": aboutItems
+    },
+    {
+      'rsocket-js': [
+        "docs/guides/rsocket-js/index",
+        {
+          "rsocket-flowable": [
+            "docs/guides/rsocket-js/rsocket-flowable/index",
+            "docs/guides/rsocket-js/rsocket-flowable/flowable",
+            "docs/guides/rsocket-js/rsocket-flowable/single",
+          ]
+        }
+      ]
     }
   ],
   "about": aboutItems
