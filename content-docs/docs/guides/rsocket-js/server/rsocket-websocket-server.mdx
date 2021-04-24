@@ -1,0 +1,31 @@
+---
+slug: /docs/guides/rsocket-js/client/rsocket-websocket-server
+title: rsocket-js WebSocket Server
+sidebar_label: WebSocket Server
+---
+
+## Getting Started
+
+```
+npm install rsocket-core rsocket-websocket-server rsocket-flowable
+```
+
+## Example
+
+```js
+const { RSocketServer } = require('rsocket-core');
+const RSocketWebSocketServer = require('rsocket-websocket-server');
+const { Single } = require('rsocket-flowable');
+
+const WebSocketTransport = RSocketWebSocketServer.default;
+
+const host = '127.0.0.1';
+const port = 3000;
+
+const transportOpts = {
+  host: host,
+  port: port,
+};
+
+const transport = new WebSocketTransport(transportOpts);
+```

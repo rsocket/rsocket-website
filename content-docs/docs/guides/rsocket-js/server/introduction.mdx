@@ -1,0 +1,108 @@
+---
+slug: /docs/guides/rsocket-js/server
+title: rsocket-js Server
+sidebar_label: Introduction
+---
+
+An `rsocket-js` server can be used to communicate with any RSocket Client implemented against the same protocol version as the server, and which implements the same transport as the server.
+
+Available server transports for `rsocket-js` include:
+
+- [`rsocket-tcp-server`](./rsocket-tcp-server)
+- [`rsocket-websocket-server`](./rsocket-websocket-server)
+
+To get started creating an RSocket server, you will first need to install the [`rsocket-core`](https://www.npmjs.com/package/rsocket-core) NPM package, and atleast one transport protocol implementation. See the WebSocket server example below.
+
+### WebSocket Server Example
+
+```js
+const { RSocketServer } = require('rsocket-core');
+const RSocketWebSocketServer = require('rsocket-websocket-server');
+const { Single } = require('rsocket-flowable');
+
+const WebSocketTransport = RSocketWebSocketServer.default;
+const host = '127.0.0.1';
+const port = 9898;
+
+const transportOpts = {
+  host: host,
+  port: port,
+};
+
+const transport = new WebSocketTransport(transportOpts);
+
+const getRequestHandler = (requestingRSocket, setupPayload) => {
+
+  function handleFireAndForget() {
+    ...
+  }
+
+  return {
+    fireAndForget: handleFireAndForget,
+    ...
+  };
+};
+
+const rSocketServer = new RSocketServer({
+  transport,
+  getRequestHandler,
+});
+
+rSocketServer.start();
+
+console.log(`Server started on port ${port}`);
+```
+
+# RSocketServer
+
+## `getRequestHandler`
+
+The created `RSocketServer` instance expects to be passed a function that can return an object matching the `Responder` interface. This object is responsible for mapping callback/handler functions to the various RSocket message types, and returning an appropriate `rsocket-flowable` instance that will produce/injest data for the message.
+
+See the server portion of [WebSocket Client Server Example](/docs/guides/rsocket-js#server-example) for an example of an implemented `getRequestHandler`.
+
+```js
+const getRequestHandler = (requestingRSocket, setupPayload) => {
+
+  function handleFireAndForget() {
+    ...
+  }
+
+  function handleRequestResponse(payload) {
+    return new Single((subscriber) => {
+      ...
+    });
+  }
+
+  function handleRequestStream(payload) {
+    return new Flowable((subscriber) => {
+      ...
+    });
+  }
+
+  function handleRequestChannel(payload) {
+    return new Flowable((subscriber) => {
+      ...
+    });
+  }
+
+  function handleMetadataPush(payload) {
+    return new Single((subscriber) => {
+      ...
+    });
+  }
+
+  return {
+    fireAndForget: handleFireAndForget,
+    requestResponse: handleRequestResponse,
+    requestStream: handleRequestStream,
+    requestChannel: handleRequestChannel,
+    metadataPush: handleMetadataPush
+  };
+};
+
+const rSocketServer = new RSocketServer({
+  getRequestHandler,
+  ...
+});
+```

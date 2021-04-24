@@ -41,3 +41,127 @@ _lazy_, _pull-based_, and support _back-pressure_. Two types are implemented:
 - [`Single`](./rsocket-js/rsocket-flowable/single): Like `Flowable`, but resolves to a single value.
 
 rsocket-js public API methods typically return values of these types.
+
+## WebSocket Client & Server example
+
+### Client Example
+
+The client sends a `request/response` message to the server on an interval, and exits after a certain amount of time has elapsed.
+
+```js
+// rsocket-client.js
+const { RSocketClient } = require('rsocket-core');
+const RSocketWebsocketClient = require('rsocket-websocket-client').default;
+const WebSocket = require('ws');
+
+function now() {
+  return new Date().getTime();
+}
+
+async function connect(options) {
+  const transportOptions = {
+    url: 'ws://127.0.0.1:9898',
+    wsCreator: (url) => {
+      return new WebSocket(url);
+    },
+  };
+  const setup = {
+    keepAlive: 1000000,
+    lifetime: 100000,
+    dataMimeType: 'text/plain',
+    metadataMimeType: 'text/plain',
+  };
+  const transport = new RSocketWebsocketClient(transportOptions);
+  const client = new RSocketClient({ setup, transport });
+  return await client.connect();
+}
+
+async function run() {
+  return new Promise(async (resolve, reject) => {
+    const rsocket = await connect();
+    const start = now();
+    const interval = setInterval(() => {
+      rsocket.requestResponse({ data: 'What is the current time?' }).subscribe({
+        onComplete: (response) => {
+          console.log(response);
+        },
+        onError: (error) => {
+          console.error(error);
+        },
+        onSubscribe: (cancel) => {
+          /* call cancel() to stop onComplete/onError */
+        },
+      });
+
+      if (now() - start >= 5000) {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 750);
+  });
+}
+
+Promise.resolve(run()).then(
+  () => process.exit(0),
+  (error) => {
+    console.error(error.stack);
+    process.exit(1);
+  }
+);
+```
+
+### Server Example
+
+The server responds to `request/response` messages with the current time.
+
+```js
+// rsocket-server.js
+const { RSocketServer } = require('rsocket-core');
+const RSocketWebSocketServer = require('rsocket-websocket-server');
+const { Single } = require('rsocket-flowable');
+
+const WebSocketTransport = RSocketWebSocketServer.default;
+const host = '127.0.0.1';
+const port = 9898;
+
+const transportOpts = {
+  host: host,
+  port: port,
+};
+
+const transport = new WebSocketTransport(transportOpts);
+
+const getRequestHandler = (requestingRSocket, setupPayload) => {
+  function handleRequestResponse(payload) {
+    console.log(`requestResponse request`, payload);
+    return new Single((subscriber) => {
+      setTimeout(() => {
+        try {
+          const msg = `${new Date()}`;
+          console.log(`requestResponse response`, msg);
+          subscriber.onComplete({
+            data: msg,
+            metadata: null,
+          });
+        } catch (e) {
+          subscriber.onError(e);
+        }
+      }, 0);
+      subscriber.onSubscribe();
+    });
+  }
+
+  return {
+    requestResponse: handleRequestResponse,
+  };
+};
+
+const rSocketServer = new RSocketServer({
+  transport,
+  getRequestHandler,
+});
+
+rSocketServer.start();
+
+console.log(`Server started on port ${port}`);
+```

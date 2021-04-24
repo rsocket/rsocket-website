@@ -1,5 +1,5 @@
 ---
-slug: /docs/guides/rsocket-js/client/index
+slug: /docs/guides/rsocket-js/client
 title: rsocket-js Client
 sidebar_label: Introduction
 ---
@@ -18,12 +18,12 @@ To get started creating an RSocket client, you will first need to install the [`
 ### WebSocket Client Quick Start Example
 
 ```
-npm install rsocket-core rsocket-websockt-client
+npm install rsocket-core rsocket-websocket-client
 ```
 
 ```js
 import { RSocketClient } from 'rsocket-core';
-import RSocketWebsocketClient from 'rsocket-websockt-client';
+import RSocketWebsocketClient from 'rsocket-websocket-client';
 
 async function createClient(options) {
   const client = new RSocketClient({
