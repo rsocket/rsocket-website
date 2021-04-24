@@ -1,0 +1,50 @@
+---
+slug: /docs/guides/rsocket-js/client/rsocket-tcp-client
+title: rsocket-js TCP Client
+sidebar_label: TCP Client
+---
+
+The `rsocket-tcp-client` implements the RScocket protocol using the TCP transport protocol, and is suitable for Server to Server, and other scenarios where raw TCP is available.
+
+:::note
+rsocket-tcp-client is not supported or suitable for use in web browser environments. For web browser environments, [rsocket-websocket-client](./rsocket-websocket-client) is recommended and supported.
+:::
+
+### TCP Client Quick Start Example
+
+```
+npm install rsocket-core rsocket-tcp-client
+```
+
+```js
+import { RSocketClient } from 'rsocket-core';
+import RSocketTCPClient from 'rsocket-tcp-client';
+
+async function createClient(options) {
+  const client = new RSocketClient({
+    setup: {
+      dataMimeType: 'text/plain',
+      keepAlive: 1000000, // avoid sending during test
+      lifetime: 100000,
+      metadataMimeType: 'text/plain',
+    },
+    transport: new RSocketTCPClient({
+      host: options.host,
+      port: options.port,
+    }),
+  });
+
+  return await client.connect();
+}
+
+async function run() {
+  const rsocket = await createClient({
+    host: '127.0.0.1',
+    port: 9898,
+  });
+
+  ...
+}
+
+await run();
+```

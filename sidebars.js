@@ -12,16 +12,7 @@ module.exports = {
       "About": aboutItems
     },
     {
-      'rsocket-js': [
-        "docs/guides/rsocket-js/index",
-        {
-          "rsocket-flowable": [
-            "docs/guides/rsocket-js/rsocket-flowable/index",
-            "docs/guides/rsocket-js/rsocket-flowable/flowable",
-            "docs/guides/rsocket-js/rsocket-flowable/single",
-          ]
-        }
-      ]
+      "rsocket-js": require("./sidebar-rsocket-js")
     }
   ],
   "about": aboutItems

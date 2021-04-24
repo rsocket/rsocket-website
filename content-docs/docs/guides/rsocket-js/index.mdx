@@ -7,6 +7,17 @@ sidebar_label: Introduction
 `rsocket-js` implements the 1.0 version of the [RSocket protocol](./protocol)
 and is designed for use in Node.js and browsers.
 
+## Packages
+
+The following packages are published to npm:
+
+- [rsocket-core](https://www.npmjs.com/package/rsocket-core)
+- [rsocket-flowable](https://www.npmjs.com/package/rsocket-flowable)
+- [rsocket-tcp-client](https://www.npmjs.com/package/rsocket-tcp-client)
+- [rsocket-tcp-server](https://www.npmjs.com/package/rsocket-tcp-server)
+- [rsocket-websocket-client](https://www.npmjs.com/package/rsocket-websocket-client)
+- [rsocket-websocket-server](https://www.npmjs.com/package/rsocket-websocket-server)
+
 ## Status
 
 The following are currently implemented:
@@ -16,8 +27,7 @@ The following are currently implemented:
 - Browser WebSocket client (binary)
 - TCK client for spec compliance testing
 - UTF-8 and Binary encoding at the transport layer
-- Optional JSON (de)serialization at the rsocket layer (send and receive objects
-  instead of strings)
+- Optional JSON (de)serialization at the rsocket layer (send and receive objects instead of strings)
 - ReactiveStream data types
 
 ## Reactive Streams
@@ -26,8 +36,8 @@ rsocket-js includes an implementation of the [Reactive Streams](http://www.react
 API in JavaScript. Note that unlike standard Rx Observables, Reactive Streams are
 _lazy_, _pull-based_, and support _back-pressure_. Two types are implemented:
 
-- `Flowable`: An implementation of the Reactive Streams `Publisher` type,
+- [`Flowable`](./rsocket-js/rsocket-flowable/flowable): An implementation of the Reactive Streams `Publisher` type,
   providing a demand-driven stream of values over time.
-- `Single`: Like `Flowable`, but resolves to a single value.
+- [`Single`](./rsocket-js/rsocket-flowable/single): Like `Flowable`, but resolves to a single value.
 
 rsocket-js public API methods typically return values of these types.

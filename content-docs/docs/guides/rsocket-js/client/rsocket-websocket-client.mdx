@@ -1,0 +1,46 @@
+---
+slug: /docs/guides/rsocket-js/client/rsocket-websocket-client
+title: rsocket-js WebSocket Client
+sidebar_label: WebSocket Client
+---
+
+The `rsocket-websocket-client` implements the RScocket protocol using the WebSocket transport protocol, and is suitable for Server to Server, and Client to Server scenarios where raw TCP is not available, such as in a web browser.
+
+### WebSocket Client Quick Start Example
+
+```
+npm install rsocket-core rsocket-websocket-client
+```
+
+```js
+import { RSocketClient } from 'rsocket-core';
+import RSocketTCPClient from 'rsocket-websocket-client';
+
+async function createClient(options) {
+  const client = new RSocketClient({
+    setup: {
+      dataMimeType: 'text/plain',
+      keepAlive: 1000000, // avoid sending during test
+      lifetime: 100000,
+      metadataMimeType: 'text/plain',
+    },
+    transport: new RSocketTCPClient({
+      host: options.host,
+      port: options.port,
+    }),
+  });
+
+  return await client.connect();
+}
+
+async function run() {
+  const rsocket = await createClient({
+    host: '127.0.0.1',
+    port: 9898,
+  });
+
+  ...
+}
+
+await run();
+```
