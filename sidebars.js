@@ -5,15 +5,22 @@ const aboutItems = [
   "about/implementations"
 ];
 
+const guideItems = [
+  "docs/guides/index",
+  {
+    "rsocket-js": require("./sidebar-rsocket-js")
+  }
+];
+
 module.exports = {
   "docs": [
-    "docs/getting-started/index",
     {
       "About": aboutItems
     },
     {
-      "rsocket-js": require("./sidebar-rsocket-js")
+      "Guides": guideItems
     }
   ],
-  "about": aboutItems
+  "about": aboutItems,
+  "guides": guideItems,
 };

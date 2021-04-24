@@ -98,13 +98,13 @@ module.exports = {
       },
       "items": [
         {
-          "to": "docs/getting-started",
-          "label": "Docs",
+          "to": "about/faq",
+          "label": "About",
           "position": "left"
         },
         {
-          "to": "about/faq",
-          "label": "About",
+          "to": "docs/guides",
+          "label": "Guides",
           "position": "left"
         },
         {
