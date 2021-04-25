@@ -111,7 +111,7 @@ const getRequestHandler = (requestingRSocket, setupPayload) => {
       setTimeout(() => {
         /**
          * If the client cancelled the request we can
-         * retrun early and avoid doing any of the work below.
+         * return early and avoid doing any of the work below.
          */
         if (status === statuses.CANCELLED) {
           return;
