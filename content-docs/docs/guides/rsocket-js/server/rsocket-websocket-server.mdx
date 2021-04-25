@@ -28,4 +28,13 @@ const transportOpts = {
 };
 
 const transport = new WebSocketTransport(transportOpts);
+
+const rSocketServer = new RSocketServer({
+  transport,
+  getRequestHandler: function () {
+    ...
+  },
+});
+
+rSocketServer.start();
 ```
