@@ -21,7 +21,7 @@ Available network transports for `RSocketServer` include:
 
 ## `getRequestHandler`
 
-When creating a `RSocketServer` instance, the constructor options require a function (`getRequestHandler`) to be provided that can return an object matching the `Responder` interface. This object is responsible for mapping callback/handler functions to the various RSocket message types, and returning an appropriate [`Single`](../rsocket-flowable/single.mdx) or [`Flowable`](../rsocket-flowable/flowable.mdx) from `rsocket-flowable` that will produce/injest data for the message.
+When creating a `RSocketServer` instance, the constructor options require a function (`getRequestHandler`) to be provided that can return an object matching the `Responder` interface. This object is responsible for mapping callback/handler functions to the various RSocket message types, and returning an appropriate [`Single`](../rsocket-flowable/single.mdx) or [`Flowable`](../rsocket-flowable/flowable.mdx) from `rsocket-flowable` that will produce/injest data for the request.
 
 ```js
 const getRequestHandler = (requestingRSocket, setupPayload) => {
