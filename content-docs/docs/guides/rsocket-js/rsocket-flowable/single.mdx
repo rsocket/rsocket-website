@@ -4,11 +4,11 @@ title: Single
 sidebar_label: Single
 ---
 
-The `Single` class is similar to `Flowable` but represents a single value that is produced on demand
-(when subscribed). From a practical perspective this is a lazy, cancellable
-Promise that supports operators (e.g. `map()`).
+The `Single` class is similar to `Flowable`, however instead of representing a stream of data with an unknown length, `Single` represents a stream which will only ever produce a single value, and which is produced on demand (when subscribed). From a practical perspective `Single` is a lazy, cancellable Promise that supports operators (e.g. `map()`).
 
-### Example: Network Request
+## Examples
+
+### Network Request
 
 This example creates a `Single` that resolves to the result of an XHR request. The `fetch`
 API does not support cancellation, so no cancel callback is passed to
@@ -35,7 +35,7 @@ single.subscribe({
 });
 ```
 
-### Example: Timer
+### Timer
 
 This example creates a `Single` that resolves to a string after a timeout, passing a
 cancellation callback to stop the timer in case the user cancels the `Single`:
@@ -55,6 +55,8 @@ single.subscribe({
   },
 });
 ```
+
+## API
 
 ### constructor (function)
 

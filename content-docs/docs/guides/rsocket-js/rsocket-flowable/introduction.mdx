@@ -10,8 +10,8 @@ sidebar_label: Introduction
 API in JavaScript. Note that unlike standard Rx Observables, Reactive Streams are
 _lazy_, _pull-based_, and support _back-pressure_. Two types are implemented:
 
-- `Flowable`: An implementation of the Reactive Streams `Publisher` type,
+- [`Flowable`](./flowable.mdx): An implementation of the Reactive Streams `Publisher` type,
   providing a demand-driven stream of values over time.
-- `Single`: Like `Flowable`, but resolves to a single value.
+- [`Single`](./single.mdx): Like `Flowable`, but resolves to a single value.
 
 rsocket-js public API methods typically return values of these types.
