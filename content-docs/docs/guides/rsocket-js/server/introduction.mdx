@@ -1,65 +1,27 @@
 ---
 slug: /docs/guides/rsocket-js/server
-title: rsocket-js Server
+title: RSocketServer - rsocket-js
 sidebar_label: Introduction
 ---
 
-An `rsocket-js` server can be used to communicate with any RSocket Client implemented against the same protocol version as the server, and which implements the same transport as the server.
+`RSocketServer` is the high level abstraction leveraged to create a server running the RSocket protocol.
 
-Available server transports for `rsocket-js` include:
+An `RSocketServer` server can be used to communicate with any RSocket Client implemented against the same protocol version as the server, and which implements the same transport as the server.
 
-- [`rsocket-tcp-server`](./rsocket-tcp-server)
-- [`rsocket-websocket-server`](./rsocket-websocket-server)
+To get started creating an RSocket server, you will first need to install the [`rsocket-core`](https://www.npmjs.com/package/rsocket-core) NPM package, and atleast one transport protocol implementation. See the server portion of [WebSocket Client Server Example](/docs/guides/rsocket-js#server-example) for an example of an implemented `getRequestHandler`.
 
-To get started creating an RSocket server, you will first need to install the [`rsocket-core`](https://www.npmjs.com/package/rsocket-core) NPM package, and atleast one transport protocol implementation. See the WebSocket server example below.
+## Transports
 
-### WebSocket Server Example
+A transport is the abstraction which handles the underlying network communication portion of the RSocket applicaiton protocol.
 
-```js
-const { RSocketServer } = require('rsocket-core');
-const RSocketWebSocketServer = require('rsocket-websocket-server');
-const { Single } = require('rsocket-flowable');
+Available network transports for `RSocketServer` include:
 
-const WebSocketTransport = RSocketWebSocketServer.default;
-const host = '127.0.0.1';
-const port = 9898;
-
-const transportOpts = {
-  host: host,
-  port: port,
-};
-
-const transport = new WebSocketTransport(transportOpts);
-
-const getRequestHandler = (requestingRSocket, setupPayload) => {
-
-  function handleFireAndForget() {
-    ...
-  }
-
-  return {
-    fireAndForget: handleFireAndForget,
-    ...
-  };
-};
-
-const rSocketServer = new RSocketServer({
-  transport,
-  getRequestHandler,
-});
-
-rSocketServer.start();
-
-console.log(`Server started on port ${port}`);
-```
-
-# RSocketServer
+- [`rsocket-tcp-server`](./rsocket-tcp-server.mdx)
+- [`rsocket-websocket-server`](./rsocket-websocket-server.mdx)
 
 ## `getRequestHandler`
 
-The created `RSocketServer` instance expects to be passed a function that can return an object matching the `Responder` interface. This object is responsible for mapping callback/handler functions to the various RSocket message types, and returning an appropriate `rsocket-flowable` instance that will produce/injest data for the message.
-
-See the server portion of [WebSocket Client Server Example](/docs/guides/rsocket-js#server-example) for an example of an implemented `getRequestHandler`.
+When creating a `RSocketServer` instance, the constructor options require a function (`getRequestHandler`) to be provided that can return an object matching the `Responder` interface. This object is responsible for mapping callback/handler functions to the various RSocket message types, and returning an appropriate [`Single`](../rsocket-flowable/single.mdx) or [`Flowable`](../rsocket-flowable/flowable.mdx) from `rsocket-flowable` that will produce/injest data for the message.
 
 ```js
 const getRequestHandler = (requestingRSocket, setupPayload) => {
@@ -105,4 +67,67 @@ const rSocketServer = new RSocketServer({
   getRequestHandler,
   ...
 });
+```
+
+## Client Cancellation
+
+An important characteristic of RSocket's protocol is the concept of cancellation.
+
+In the context of an RSocket server, once a client connection/request has begun, it is possible that before that request is completed, the client which initiated the request may decide it no longer wishes to continue and signal to the server that it wishes to cancel.
+
+In the event that a client signals to an RSocket server that it wishes to cancel a request, the server should avoid calling the `onComplete` or `onNext` callbacks for the requests resulting [`Single`](../rsocket-flowable/single.mdx) or [`Flowable`](../rsocket-flowable/flowable.mdx) instances.
+
+### Cancellation Example
+
+```js
+const statuses = {
+  PENDING: "pending",
+  CANCELLED: "cancelled"
+};
+
+const getRequestHandler = (requestingRSocket, setupPayload) => {
+
+  function handleRequestResponse(payload) {
+    return new Single((subscriber) => {
+
+      let status = statuses.PENDING;
+
+      process.nextTick(() => {
+        /**
+         * If the client cancelled the request we can
+         * retrun early and avoid doing any of the work below.
+         */
+        if (status === statuses.CANCELLED) {
+          return;
+        }
+
+        try {
+          const msg = `${new Date()}`;
+          subscriber.onComplete({
+            data: msg,
+            metadata: null
+          });
+        } catch (e) {
+          subscriber.onError(e);
+        }
+      });
+
+      /**
+       * In the event that the client cancels the request before
+       * the server can respond, we will change our status to cancelled
+       * and avoid calling `onComplete` on the `subscriber` instance in the
+       * `nextTick` callback.
+       */
+      function handleCancellation() {
+        status = statuses.CANCELLED;
+      }
+
+      subscriber.onSubscribe(() => handleCancellation()));
+    });
+  }
+
+  return {
+    requestResponse: handleRequestResponse,
+  };
+};
 ```
