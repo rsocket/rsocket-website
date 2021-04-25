@@ -73,7 +73,7 @@ const rSocketServer = new RSocketServer({
 
 An important characteristic of RSocket's protocol is the concept of cancellation.
 
-In the context of an RSocket server, once a client connection/request has begun, it is possible that before that request is completed, the client which initiated the request may decide it no longer wishes to continue and signal to the server that it wishes to cancel.
+In the context of an RSocket server, once a client connection/request has begun, it is possible that the client which initiated the request may decide it no longer wishes to continue and signal to the server that it wishes to cancel.
 
 In the event that a client signals to an RSocket server that it wishes to cancel a request, the server should avoid calling the `onComplete` or `onNext` callbacks for the requests resulting [`Single`](../rsocket-flowable/single.mdx) or [`Flowable`](../rsocket-flowable/flowable.mdx) instances.
 
@@ -81,37 +81,16 @@ In the event that a client signals to an RSocket server that it wishes to cancel
 
 ```js
 const statuses = {
-  PENDING: "pending",
-  CANCELLED: "cancelled"
+  PENDING: 'pending',
+  CANCELLED: 'cancelled',
 };
 
 const getRequestHandler = (requestingRSocket, setupPayload) => {
-
   function handleRequestResponse(payload) {
+    const simulatedDelayMilli = 100;
+    let status = statuses.PENDING;
+
     return new Single((subscriber) => {
-
-      let status = statuses.PENDING;
-
-      process.nextTick(() => {
-        /**
-         * If the client cancelled the request we can
-         * retrun early and avoid doing any of the work below.
-         */
-        if (status === statuses.CANCELLED) {
-          return;
-        }
-
-        try {
-          const msg = `${new Date()}`;
-          subscriber.onComplete({
-            data: msg,
-            metadata: null
-          });
-        } catch (e) {
-          subscriber.onError(e);
-        }
-      });
-
       /**
        * In the event that the client cancels the request before
        * the server can respond, we will change our status to cancelled
@@ -122,7 +101,32 @@ const getRequestHandler = (requestingRSocket, setupPayload) => {
         status = statuses.CANCELLED;
       }
 
-      subscriber.onSubscribe(() => handleCancellation()));
+      subscriber.onSubscribe(() => handleCancellation());
+
+      /**
+       * Leverage `setTimeout` to simulate a delay
+       * in responding to the client, and thus giving it
+       * time to decide to "cancel".
+       */
+      setTimeout(() => {
+        /**
+         * If the client cancelled the request we can
+         * retrun early and avoid doing any of the work below.
+         */
+        if (status === statuses.CANCELLED) {
+          return;
+        }
+
+        const msg = `${new Date()}`;
+        try {
+          subscriber.onComplete({
+            data: msg,
+            metadata: null,
+          });
+        } catch (e) {
+          subscriber.onError(e);
+        }
+      }, simulatedDelayMilli);
     });
   }
 
