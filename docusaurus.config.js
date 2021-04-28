@@ -111,7 +111,7 @@ module.exports = {
           "position": "left"
         },
         {
-          "to": "docs/guides",
+          "to": "guides",
           "label": "Guides",
           "position": "left"
         },

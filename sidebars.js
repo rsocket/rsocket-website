@@ -6,7 +6,7 @@ const aboutItems = [
 ];
 
 const guideItems = [
-  "docs/guides/index",
+  "guides/index",
   {
     "rsocket-js": require("./sidebar-rsocket-js")
   }
