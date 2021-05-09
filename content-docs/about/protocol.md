@@ -1,5 +1,5 @@
 ---
-slug: /protocol
+slug: /about/protocol
 title: Protocol
 sidebar_label: Protocol
 ---

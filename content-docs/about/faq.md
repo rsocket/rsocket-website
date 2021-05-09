@@ -1,12 +1,12 @@
 ---
-slug: /
+slug: /about/faq
 title: Frequently Asked Questions
 sidebar_label: FAQ
 ---
 
 ## Why a new protocol?
 
-The full explanation of our motivations in creating a new protocol can be found in the [Motivations document](/docs/motivations).
+The full explanation of our motivations in creating a new protocol can be found in the [Motivations document](/about/motivations).
 
 Some of the key reasons include:
 
@@ -40,7 +40,7 @@ This means we still need SSE or WebSockets (and SSE is a text protocol so requir
 
 HTTP/2 was meant as a better HTTP/1.1, primarily for document retrieval in browsers for websites. We can do better than HTTP/2 for applications.
 
-See also the RSocket [Motivations document](/docs/motivations).
+See also the RSocket [Motivations document](/about/motivations).
 
 ## What about QUIC?
 
@@ -83,7 +83,7 @@ HTTP/2 and RSocket both require a stateful connection with an initial exchange.
 
 ## Transport Layer
 
-HTTP/2 [requires TCP](https://http2.github.io/http2-spec/#starting). RSocket [requires TCP, WebSockets or Aeron](http://rsocket.io/docs/Protocol#terminology).
+HTTP/2 [requires TCP](https://http2.github.io/http2-spec/#starting). RSocket [requires TCP, WebSockets or Aeron](http://rsocket.io/about/Protocol#terminology).
 
 We have no intention of this running over HTTP/1.1. We also do not intend on running over HTTP/2 when fronted only by HTTP/1.1 APIs (as browsers expose), though that could be explored and conceptually is possible (with the use of SSE or chunked encoding). If using an HTTP/2 implementation that exposes the underlying byte streams, then HTTP/2 can be used as a transport (and this is in fact done in at least one production use of RSocket).
 
@@ -128,7 +128,7 @@ RSocket does not enforce a queuing model, nor an emission model, nor a processin
 
 Modern distributed system topologies tend to have multiple levels of request fan-out. It means that one request at one level may lead to tens of requests to multiple backends. Being able to cancel a request can save a non-trivial amount of work.
 
-##  What are example use cases of cancellation?
+## What are example use cases of cancellation?
 
 Let’s imagine a server responsible for computing the *n*th digit of Pi. A client sends a request to that server but realizes later that it doesn’t want/need the response anymore (for arbitrary reasons). Rather than letting the server do the computation in vain, it can cancel it (the server may not even have started the work).
 
@@ -170,8 +170,8 @@ Relying on the TCP flow control doesn’t work, because we multiplex the streams
 
 There are two types of flow control:
 
-- One is provided by the request-*n* semantics defined in Reactive Streams (please [read the spec][Reactive Streams] for exhaustive details).
-- The second is provided via the lease semantics defined in the [Protocol document](http://rsocket.io/docs/Protocol#lease-semantics).
+- One is provided by the request-_n_ semantics defined in Reactive Streams (please [read the spec][reactive streams] for exhaustive details).
+- The second is provided via the lease semantics defined in the [Protocol document](http://rsocket.io/about/Protocol#lease-semantics).
 
 ## How does RSocket benefit a client-side load balancer in a data center?
 
@@ -181,6 +181,7 @@ For instance, when a client doesn’t have a valid lease, it exposes a “0.0”
 ## Why is multiplexing more efficient?
 
 See:
+
 - [HTTP/2 FAQ: Why is HTTP/2 multiplexed?](https://http2.github.io/faq/#why-is-http2-multiplexed)
 - [HTTP/2 FAQ: Why just one TCP connection?](https://http2.github.io/faq/#why-just-one-tcp-connection)
 
@@ -224,15 +225,15 @@ Unfortunately the word has become quite a buzzword, and overused.
 
 However, this library is directly related to several projects where “Reactive” is an important part of their name and architectural pattern. Specifically, RSocket implements, uses, or follows the principles in these projects and libraries, thus the name:
 
-* [Reactive Streams]
-* [Reactive Extensions]
-* [RxJava]
-* [RxJS]
-* [Reactive Manifesto]
+- [Reactive Streams]
+- [Reactive Extensions]
+- [RxJava]
+- [RxJS]
+- [Reactive Manifesto]
 
-[Aeron]: https://github.com/real-logic/Aeron "Efficient reliable UDP unicast, UDP multicast, and IPC message transport."
-[Reactive Streams]: http://www.reactive-streams.org "Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure."
-[Reactive Extensions]: http://www.reactivex.io "ReactiveX is an API for asynchronous programming with observable streams."
-[RxJava]: https://github.com/ReactiveX/RxJava "RxJava is a library for composing asynchronous and event-based programs using observable sequences for the Java VM."
-[RxJS]: https://github.com/ReactiveX/RxJS "RxJS is a reactive programming library for JavaScript."
-[Reactive Manifesto]: http://www.reactivemanifesto.org "We want systems that are Responsive, Resilient, Elastic, and Message Driven. We call these Reactive Systems."
+[aeron]: https://github.com/real-logic/Aeron 'Efficient reliable UDP unicast, UDP multicast, and IPC message transport.'
+[reactive streams]: http://www.reactive-streams.org 'Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure.'
+[reactive extensions]: http://www.reactivex.io 'ReactiveX is an API for asynchronous programming with observable streams.'
+[rxjava]: https://github.com/ReactiveX/RxJava 'RxJava is a library for composing asynchronous and event-based programs using observable sequences for the Java VM.'
+[rxjs]: https://github.com/ReactiveX/RxJS 'RxJS is a reactive programming library for JavaScript.'
+[reactive manifesto]: http://www.reactivemanifesto.org 'We want systems that are Responsive, Resilient, Elastic, and Message Driven. We call these Reactive Systems.'

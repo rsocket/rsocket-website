@@ -3,6 +3,7 @@
 ## Getting started
 
 Before you begin:
+
 - This site is powered by [Docusaurus V2](https://v2.docusaurus.io/), which requires [Node JS](https://nodejs.org/en/).
 
 ### Ready to make a change? Fork the repo.
@@ -22,7 +23,7 @@ Most changes will be expected to be documentation updates in the [markdown docs]
 more than the Markdown documentation pages, then you should be familiar and comfortable with Node JS, Docusaurus,
 and ReactJS.
 
-Review the [Docusaurus v2 docs](https://v2.docusaurus.io/docs/markdown-features) for how to edit Markdown files.
+Review the [Docusaurus docs](https://docusaurus.io/docs/markdown-features) for how to edit Markdown files.
 
 ### Open a pull request
 
@@ -44,11 +45,13 @@ We should be able to review and merge it quickly.
 
 ### Running the development server
 
-You will need to install the [Node JS](https://nodejs.org/en/download/) runtime, and then from
-within the root of this directory, run the following commands:
+You will need to install the [Node.js](https://nodejs.org/en/download/) runtime, and then from
+within the root of this directory run the following commands:
 
-    npm install
-    npm run start
+```shell script
+npm install
+npm run start
+```
 
 ### Forking and Publishing (Likely unnecessary)
 

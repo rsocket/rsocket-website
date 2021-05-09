@@ -2,20 +2,20 @@ import React from 'react';
 import Layout from '@theme/Layout';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import {useBaseUrlUtils} from '@docusaurus/useBaseUrl';
+import { useBaseUrlUtils } from '@docusaurus/useBaseUrl';
 import classnames from "classnames";
 
 function Help() {
-  const {withBaseUrl} = useBaseUrlUtils();
+  const { withBaseUrl } = useBaseUrlUtils();
   const context = useDocusaurusContext();
-  const {siteConfig = {}} = context;
+  const { siteConfig = {} } = context;
 
   const supportLinks = [
     {
       title: 'Browse Documentation',
       content: (() => {
-        const motivationsLink = (<Link to={withBaseUrl('docs/motivations')}>motivations</Link>);
-        const protocolsLink = (<Link to={withBaseUrl('docs/motivations')}>protocol</Link>);
+        const motivationsLink = (<Link to={withBaseUrl('about/motivations')}>motivations</Link>);
+        const protocolsLink = (<Link to={withBaseUrl('about/motivations')}>protocol</Link>);
         return (
           <>
             Learn more about the {motivationsLink} behind RSocket and details of the {protocolsLink}.
@@ -56,7 +56,7 @@ function Help() {
               </div>
             </div>
             <div className="row">
-              {supportLinks.map(({content, title}, idx) => (
+              {supportLinks.map(({ content, title }, idx) => (
                 <div
                   key={idx}
                   className={classnames('col', `col--${supportLinks.length * 2}`)}

@@ -63,6 +63,7 @@ module.exports = {
       "@docusaurus/preset-classic",
       {
         "docs": {
+          "routeBasePath": "/",
           "path": path.resolve("content-docs"),
           "showLastUpdateAuthor": true,
           "showLastUpdateTime": true,
@@ -105,8 +106,13 @@ module.exports = {
       },
       "items": [
         {
-          "to": "docs/",
+          "to": "about/faq",
           "label": "About",
+          "position": "left"
+        },
+        {
+          "to": "guides",
+          "label": "Guides",
           "position": "left"
         },
         {

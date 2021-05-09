@@ -1,5 +1,5 @@
 ---
-slug: /implementations
+slug: /about/implementations
 title: Implementations
 sidebar_label: Implementations
 ---

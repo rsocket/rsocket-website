@@ -1,9 +1,8 @@
 ---
-slug: /motivations
+slug: /about/motivations
 title: Motivations
 sidebar_label: Motivations
 ---
-
 
 Large, distributed systems are often implemented in a modular fashion by different teams using a variety of technologies and programming languages. The pieces need to communicate reliably and support rapid, independent evolution. Effective and scalable communication between modules is a crucial concern in distributed systems. It significantly affects how much latency users experience and the amount of resources required to build and run the system.
 
@@ -141,7 +140,7 @@ This first form of flow control is suited to both server-to-server and server-to
 
 RSocket allows for the `request(n)` signal to be composed over network boundaries from requester to responder (typically client to server). This controls the flow of emission from responder to requester using Reactive Streams semantics at the application level and enables the use of bounded buffers so rate-of-flow adjusts to application consumption and does not rely solely on transport and network buffering.
 
-This same data type and approach has been adopted into Java 9 in [the `java.util.concurrent.Flow` suite of types](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Flow.Subscription.html).
+This same data type and approach has been adopted into Java 9 in [the `java.util.concurrent.Flow` suite of types](https://docs.oracle.com/javase/9/about/api/java/util/concurrent/Flow.Subscription.html).
 
 ### Leasing
 
@@ -172,13 +171,14 @@ RSocket seeks to:
 - Reduce perceived latency and increase system efficiency by supporting non-blocking, duplex, async application communication with flow control over multiple transports from any language.
 
 - Reduce hardware footprint (and thus cost and operational complexity) by:
-   - increasing CPU and memory efficiency through use of binary encoding
-   - avoiding redundant work by allowing persistent connections
+
+  - increasing CPU and memory efficiency through use of binary encoding
+  - avoiding redundant work by allowing persistent connections
 
 - Reduce perceived user latency by:
-   - avoiding handshakes and the associated round-trip network overhead
-   - reducing computation time by using binary encoding
-   - allocating less memory and reducing garbage collection cost
+  - avoiding handshakes and the associated round-trip network overhead
+  - reducing computation time by using binary encoding
+  - allocating less memory and reducing garbage collection cost
 
 ## Comparisons
 
@@ -187,29 +187,30 @@ Following is a brief review of some protocols we reviewed before we decided to c
 For context:
 
 - RSocket is an OSI Layer 5/6, or TCP/IP “Application Layer” protocol.
-- It is intended for use over duplex, binary transport protocols that are TCP-like in behavior (described further [here](http://rsocket.io/docs/Protocol#transport-protocol)).
+- It is intended for use over duplex, binary transport protocols that are TCP-like in behavior (described further [here](http://rsocket.io/about/Protocol#transport-protocol)).
 
 ### TCP & QUIC
 
-* No framing or application semantics
-* Must provide an application protocol
+- No framing or application semantics
+- Must provide an application protocol
 
 ### WebSockets
 
-* No application semantics, just framing
-* Must provide an application protocol
+- No application semantics, just framing
+- Must provide an application protocol
 
 ### HTTP/1.1 & HTTP/2
 
 HTTP provides barely-sufficient raw capabilities for application protocols to be built with, but an application protocol still needs to be defined on top of it. It is insufficient in defining application semantics. ([gRPC from Google](https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md) is an example of a protocol being built on top of HTTP/2 to add these type of semantics).
 
 These limited application semantics generally require an application protocol to define things such as:
-  - Use of GET, POST, or PUT for request
-  - Use of Normal, Chunked, or SSE for response
-  - MimeType of payload
-  - Error messaging along with standard status codes
-  - How the client should behave with status codes
-  - Use of SSE as persistent channel from server to client to allow server to make requests to client
+
+- Use of GET, POST, or PUT for request
+- Use of Normal, Chunked, or SSE for response
+- MimeType of payload
+- Error messaging along with standard status codes
+- How the client should behave with status codes
+- Use of SSE as persistent channel from server to client to allow server to make requests to client
 
 There is no defined mechanism for flow control from responder (typically server) to requester (typically client). HTTP/2 does flow control at the byte level, not the application level. The mechanisms for communicating requester (typically server) availability (such as failing a request) are inefficient and painful. It does not support interaction models such as fire-and-forget, and streaming models are inefficient (chunked encoding or SSE, which is <span style={{ fontSize: '90%' }}>ASCII</span>-based).
 
@@ -217,7 +218,7 @@ Despite its ubiquity, <span style={{ fontSize: '90%' }}>REST</span> alone is ins
 
 What about HTTP/2 though? Doesn’t it resolve the HTTP/1 issues and address the motivations of RSocket?
 
-Unfortunately, no. HTTP/2 is *much* better for browsers and request/response document transfer, but does not expose the desired behaviors and interaction models for applications as described earlier in this document.
+Unfortunately, no. HTTP/2 is _much_ better for browsers and request/response document transfer, but does not expose the desired behaviors and interaction models for applications as described earlier in this document.
 
 Here are some quotes from the HTTP/2 [spec](https://http2.github.io/http2-spec/) and [FAQ](https://http2.github.io/faq/) that are useful to provide context on what HTTP/2 was targeting:
 
@@ -235,12 +236,12 @@ This means we still need SSE or WebSockets (and SSE is a text protocol so requir
 
 HTTP/2 was meant as a better HTTP/1.1, primarily for document retrieval in browsers for websites. We can do better than HTTP/2 for applications.
 
-[Aeron]: https://github.com/real-logic/Aeron "Efficient reliable UDP unicast, UDP multicast, and IPC message transport."
-[Akka Streams]: https://doc.akka.io/docs/akka/2.4/scala/stream/index.html "An intuitive and safe way to formulate stream processing setups such that we can then execute them efficiently and with bounded resource usage."
-[QUIC]: https://www.chromium.org/quic "QUIC is a new transport which reduces latency compared to that of TCP."
-[Reactive Extensions]: http://www.reactivex.io "ReactiveX is an API for asynchronous programming with observable streams."
-[Reactive Manifesto]: http://www.reactivemanifesto.org "We want systems that are Responsive, Resilient, Elastic, and Message Driven. We call these Reactive Systems."
-[Reactive Streams]: http://www.reactive-streams.org "Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure."
-[Reactor]: https://github.com/reactor/reactor "Reactive foundations for apps and frameworks and reactive extensions, with Mono (1 element) and Flux (n elements) types."
-[RxJava]: https://github.com/ReactiveX/RxJava "RxJava is a library for composing asynchronous and event-based programs using observable sequences for the Java VM."
-[RxJS]: https://github.com/ReactiveX/RxJS "RxJS is a reactive programming library for JavaScript."
+[aeron]: https://github.com/real-logic/Aeron 'Efficient reliable UDP unicast, UDP multicast, and IPC message transport.'
+[akka streams]: https://doc.akka.io/about/akka/2.4/scala/stream/index.html 'An intuitive and safe way to formulate stream processing setups such that we can then execute them efficiently and with bounded resource usage.'
+[quic]: https://www.chromium.org/quic 'QUIC is a new transport which reduces latency compared to that of TCP.'
+[reactive extensions]: http://www.reactivex.io 'ReactiveX is an API for asynchronous programming with observable streams.'
+[reactive manifesto]: http://www.reactivemanifesto.org 'We want systems that are Responsive, Resilient, Elastic, and Message Driven. We call these Reactive Systems.'
+[reactive streams]: http://www.reactive-streams.org 'Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure.'
+[reactor]: https://github.com/reactor/reactor 'Reactive foundations for apps and frameworks and reactive extensions, with Mono (1 element) and Flux (n elements) types.'
+[rxjava]: https://github.com/ReactiveX/RxJava 'RxJava is a library for composing asynchronous and event-based programs using observable sequences for the Java VM.'
+[rxjs]: https://github.com/ReactiveX/RxJS 'RxJS is a reactive programming library for JavaScript.'
