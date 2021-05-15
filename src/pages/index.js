@@ -260,7 +260,7 @@ function Home() {
                 'button button--secondary button--lg',
                 styles.getStarted,
               )}
-              to={withBaseUrl('about/')}
+              to={withBaseUrl('about/faq')}
             >
               Read the FAQ
             </Link>
