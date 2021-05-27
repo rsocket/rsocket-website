@@ -341,7 +341,7 @@ function Home() {
               <div className="text--center padding-vert--lg">
                 <Link
                   className="button button--primary button--lg"
-                  to={withBaseUrl('about/')}
+                  to={withBaseUrl('about/faq')}
                 >
                   Learn more about RSocket!
                 </Link>

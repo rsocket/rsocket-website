@@ -92,7 +92,7 @@ module.exports = {
     },
     "prism": {
       "theme": require("prism-react-renderer/themes/dracula"),
-      "additionalLanguages": ["kotlin"],
+      "additionalLanguages": ["java", "kotlin"],
     },
     "metadatas": [
       { property: "og:image", content: `${deployUrl}/img/social/rsocket-io-facebook-og.jpg` },
