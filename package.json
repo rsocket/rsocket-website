@@ -11,8 +11,8 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "@docusaurus/core": "2.0.0-alpha.70",
-    "@docusaurus/preset-classic": "2.0.0-alpha.70",
+    "@docusaurus/core": "2.0.0-beta.0",
+    "@docusaurus/preset-classic": "2.0.0-beta.0",
     "classnames": "^2.2.6",
     "clsx": "^1.1.1",
     "highlight.js": "^10.2.0",
