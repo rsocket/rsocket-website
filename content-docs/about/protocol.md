@@ -1274,7 +1274,6 @@ conditions that do not make sense given the current context. Clarifications are 
 1. Lack of LEASE frames that stops new Requests is an application concern and SHALL NOT be handled by the protocol.
 
 1. If a PAYLOAD for a REQUEST_RESPONSE is received that does not have a COMPLETE flag set, the implementation MUST
-
 assume it is set and act accordingly.
 
 1. Reassembly of PAYLOADs and REQUEST_CHANNELs MUST assume the possibility of an infinite stream.
