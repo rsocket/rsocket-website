@@ -1,0 +1,52 @@
+---
+slug: /guides/rsocket-java/client/rsocket-websocket-client
+title: RSocketWebsocketClient - rsocket-js
+sidebar_label: WebSocket Client
+---
+
+The `RSocketWebsocketClient` implements the RScocket protocol using the WebSocket network transport protocol, and is suitable for Server to Server, and Client to Server scenarios where raw TCP is not available, such as in a web browser.
+
+### WebSocket Client Quick Start Example
+
+```
+npm install rsocket-core rsocket-websocket-client
+```
+
+```js
+const { RSocketClient } = require('rsocket-core');
+const RSocketWebsocketClient = require('rsocket-websocket-client').default;
+const WebSocket = require('ws');
+
+async function createClient(options) {
+  const transportOptions = {
+    url: 'ws://`${options.host}`:${options.port}',
+    // In non-browser environments we need to provide a
+    // factory method which can return an instance of a
+    // websocket object. Browsers however, have this
+    // functionality built-in.
+    wsCreator: (url) => {
+      return new WebSocket(url);
+    }
+  };
+  const setupOptions = {
+    keepAlive: 1000000,
+    lifetime: 100000,
+    dataMimeType: 'text/plain',
+    metadataMimeType: 'text/plain'
+  };
+  const transport = new RSocketWebsocketClient(transportOptions);
+  const client = new RSocketClient({ setup: setupOptions, transport });
+  return await client.connect();
+}
+
+async function run() {
+  const rsocket = await createClient({
+    host: '127.0.0.1',
+    port: 9898,
+  });
+
+  ...
+}
+
+await run();
+```

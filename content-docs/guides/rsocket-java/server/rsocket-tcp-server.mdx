@@ -1,0 +1,42 @@
+---
+slug: /guides/rsocket-java/server/rsocket-tcp-server
+title: RSocketTCPServer - rsocket-js
+sidebar_label: TCP Server
+---
+
+## Getting Started
+
+TODO
+
+## Example
+
+```
+npm install rsocket-core rsocket-tcp-server rsocket-flowable
+```
+
+```js
+const { RSocketServer } = require('rsocket-core');
+const RSocketTCPServer = require('rsocket-tcp-server');
+const { Single } = require('rsocket-flowable');
+
+const TCPTransport = RSocketTCPServer.default;
+
+const host = '127.0.0.1';
+const port = 3000;
+
+const transportOpts = {
+  host: host,
+  port: port,
+};
+
+const transport = new TCPTransport(transportOpts);
+
+const rSocketServer = new RSocketServer({
+  transport,
+  getRequestHandler: function () {
+    ...
+  },
+});
+
+rSocketServer.start();
+```

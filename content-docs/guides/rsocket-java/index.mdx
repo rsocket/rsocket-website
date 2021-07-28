@@ -1,0 +1,27 @@
+---
+slug: /guides/rsocket-java
+title: rsocket-java
+sidebar_label: Introduction
+---
+
+`rsocket-java` implements the 1.0 version of the [RSocket protocol](about/protocol), and is designed for use in JVM based runtime environments.
+
+While `rsocket-java` is commonly consumed by framework intregrations, such as Spring Boot, `rsocket-java` can be used without any framework integrations.
+
+## Artifacts
+
+Releases and milestone artifacts are published to [Maven Central](https://search.maven.org/search?q=g:io.rsocket) under `io.rsocket`.
+
+### Gradle Example
+
+```Gradle
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }  // Reactor milestones (if needed)
+}
+
+dependencies {
+    implementation 'io.rsocket:rsocket-core:1.1.1'
+    implementation 'io.rsocket:rsocket-transport-netty:1.1.1'
+}
+```
