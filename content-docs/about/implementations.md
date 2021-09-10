@@ -21,7 +21,7 @@ The core scope includes the following (and is not limited to) :
 
 | Driver         | Transport(s)                                                                            | Version | Core Support | Resumption | Leasing | RPC |
 | -------------- | --------------------------------------------------------------------------------------- | ------- | ------------ | ---------- | ------- | --- |
-| rsocket-java   | <ul><li>aeron (UDP)</li><li>akka</li><li>reactor-netty <br />(TCP, websocket)</li></ul> | 1.0     | x            |            |         | x   |
+| rsocket-java   | <ul><li>aeron (UDP)</li><li>akka</li><li>reactor-netty <br />(TCP, websocket)</li></ul> | 1.0     | x            |            | x       | x   |
 | rsocket-js     | <ul><li>nodejs net (TCP)</li><li>plain (websocket)</li></ul>                            | 1.0     | x            | x          |         | x   |
 | rsocket-net    | <ul><li>System.Net <br />(TCP, websocket)</li></ul>                                     | 1.0     | x            |            |         | x   |
 | rsocket-cpp    | <ul><li>Folly (TCP)</li></ul>                                                           | 1.0     | x            | x          |         |     |
