@@ -1,0 +1,42 @@
+---
+slug: /guides/rsocket-py/server/rsocket-websocket-server
+title: RSocketServer (Websocket Transport) - rsocket-py
+sidebar_label: WebSocket Server
+---
+
+## Getting Started
+
+TODO
+
+## Example
+
+```
+npm install rsocket-core rsocket-websocket-server rsocket-flowable
+```
+
+```py
+const { RSocketServer } = require('rsocket-core');
+const RSocketWebSocketServer = require('rsocket-websocket-server');
+const { Single } = require('rsocket-flowable');
+
+const WebSocketTransport = RSocketWebSocketServer.default;
+
+const host = '127.0.0.1';
+const port = 3000;
+
+const transportOpts = {
+  host: host,
+  port: port,
+};
+
+const transport = new WebSocketTransport(transportOpts);
+
+const rSocketServer = new RSocketServer({
+  transport,
+  getRequestHandler: function () {
+    ...
+  },
+});
+
+rSocketServer.start();
+```

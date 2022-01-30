@@ -1,0 +1,102 @@
+---
+slug: /guides/rsocket-py/rsocket-flowable/single
+title: Single
+sidebar_label: Single
+---
+
+The `Single` class is similar to `Flowable`, however instead of representing a stream of data with an unknown length, `Single` represents a stream which will only ever produce a single value, and which is produced on demand (when subscribed). From a practical perspective `Single` is a lazy, cancellable Promise that supports operators (e.g. `map()`).
+
+## Examples
+
+### Network Request
+
+This example creates a `Single` that resolves to the result of an XHR request. The `fetch`
+API does not support cancellation, so no cancel callback is passed to
+`onSubscribe()`. The user may still call `cancel()` to ignore the fetch
+results and stop `onComplete()` or `onError()` from being called.
+
+```python
+const single = new Single((subscriber) => {
+  fetch('https://...').then((resp) => {
+    resp.json().then(
+      (data) => subscriber.onComplete(data),
+      (error) => subscriber.onError(error)
+    );
+  });
+  subscriber.onSubscribe();
+});
+
+single.subscribe({
+  onComplete: (data) => console.log(data),
+  onError: (error) => console.error(error),
+  onSubscribe: (cancel) => {
+    /* call cancel() to stop onComplete/onError */
+  },
+});
+```
+
+### Timer
+
+This example creates a `Single` that resolves to a string after a timeout, passing a
+cancellation callback to stop the timer in case the user cancels the `Single`:
+
+```python
+const single = new Single((subscriber) => {
+  const id = setTimeout(() => subscriber.onComplete('hello!'), 250);
+  // Cancellation callback is optional
+  subscriber.onSubscribe(() => clearTimeout(id));
+});
+
+single.subscribe({
+  onComplete: (data) => console.log(data),
+  onError: (error) => console.error(error),
+  onSubscribe: (cancel) => {
+    /* call cancel() to stop onComplete/onError */
+  },
+});
+```
+
+## API
+
+### constructor (function)
+
+```python
+class Single<T> {
+  constructor(source: Source<T>)
+}
+
+type Source<T> = (subscriber: Subscriber<T>) => void;
+
+type Subscriber<T> = {
+  onComplete: (data: T) => void,
+  onError: (error: Error) => void,
+  onSubscribe: (cancel: CancelCallback) => void,
+};
+
+type CancelCallback = () => void;
+```
+
+### subscribe() (method)
+
+This method connects the `Single` to a subscriber of values. Unlike `Flowable`, with `Single` a subscribe
+also implicitly indicates demand. `PartialSubscriber` differs from `Subscriber`
+only in that methods are optional.
+
+```python
+subscribe(subscriber: PartialSubscriber<T>): void
+
+type PartialSubscriber<T> = {
+  onComplete?: (data: T) => void,
+  onError?: (error: Error) => void,
+  onSubscribe?: (cancel: CancelCallback) => void,
+}
+```
+
+### map() (method)
+
+This method applies a transform function to values produced by this `Single`. This is similar to
+`Array.prototype.map`, `Observable.prototype.map`, etc.
+
+```python
+map<U>(fn: (data: T) => U): Single<U>
+```

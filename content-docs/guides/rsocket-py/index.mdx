@@ -1,0 +1,120 @@
+---
+slug: /guides/rsocket-py
+title: rsocket-py
+sidebar_label: Introduction
+---
+
+The python `rsocket` package implements the 1.0 version of the [RSocket protocol](https://rsocket.io/about/protocol)
+and is designed for use in python >= 3.8 using asyncio.
+
+## Packages
+
+A pypi package is available at [rsocket](https://pypi.org/project/rsocket/)
+
+## Status
+
+The following are currently implemented:
+
+- RSocketClient / RSocketServer
+- TCP/WebSocket server/client transport (Websocket integration with Quart and aiohttp)
+- Minimal integration with RxPy >= 3.x
+
+## WebSocket Client & Server example
+
+### Client Example
+
+The client sends a `request/response` message to the server on an interval, with the requested date-time format, and exits after a certain amount of time has elapsed.
+
+```py
+# client.py
+import asyncio
+import logging
+
+from reactivestreams.subscriber import Subscriber
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from rsocket.transports.tcp import TransportTCP
+
+
+class StreamSubscriber(Subscriber):
+
+    async def on_next(self, value, is_complete=False):
+        await self.subscription.request(1)
+
+    def on_subscribe(self, subscription):
+        self.subscription = subscription
+
+
+async def main():
+    connection = await asyncio.open_connection('localhost', 6565)
+
+    async with RSocketClient(TransportTCP(*connection)) as client:
+        payload = Payload(b'%Y-%m-%d %H:%M:%S')
+
+        async def run_request_response():
+            try:
+                while True:
+                    result = await client.request_response(payload)
+                    logging.info('Response: {}'.format(result.data))
+                    await asyncio.sleep(1)
+            except asyncio.CancelledError:
+                pass
+
+        task = asyncio.create_task(run_request_response())
+
+        await asyncio.sleep(5)
+        task.cancel()
+        await task
+
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
+    asyncio.run(main())
+```
+
+### Server Example
+
+The server responds to `request/response` messages with the current formatted date-time.
+
+```py
+# server.py
+import asyncio
+import logging
+from datetime import datetime
+
+from rsocket.payload import Payload
+from rsocket.request_handler import BaseRequestHandler
+from rsocket.rsocket_server import RSocketServer
+from rsocket.transports.tcp import TransportTCP
+
+
+class Handler(BaseRequestHandler):
+    async def request_response(self, payload: Payload) -> asyncio.Future:
+        await asyncio.sleep(0.1)  # Simulate not immediate process
+        future = asyncio.Future()
+        date_time_format = payload.data.decode('utf-8')
+        formatted_date_time = datetime.now().strftime(date_time_format)
+        future.set_result(Payload(formatted_date_time.encode('utf-8')))
+        return future
+
+
+async def run_server():
+    def session(*connection):
+        RSocketServer(TransportTCP(*connection), handler_factory=Handler)
+
+    server = await asyncio.start_server(session, 'localhost', 6565)
+
+    async with server:
+        await server.serve_forever()
+
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
+    asyncio.run(run_server())
+```
+
+## More Examples
+
+Browse the following repositories for more `rsocket-py` examples:
+
+- [rsocket-py/examples](https://github.com/rsocket/rsocket-py/tree/master/examples)
