@@ -15,8 +15,8 @@ module.exports = [
     ]
   },
   {
-    "rsocket-rxpy": [
-      "guides/rsocket-py/rsocket-rxpy/introduction"
+    "RxPy": [
+      "guides/rsocket-py/rxpy/introduction"
     ]
   }
 ];
