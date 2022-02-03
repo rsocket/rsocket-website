@@ -15,10 +15,8 @@ module.exports = [
     ]
   },
   {
-    "rsocket-flowable": [
-      "guides/rsocket-py/rsocket-rxpy/introduction",
-      "guides/rsocket-py/rsocket-rxpy/flowable",
-      "guides/rsocket-py/rsocket-rxpy/single",
+    "rsocket-rxpy": [
+      "guides/rsocket-py/rsocket-rxpy/introduction"
     ]
   }
 ];

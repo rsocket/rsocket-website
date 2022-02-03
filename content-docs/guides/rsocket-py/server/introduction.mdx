@@ -20,9 +20,7 @@ A transport is the abstraction which handles the underlying network communicatio
 Available network transports for `RSocketServer` include:
 
 - TCP - available by default
-- Websocket
-  - aiohttp
-  - Quart
+- Websocket (aiohttp, Quart)
 
 ## `RequestHandler`
 
@@ -72,23 +70,52 @@ In the context of an RSocket server, once a client connection/request has begun,
 initiated the request may decide it no longer wishes to continue and signal to the server that it wishes to cancel.
 
 In the event that a client signals to an RSocket server that it wishes to cancel a request, the server should avoid
-calling the `onComplete` or `onNext` callbacks for the requests resulting [`Single`](../rsocket-rxpy/single.mdx)
-or [`Flowable`](../rsocket-rxpy/flowable.mdx) instances.
+calling the `onComplete` or `onNext` callbacks for the requests resulting `Single`
+or `Flowable` instances.
 
-### Cancellation Example
+### Cancellation Request-Response Example
 
 ```py
-from reactivestreams.publisher import Publisher
-from reactivestreams.subscription import Subscription
-from reactivestreams.subscriber import Subscriber
+import asyncio
+import logging
+from asyncio import Future
+
 from rsocket.payload import Payload
 from rsocket.request_handler import BaseRequestHandler
 
+async def calculate():
+        try:
+            await asyncio.sleep(4)
+
+            return 'Response'
+        except asyncio.CancelledError:
+            logging.info('Canceled by client')
+            raise
+
+
 class CustomRequestHandler(BaseRequestHandler):
 
-    class StreamPublisher(Publisher, Subscription):
+    async def request_response(self, payload: Payload) -> Future:
+        return asyncio.ensure_future(calculate())
+```
+
+### Cancellation Request-Stream Example
+
+```py
+
+from reactivestreams.publisher import Publisher
+from reactivestreams.subscriber import Subscriber
+from reactivestreams.subscription import Subscription
+from rsocket.payload import Payload
+from rsocket.request_handler import BaseRequestHandler
+
+
+class CustomRequestHandler(BaseRequestHandler):
+
+    class ResponseStream(Publisher, Subscription):
         def subscribe(self, subscriber: Subscriber):
-            ...
+            subscriber.on_subscribe(self)
+            self.subscriber = subscriber
 
         async def request(self, n: int):
             ...
@@ -97,61 +124,5 @@ class CustomRequestHandler(BaseRequestHandler):
             ...
 
     async def request_stream(self, payload: Payload) -> Publisher:
-        return self.StreamPublisher()
-
-
-const statuses = {
-  PENDING: 'pending',
-  CANCELLED: 'cancelled',
-};
-
-const getRequestHandler = (requestingRSocket, setupPayload) => {
-  function handleRequestResponse(payload) {
-    const simulatedDelayMilli = 100;
-    let status = statuses.PENDING;
-
-    return new Single((subscriber) => {
-      /**
-       * In the event that the client cancels the request before
-       * the server can respond, we will change our status to cancelled
-       * and avoid calling `onComplete` on the `subscriber` instance in the
-       * `nextTick` callback.
-       */
-      function handleCancellation() {
-        status = statuses.CANCELLED;
-      }
-
-      subscriber.onSubscribe(() => handleCancellation());
-
-      /**
-       * Leverage `setTimeout` to simulate a delay
-       * in responding to the client, and thus giving it
-       * time to decide to "cancel".
-       */
-      setTimeout(() => {
-        /**
-         * If the client cancelled the request we can
-         * return early and avoid doing any of the work below.
-         */
-        if (status === statuses.CANCELLED) {
-          return;
-        }
-
-        const msg = `${new Date()}`;
-        try {
-          subscriber.onComplete({
-            data: msg,
-            metadata: null,
-          });
-        } catch (e) {
-          subscriber.onError(e);
-        }
-      }, simulatedDelayMilli);
-    });
-  }
-
-  return {
-    requestResponse: handleRequestResponse,
-  };
-};
+        return self.ResponseStream()
 ```
