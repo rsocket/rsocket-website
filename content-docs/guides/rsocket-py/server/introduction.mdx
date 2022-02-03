@@ -10,14 +10,14 @@ An `RSocketServer` server can be used to communicate with any RSocket Client imp
 and which implements the same transport as the server.
 
 To get started creating an RSocket server, you will need to install the [rsocket](https://pypi.org/project/rsocket/) package,
-and atleast one transport protocol implementation. See the server portion of [WebSocket Client Server Example](/guides/rsocket-py#server-example)
-for an example of an implemented `getRequestHandler`.
+and at least one transport protocol implementation (TCP available by default).
+See the server portion of [WebSocket Client Server Example](/guides/rsocket-py#server-example) for an example of an implemented `getRequestHandler`.
 
 ## Transports
 
-A transport is the abstraction which handles the underlying network communication portion of the RSocket applicaiton protocol.
+Transport is the abstraction which handles the underlying network communication portion of the RSocket applicaiton protocol.
 
-Available network transports for `RSocketServer` include:
+Available network transports for `rsocket-py` server include:
 
 - TCP - available by default
 - Websocket (aiohttp, Quart)
