@@ -1,0 +1,128 @@
+---
+slug: /guides/rsocket-py/server
+title: RSocketServer - rsocket-py
+sidebar_label: Introduction
+---
+
+`RSocketServer` is the high level abstraction leveraged to create a server running the RSocket protocol.
+
+An `RSocketServer` server can be used to communicate with any RSocket Client implemented against the same protocol version as the server,
+and which implements the same transport as the server.
+
+To get started creating an RSocket server, you will need to install the [rsocket](https://pypi.org/project/rsocket/) package,
+and at least one transport protocol implementation (TCP available by default).
+See the server portion of [WebSocket Client Server Example](/guides/rsocket-py#server-example) for an example of an implemented `getRequestHandler`.
+
+## Transports
+
+Transport is the abstraction which handles the underlying network communication portion of the RSocket applicaiton protocol.
+
+Available network transports for `rsocket-py` server include:
+
+- TCP - available by default
+- Websocket (aiohttp, Quart)
+
+## `RequestHandler`
+
+When creating a `RSocketServer` instance, the constructor require a factory (method or class) be provided that can
+return an object matching the `RequestHandler` abstract class.
+This object is responsible for mapping callback/handler functions to the various RSocket message types,
+and returning an appropriate Publisher/Future that will produce data for the request.
+
+```py
+from asyncio import Future
+from typing import Tuple
+
+from reactivestreams.publisher import Publisher
+from reactivestreams.subscriber import Subscriber
+from rsocket.payload import Payload
+from rsocket.request_handler import RequestHandler
+
+
+class CustomRequestHandler(RequestHandler):
+
+    async def on_setup(self,
+                       data_encoding: bytes,
+                       metadata_encoding: bytes):
+        ...
+
+    async def request_channel(self, payload: Payload) -> Tuple[Publisher, Subscriber]:
+        ...
+
+    async def request_fire_and_forget(self, payload: Payload):
+        ...
+
+    async def on_metadata_push(self, payload: Payload):
+        ...
+
+    async def request_response(self, payload: Payload) -> Future:
+        ...
+
+    async def request_stream(self, payload: Payload) -> Publisher:
+        ...
+```
+
+## Client Cancellation
+
+An important characteristic of RSocket's protocol is the concept of cancellation.
+
+In the context of an RSocket server, once a client connection/request has begun, it is possible that the client which
+initiated the request may decide it no longer wishes to continue and signal to the server that it wishes to cancel.
+
+In the event that a client signals to an RSocket server that it wishes to cancel a request, the server should avoid
+calling the `onComplete` or `onNext` callbacks for the requests resulting `Single`
+or `Flowable` instances.
+
+### Cancellation Request-Response Example
+
+```py
+import asyncio
+import logging
+from asyncio import Future
+
+from rsocket.payload import Payload
+from rsocket.request_handler import BaseRequestHandler
+
+async def calculate():
+        try:
+            await asyncio.sleep(4)
+
+            return 'Response'
+        except asyncio.CancelledError:
+            logging.info('Canceled by client')
+            raise
+
+
+class CustomRequestHandler(BaseRequestHandler):
+
+    async def request_response(self, payload: Payload) -> Future:
+        return asyncio.ensure_future(calculate())
+```
+
+### Cancellation Request-Stream Example
+
+```py
+
+from reactivestreams.publisher import Publisher
+from reactivestreams.subscriber import Subscriber
+from reactivestreams.subscription import Subscription
+from rsocket.payload import Payload
+from rsocket.request_handler import BaseRequestHandler
+
+
+class CustomRequestHandler(BaseRequestHandler):
+
+    class ResponseStream(Publisher, Subscription):
+        def subscribe(self, subscriber: Subscriber):
+            subscriber.on_subscribe(self)
+            self.subscriber = subscriber
+
+        async def request(self, n: int):
+            ...
+
+        def cancel(self):
+            ...
+
+    async def request_stream(self, payload: Payload) -> Publisher:
+        return self.ResponseStream()
+```

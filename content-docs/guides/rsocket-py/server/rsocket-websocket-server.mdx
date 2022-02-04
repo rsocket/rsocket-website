@@ -1,0 +1,71 @@
+---
+slug: /guides/rsocket-py/server/rsocket-websocket-server
+title: RSocketServer (Websocket Transport) - rsocket-py
+sidebar_label: WebSocket Server
+---
+
+## Getting Started
+
+`rsocket-py` supports multiple transport protocols. The Websocket transport is available by installing rsocket using one
+of the extra features:
+
+- pip3 install rsocket[aiohttp]
+- pip3 install rsocket[quart]
+
+In order to use a Websocket transport, instantiate a `TransportAioHttpWebsocket` or `TransportQuartWebsocket`
+and pass it to an `RSocketServer` instance. There are a few helpers to ease the creation of a server or a client.
+
+## Examples
+
+Example using `aiohttp`:
+
+```py
+from asyncio import Future
+
+from aiohttp import web
+
+from rsocket.payload import Payload
+from rsocket.request_handler import BaseRequestHandler
+from rsocket.transports.websocket import websocket_handler_factory
+
+
+class Handler(BaseRequestHandler):
+
+    async def request_response(self, payload: Payload) -> Future:
+        ...
+
+
+if __name__ == '__main__':
+    app = web.Application()
+    app.add_routes([web.get('/', websocket_handler_factory(handler_factory=Handler))])
+    web.run_app(app, port=6565)
+```
+
+Example using `quart`:
+
+```py
+from asyncio import Future
+
+from quart import Quart
+
+from rsocket.payload import Payload
+from rsocket.request_handler import BaseRequestHandler
+from rsocket.transports.quart_websocket import websocket_handler
+
+app = Quart(__name__)
+
+
+class Handler(BaseRequestHandler):
+
+    async def request_response(self, payload: Payload) -> Future:
+        ...
+
+
+@app.websocket("/")
+async def ws():
+    await websocket_handler(handler_factory=Handler)
+
+
+if __name__ == "__main__":
+    app.run(port=6565)
+```

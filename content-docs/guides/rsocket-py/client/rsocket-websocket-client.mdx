@@ -1,0 +1,27 @@
+---
+slug: /guides/rsocket-py/client/rsocket-websocket-client
+title: RSocketWebsocketClient - rsocket-py
+sidebar_label: WebSocket Client
+---
+
+The `RSocketWebsocketClient` implements the RSocket protocol using the WebSocket network transport protocol, and is suitable for Server to Server, and Client to Server scenarios where raw TCP is not available, such as in a web browser.
+
+### WebSocket Client Quick Start Example
+
+
+```py
+import asyncio
+
+from rsocket.payload import Payload
+from rsocket.transports.aiohttp_websocket import websocket_client
+
+
+async def application():
+    async with websocket_client('http://localhost:6565') as client:
+        result = await client.request_response(Payload(b'ping'))
+        print(result)
+
+
+if __name__ == '__main__':
+    asyncio.run(application())
+```

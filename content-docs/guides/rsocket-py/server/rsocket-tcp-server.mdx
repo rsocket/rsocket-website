@@ -1,0 +1,40 @@
+---
+slug: /guides/rsocket-py/server/rsocket-tcp-server
+title: RSocketServer (TCP Transport) - rsocket-py
+sidebar_label: TCP Server
+---
+
+## Getting Started
+
+`rsocket-py` supports multiple transport protocols. The TCP transport is available by default.
+In order to use a basic TCP transport, instantiate a `TransportTCP` and pass it to an `RSocketServer` instance.
+
+## Example
+
+```py
+import asyncio
+
+from rsocket.payload import Payload
+from rsocket.request_handler import BaseRequestHandler
+from rsocket.rsocket_server import RSocketServer
+from rsocket.transports.tcp import TransportTCP
+
+
+class Handler(BaseRequestHandler):
+    async def request_response(self, payload: Payload) -> asyncio.Future:
+        ...
+
+
+async def run_server():
+    def session(*connection):
+        RSocketServer(TransportTCP(*connection), handler_factory=Handler)
+
+    server = await asyncio.start_server(session, 'localhost', 6565)
+
+    async with server:
+        await server.serve_forever()
+
+
+if __name__ == '__main__':
+    asyncio.run(run_server())
+```

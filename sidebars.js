@@ -8,7 +8,8 @@ const aboutItems = [
 const guideItems = [
   "guides/index",
   {
-    "rsocket-js": require("./sidebar-rsocket-js")
+    "rsocket-js": require("./sidebar-rsocket-js"),
+    "rsocket-py": require("./sidebar-rsocket-py")
   }
 ];
 

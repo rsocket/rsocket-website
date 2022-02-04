@@ -1,0 +1,30 @@
+---
+slug: /guides/rsocket-py/client/rsocket-tcp-client
+title: RSocketTCPClient - rsocket-py
+sidebar_label: TCP Client
+---
+
+The `TransportTCP` implements the RSocket protocol using the TCP network transport protocol,
+and is suitable for Server to Server, and other scenarios where raw TCP is available.
+
+
+### TCP Client Quick Start Example
+
+```
+npm install rsocket-core rsocket-tcp-client
+```
+
+```py
+import asyncio
+from rsocket.rsocket_client import RSocketClient
+from rsocket.transports.tcp import TransportTCP
+
+async def main():
+    connection = await asyncio.open_connection('localhost', 6565)
+
+    async with RSocketClient(TransportTCP(*connection)) as client:
+        ... # Execute requests
+
+if __name__ == '__main__':
+    asyncio.run(main())
+```
