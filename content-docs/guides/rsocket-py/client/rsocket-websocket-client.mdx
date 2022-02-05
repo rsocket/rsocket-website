@@ -4,9 +4,14 @@ title: RSocketWebsocketClient - rsocket-py
 sidebar_label: WebSocket Client
 ---
 
-The `RSocketWebsocketClient` implements the RSocket protocol using the WebSocket network transport protocol, and is suitable for Server to Server, and Client to Server scenarios where raw TCP is not available, such as in a web browser.
+The `RSocketClient` implements the RSocket protocol, and when used with a websocket `Transport` implementation,
+is suitable for Server to Server, and Client to Server scenarios where raw TCP is not available, such as in a web browser.
 
 ### WebSocket Client Quick Start Example
+
+The Websocket transport for a client side is available by installing rsocket with the `aiohttp` extra:
+
+- pip3 install rsocket[aiohttp]
 
 
 ```py

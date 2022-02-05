@@ -27,7 +27,7 @@ The following are currently implemented:
 - TCP/WebSocket server/client transport (Websocket integration with Quart and aiohttp)
 - Minimal integration with RxPy >= 3.x
 
-## WebSocket Client & Server example
+## Client & Server example
 
 ### Client Example
 
@@ -76,7 +76,7 @@ async def main():
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
     asyncio.run(main())
 ```
 
@@ -117,7 +117,7 @@ async def run_server():
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
     asyncio.run(run_server())
 ```
 

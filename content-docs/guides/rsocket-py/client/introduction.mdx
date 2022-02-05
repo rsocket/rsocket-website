@@ -19,10 +19,6 @@ and at least one transport protocol implementation (TCP available by default).
 
 ### Client Quick Start Example
 
-```
-npm install rsocket-core rsocket-websocket-client
-```
-
 ```py
 import asyncio
 from rsocket.rsocket_client import RSocketClient
@@ -45,28 +41,20 @@ The `rsocket-py` package exposes the following types:
 ## RSocketClient (class)
 
 `RSocketClient` is used to create an instance of a client. The clients' connection does not initialize until
-the `connect` method is invoked, or it is used as a context-manager.
+the `connect` method is invoked, or it is used as a context-manager. It is a subclass of `RSocket`.
 
-### constructor (function)
-
-
-#### serializers (property)
-
-The `data` and `metadata` of each payload are passed through to the
-transport layer as-is. This is appropriate for sending/receiving strings/binary.
-
+### Constructor properties
 
 #### transport (property)
 
 This will typically be an instance conforming to the API of the `Transport` class.
-
 
 ### connect() (method)
 
 This method opens the connection to the peer. Internally this calls `connect()` on the
 transport client. See below for the `RSocket` interface.
 
-## RSocket (interface)
+## RSocket (class)
 
 This interface represents an instance of a rsocket peer-to-peer connection, providing the five
 core interactions (fire/forget, request/response, etc.):
