@@ -34,7 +34,7 @@ if __name__ == '__main__':
 ## Examples
 
 RxRSocket can be used as a context manager with a client which is not yet connected. It will close the underlying client
-when existing the context
+when exiting the context. Example code:
 
 ```py
 from rsocket.rx_support.rx_rsocket import RxRSocket
@@ -60,10 +60,12 @@ if __name__ == '__main__':
 from rsocket.payload import Payload
 from rx import operators
 
-received_message = await rx_client.request_response(Payload(b'request text')).pipe(
-        operators.map(lambda payload: payload.data),
-        operators.single()
-    )
+received_message = await rx_client.request_response(
+    Payload(b'request text')
+).pipe(
+    operators.map(lambda payload: payload.data),
+    operators.single()
+)
 ```
 
 
@@ -74,10 +76,12 @@ from rsocket.payload import Payload
 from rx import operators
 
 received_messages = await rx_client.request_stream(
-            Payload(b'request text'), request_limit=2).pipe(
-      operators.map(lambda payload: payload.data),
-      operators.to_list()
-  )
+    Payload(b'request text'),
+    request_limit=2
+).pipe(
+    operators.map(lambda payload: payload.data),
+    operators.to_list()
+)
 ```
 
 ### Request Channel
@@ -90,9 +94,10 @@ from rx import operators
 sent_payloads = [Payload(data) for data in [b'1', b'2', b'3']]
 
 received_messages = await rx_client.request_channel(
-        Payload(b'request text'),
-        observable=rx.from_list(sent_payloads),
-        request_limit=2).pipe(
+    Payload(b'request text'),
+    observable=rx.from_list(sent_payloads),
+    request_limit=2
+).pipe(
     operators.map(lambda payload: payload.data),
     operators.to_list()
 )
