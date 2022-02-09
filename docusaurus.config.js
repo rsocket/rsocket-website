@@ -91,8 +91,8 @@ module.exports = {
       "respectPrefersColorScheme": true,
     },
     "prism": {
-      "theme": require("prism-react-renderer/themes/dracula"),
-      "additionalLanguages": ["java", "kotlin"],
+      "theme": require("prism-react-renderer/themes/vsDark"),
+      "additionalLanguages": ["java", "kotlin", "python"],
     },
     "metadatas": [
       { property: "og:image", content: `${deployUrl}/img/social/rsocket-io-facebook-og.jpg` },
