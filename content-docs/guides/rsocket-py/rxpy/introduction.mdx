@@ -9,3 +9,96 @@ sidebar_label: Introduction
 The `rsocket-py` implementation doesn't use [RxPy](https://pypi.org/project/Rx/) by default. A wrapper class `RxRSocketClient`
 can be used to interact with [RxPy](https://pypi.org/project/Rx/) (>= 3.2.0) entities (`Observable`, `Observer`)
 
+## Getting started
+
+To use Rx with the rsocket client instantiate an RxRSocket with an existing client or server instance:
+
+```py
+from rsocket.rx_support.rx_rsocket import RxRSocket
+
+import asyncio
+from rsocket.rsocket_client import RSocketClient
+from rsocket.transports.tcp import TransportTCP
+
+async def main():
+    connection = await asyncio.open_connection('localhost', 6565)
+
+    async with RSocketClient(TransportTCP(*connection)) as client:
+        rx_client = RxRSocket(client)
+        ... # Execute requests
+
+if __name__ == '__main__':
+    asyncio.run(main())
+```
+
+## Examples
+
+RxRSocket can be used as a context manager with a client which is not yet connected. It will close the underlying client
+when exiting the context. Example code:
+
+```py
+from rsocket.rx_support.rx_rsocket import RxRSocket
+
+import asyncio
+from rsocket.rsocket_client import RSocketClient
+from rsocket.transports.tcp import TransportTCP
+
+async def main():
+    connection = await asyncio.open_connection('localhost', 6565)
+    client = RSocketClient(TransportTCP(*connection))
+
+    async with RxRSocket(client) as rx_client:
+        ... # Execute requests
+
+if __name__ == '__main__':
+    asyncio.run(main())
+```
+
+### Request Response
+
+```py
+from rsocket.payload import Payload
+from rx import operators
+
+received_message = await rx_client.request_response(
+    Payload(b'request text')
+).pipe(
+    operators.map(lambda payload: payload.data),
+    operators.single()
+)
+```
+
+
+### Request Stream
+
+```py
+from rsocket.payload import Payload
+from rx import operators
+
+received_messages = await rx_client.request_stream(
+    Payload(b'request text'),
+    request_limit=2
+).pipe(
+    operators.map(lambda payload: payload.data),
+    operators.to_list()
+)
+```
+
+### Request Channel
+
+```py
+from rsocket.payload import Payload
+import rx
+from rx import operators
+
+sent_payloads = [Payload(data) for data in [b'1', b'2', b'3']]
+
+received_messages = await rx_client.request_channel(
+    Payload(b'request text'),
+    observable=rx.from_list(sent_payloads),
+    request_limit=2
+).pipe(
+    operators.map(lambda payload: payload.data),
+    operators.to_list()
+)
+```
