@@ -104,7 +104,7 @@ The RSocket protocol uses a lower level transport protocol to carry RSocket fram
 
 An implementation MAY "close" a transport connection due to protocol processing. When this occurs, it is assumed that the connection will have no further frames sent and all frames will be ignored.
 
-RSocket as specified here has been designed for and tested with TCP, WebSocket, [Aeron], and [HTTP/2 streams](https://http2.github.io/http2-spec/#StreamsLayer) as transport protocols.
+RSocket as specified here has been designed for and tested with TCP, WebSocket, [Aeron], and [HTTP/2 streams](https://httpwg.org/specs/rfc7540.html#StreamsLayer) as transport protocols.
 
 ### Framing Protocol Usage
 
