@@ -178,6 +178,10 @@ function Home() {
     {
       title: "Python",
       url: "https://github.com/rsocket/rsocket-py"
+    },
+    {
+      title: "Rust",
+      url: "https://github.com/rsocket/rsocket-rust"
     }
   ];
 
