@@ -13,6 +13,8 @@ In order to use a basic TCP transport, instantiate a `TransportTCP` and pass it 
 
 ```py
 import asyncio
+import logging
+import sys
 
 from rsocket.payload import Payload
 from rsocket.request_handler import BaseRequestHandler
@@ -25,16 +27,20 @@ class Handler(BaseRequestHandler):
         ...
 
 
-async def run_server():
+async def run_server(server_port):
+    logging.info('Starting server at localhost:%s', server_port)
+
     def session(*connection):
         RSocketServer(TransportTCP(*connection), handler_factory=Handler)
 
-    server = await asyncio.start_server(session, 'localhost', 6565)
+    server = await asyncio.start_server(session, 'localhost', server_port)
 
     async with server:
         await server.serve_forever()
 
 
 if __name__ == '__main__':
-    asyncio.run(run_server())
+    port = sys.argv[1] if len(sys.argv) > 1 else 6565
+    logging.basicConfig(level=logging.DEBUG)
+    asyncio.run(run_server(port))
 ```

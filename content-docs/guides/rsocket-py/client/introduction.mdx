@@ -97,9 +97,9 @@ from typing import Union
 
 from reactivestreams.publisher import Publisher
 from rsocket.payload import Payload
-from rsocket.streams.stream import Stream
+from rsocket.streams.backpressureapi import BackpressureApi
 
-def request_stream(self, payload: Payload) -> Union[Stream, Publisher]:
+def request_stream(self, payload: Payload) -> Union[BackpressureApi, Publisher]:
     ...
 ```
 
@@ -118,9 +118,9 @@ from typing import Union, Optional
 
 from reactivestreams.publisher import Publisher
 from rsocket.payload import Payload
-from rsocket.streams.stream import Stream
+from rsocket.streams.backpressureapi import BackpressureApi
 
-def request_channel(self, payload: Payload, publisher: Optional[Publisher] = None) -> Union[Stream, Publisher]:
+def request_channel(self, payload: Payload, publisher: Optional[Publisher] = None) -> Union[BackpressureApi, Publisher]:
     ...
 ```
 

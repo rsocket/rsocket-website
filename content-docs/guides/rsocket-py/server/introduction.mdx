@@ -31,23 +31,26 @@ This object is responsible for mapping callback/handler functions to the various
 and returning an appropriate Publisher/Future that will produce data for the request.
 
 ```py
-from asyncio import Future
-from typing import Tuple
+import asyncio
+from typing import Tuple, Optional
+from datetime import timedelta
 
 from reactivestreams.publisher import Publisher
 from reactivestreams.subscriber import Subscriber
 from rsocket.payload import Payload
 from rsocket.request_handler import RequestHandler
+from rsocket.error_codes import ErrorCode
 
 
 class CustomRequestHandler(RequestHandler):
 
     async def on_setup(self,
                        data_encoding: bytes,
-                       metadata_encoding: bytes):
+                       metadata_encoding: bytes,
+                       payload: Payload):
         ...
 
-    async def request_channel(self, payload: Payload) -> Tuple[Publisher, Subscriber]:
+    async def request_channel(self, payload: Payload) -> Tuple[Optional[Publisher], Optional[Subscriber]]:
         ...
 
     async def request_fire_and_forget(self, payload: Payload):
@@ -56,10 +59,21 @@ class CustomRequestHandler(RequestHandler):
     async def on_metadata_push(self, payload: Payload):
         ...
 
-    async def request_response(self, payload: Payload) -> Future:
+    async def request_response(self, payload: Payload) -> asyncio.Future:
         ...
 
     async def request_stream(self, payload: Payload) -> Publisher:
+        ...
+
+    async def on_error(self, error_code: ErrorCode, payload: Payload):
+        ...
+
+    async def on_keepalive_timeout(self,
+                                   time_since_last_keepalive: timedelta,
+                                   rsocket):
+        ...
+
+    async def on_connection_lost(self, rsocket, exception):
         ...
 ```
 

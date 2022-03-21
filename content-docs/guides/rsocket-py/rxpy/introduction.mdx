@@ -42,10 +42,11 @@ from rsocket.rx_support.rx_rsocket import RxRSocket
 import asyncio
 from rsocket.rsocket_client import RSocketClient
 from rsocket.transports.tcp import TransportTCP
+from rsocket.helpers import single_transport_provider
 
 async def main():
     connection = await asyncio.open_connection('localhost', 6565)
-    client = RSocketClient(TransportTCP(*connection))
+    client = RSocketClient(single_transport_provider(TransportTCP(*connection)))
 
     async with RxRSocket(client) as rx_client:
         ... # Execute requests
