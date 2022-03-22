@@ -20,34 +20,42 @@ and pass it to an `RSocketServer` instance. There are a few helpers to ease the 
 Example using `aiohttp`:
 
 ```py
+import logging
+import sys
 from asyncio import Future
 
 from aiohttp import web
 
+from rsocket.helpers import create_future
 from rsocket.payload import Payload
 from rsocket.request_handler import BaseRequestHandler
-from rsocket.transports.websocket import websocket_handler_factory
+from rsocket.transports.aiohttp_websocket import websocket_handler_factory
 
 
 class Handler(BaseRequestHandler):
 
     async def request_response(self, payload: Payload) -> Future:
-        ...
+        return create_future(Payload(b'pong'))
 
 
 if __name__ == '__main__':
+    port = sys.argv[1] if len(sys.argv) > 1 else 6565
+    logging.basicConfig(level=logging.DEBUG)
     app = web.Application()
     app.add_routes([web.get('/', websocket_handler_factory(handler_factory=Handler))])
-    web.run_app(app, port=6565)
+    web.run_app(app, port=port)
 ```
 
 Example using `quart`:
 
 ```py
+import logging
+import sys
 from asyncio import Future
 
 from quart import Quart
 
+from rsocket.helpers import create_future
 from rsocket.payload import Payload
 from rsocket.request_handler import BaseRequestHandler
 from rsocket.transports.quart_websocket import websocket_handler
@@ -58,7 +66,7 @@ app = Quart(__name__)
 class Handler(BaseRequestHandler):
 
     async def request_response(self, payload: Payload) -> Future:
-        ...
+        return create_future(Payload(b'pong'))
 
 
 @app.websocket("/")
@@ -67,5 +75,7 @@ async def ws():
 
 
 if __name__ == "__main__":
-    app.run(port=6565)
+    port = sys.argv[1] if len(sys.argv) > 1 else 6565
+    logging.basicConfig(level=logging.DEBUG)
+    app.run(port=port)
 ```

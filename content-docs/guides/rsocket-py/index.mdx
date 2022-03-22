@@ -5,7 +5,8 @@ sidebar_label: Introduction
 ---
 
 :::important
-This documentation is for version 0.3.0 of `rsocket` (currently only available via git-hub)
+This documentation is for version 0.3.x of `rsocket` (currently only available via git-hub,
+or via pypi when installing a pre-release using the pip '--pre' flag)
 :::
 
 :::caution
@@ -17,7 +18,8 @@ and is designed for use in python >= 3.8 using asyncio.
 
 ## Packages
 
-A pypi package is available at [rsocket](https://pypi.org/project/rsocket/)
+A pre-release pip package (0.3.devN) is available when installing with
+'pip install --pre rsocket' ([rsocket](https://pypi.org/project/rsocket/))
 
 ## Status
 
@@ -37,26 +39,28 @@ The client sends a `request/response` message to the server on an interval, with
 # client.py
 import asyncio
 import logging
+import sys
 
-from reactivestreams.subscriber import Subscriber
+from reactivestreams.subscriber import DefaultSubscriber
+from rsocket.helpers import single_transport_provider
 from rsocket.payload import Payload
 from rsocket.rsocket_client import RSocketClient
 from rsocket.transports.tcp import TransportTCP
 
 
-class StreamSubscriber(Subscriber):
+class StreamSubscriber(DefaultSubscriber):
 
-    async def on_next(self, value, is_complete=False):
-        await self.subscription.request(1)
-
-    def on_subscribe(self, subscription):
-        self.subscription = subscription
+    def on_next(self, value, is_complete=False):
+        logging.info('RS: {}'.format(value))
+        self.subscription.request(1)
 
 
-async def main():
-    connection = await asyncio.open_connection('localhost', 6565)
+async def main(server_port):
+    logging.info('Connecting to server at localhost:%s', server_port)
 
-    async with RSocketClient(TransportTCP(*connection)) as client:
+    connection = await asyncio.open_connection('localhost', server_port)
+
+    async with RSocketClient(single_transport_provider(TransportTCP(*connection))) as client:
         payload = Payload(b'%Y-%m-%d %H:%M:%S')
 
         async def run_request_response():
@@ -76,8 +80,9 @@ async def main():
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
-    asyncio.run(main())
+    port = sys.argv[1] if len(sys.argv) > 1 else 6565
+    logging.basicConfig(level=logging.DEBUG)
+    asyncio.run(main(port))
 ```
 
 ### Server Example
@@ -88,8 +93,10 @@ The server responds to `request/response` messages with the current formatted da
 # server.py
 import asyncio
 import logging
+import sys
 from datetime import datetime
 
+from rsocket.helpers import create_future
 from rsocket.payload import Payload
 from rsocket.request_handler import BaseRequestHandler
 from rsocket.rsocket_server import RSocketServer
@@ -99,26 +106,27 @@ from rsocket.transports.tcp import TransportTCP
 class Handler(BaseRequestHandler):
     async def request_response(self, payload: Payload) -> asyncio.Future:
         await asyncio.sleep(0.1)  # Simulate not immediate process
-        future = asyncio.Future()
         date_time_format = payload.data.decode('utf-8')
         formatted_date_time = datetime.now().strftime(date_time_format)
-        future.set_result(Payload(formatted_date_time.encode('utf-8')))
-        return future
+        return create_future(Payload(formatted_date_time.encode('utf-8')))
 
 
-async def run_server():
+async def run_server(server_port):
+    logging.info('Starting server at localhost:%s', server_port)
+
     def session(*connection):
         RSocketServer(TransportTCP(*connection), handler_factory=Handler)
 
-    server = await asyncio.start_server(session, 'localhost', 6565)
+    server = await asyncio.start_server(session, 'localhost', server_port)
 
     async with server:
         await server.serve_forever()
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
-    asyncio.run(run_server())
+    port = sys.argv[1] if len(sys.argv) > 1 else 6565
+    logging.basicConfig(level=logging.DEBUG)
+    asyncio.run(run_server(port))
 ```
 
 ## More Examples
