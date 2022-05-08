@@ -23,11 +23,13 @@ and at least one transport protocol implementation (TCP available by default).
 import asyncio
 from rsocket.rsocket_client import RSocketClient
 from rsocket.transports.tcp import TransportTCP
+from rsocket.helpers import single_transport_provider
+
 
 async def main():
     connection = await asyncio.open_connection('localhost', 6565)
 
-    async with RSocketClient(TransportTCP(*connection)) as client:
+    async with RSocketClient(single_transport_provider(TransportTCP(*connection))) as client:
         ... # Execute requests
 
 if __name__ == '__main__':
