@@ -14,6 +14,7 @@ function Examples() {
     { label: "Java", value: "java" },
     { label: "Kotlin", value: "kotlin" },
     { label: "C++", value: "cpp" },
+    { label: "TypeScript", value: "ts" },
   ];
   return (
     <>
@@ -117,6 +118,95 @@ auto s = std::make_shared<ExampleSubscriber>(5, 6);
 auto rs = rsf->connect().get();
 rs->requestStream(Payload("Jane"), s);
                     `}
+            </CodeBlock>
+          </div>
+        </TabItem>
+        <TabItem value={"ts"}>
+          <div style={{ marginBottom: 10 }}>
+            <h3>Server Example</h3>
+            <CodeBlock className="language-ts">
+              {`import { OnExtensionSubscriber, OnNextSubscriber, OnTerminalSubscriber, Payload, RSocketServer } from "rsocket-core";
+import { TcpServerTransport } from "rsocket-tcp-server";
+
+const transport = new TcpServerTransport({
+  listenOptions: {
+    host: "127.0.0.1",
+    port: 9090,
+  },
+});
+
+const server = new RSocketServer({
+  transport,
+  acceptor: {
+    accept: async () => {
+      return {
+        requestResponse: (
+          payload: Payload,
+          responderStream: OnTerminalSubscriber &
+            OnNextSubscriber &
+            OnExtensionSubscriber
+        ) => {
+          const timeout = setTimeout(
+            () => {
+              return responderStream.onNext(
+                {
+                  data: Buffer.concat([Buffer.from("Echo: "), payload.data]),
+                },
+                true
+              );
+            },
+            1000
+          );
+          return {
+            cancel: () => {
+              clearTimeout(timeout);
+              console.log("cancelled");
+            },
+            onExtension: () => { },
+          };
+        },
+      };
+    },
+  },
+});
+
+await server.bind();`}
+            </CodeBlock>
+          </div>
+          <div>
+            <h3>Client Example</h3>
+            <CodeBlock className="language-ts">
+              {`import { RSocketConnector } from "rsocket-core";
+import { TcpClientTransport } from "rsocket-tcp-client";
+
+const connector = new RSocketConnector({
+  transport: new TcpClientTransport({
+    connectionOptions: {
+      host: "127.0.0.1",
+      port: 9090,
+    },
+  }),
+});
+
+const rsocket = await connector.connect();
+
+rsocket.requestResponse(
+  {
+    data: Buffer.from("Hello World"),
+  },
+  {
+    onError: (e) => {
+      console.error(e);
+    },
+    onNext: (payload, isComplete) => {
+      console.log(
+        \`payload[data: \${payload.data}; metadata: \${payload.metadata}]|\${isComplete}\`
+      );
+    },
+    onComplete: () => { },
+    onExtension: () => { },
+  }
+);`}
             </CodeBlock>
           </div>
         </TabItem>
