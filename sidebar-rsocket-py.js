@@ -2,8 +2,8 @@ module.exports = [
   "guides/rsocket-py/index",
   {
     "Guides": [
-      "guides/rsocket-py/simple",
-      "guides/rsocket-py/tutorial"
+      "guides/rsocket-py/simple/index",
+      "guides/rsocket-py/tutorial/index"
     ]
   },
   {
