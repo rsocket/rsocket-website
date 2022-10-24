@@ -25,7 +25,6 @@ Let's setup a simple server which will accept connections and add a user to the 
 The server will listen on TCP port 6565. Here is the minimum required code:
 
 ```py
-# server.py
 import asyncio
 
 from rsocket.frame_helpers import str_to_bytes
@@ -74,7 +73,6 @@ Next we will look at a simple client which connects to this server
 Here is the minimum required client code. The client will connect to the server, send a single "response" request and disconnect.
 
 ```py
-# client.py
 import asyncio
 
 from rsocket.helpers import single_transport_provider, utf8_decode
