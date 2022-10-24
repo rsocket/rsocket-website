@@ -1,0 +1,97 @@
+---
+slug: /guides/rsocket-py/tutorial
+title: Tutorial
+sidebar_label: Tutorial
+---
+
+This tutorial will go over step by step setting up an application using most of the library's features.
+
+# Preface
+
+We will be setting up a chat application with both a server and client written in python.
+
+The chat client will have the following commands:
+- /login <user> <password>
+- /logout
+- /join <channel>
+- /leave <channel>
+- /msg <user> <message>
+- /upload <filename>
+- /download <filename>
+
+# Server side: first steps
+
+Let's setup a simple server which will accept connections and add a user to the list of currently logged in users.
+The server will listen on TCP port 6565. Here is the minimum required code:
+
+```py
+# server.py
+import asyncio
+
+from rsocket.frame_helpers import str_to_bytes
+from rsocket.helpers import create_future
+from rsocket.local_typing import Awaitable
+from rsocket.payload import Payload
+from rsocket.request_handler import BaseRequestHandler
+from rsocket.rsocket_server import RSocketServer
+from rsocket.transports.tcp import TransportTCP
+
+
+class Handler(BaseRequestHandler):
+    async def request_response(self, payload: Payload) -> Awaitable[Payload]:
+        return create_future(Payload(str_to_bytes('Welcome to chat')))
+
+
+async def run_server():
+    def session(*connection):
+        RSocketServer(TransportTCP(*connection), handler_factory=Handler)
+
+    async with await asyncio.start_server(session, 'localhost', 6565) as server:
+        await server.serve_forever()
+
+
+if __name__ == '__main__':
+    asyncio.run(run_server())
+```
+
+Line 24-25 start a standard TCP server using the asyncio module.
+
+Lines 21-22 define that the response to this session will be an RSocketServer instance.
+There is no need to specify anything else here since the RSocketServer starts internal
+tasks which listen for incoming data and send outgoing data. The 2 parameters passed are:
+- transport : An abstraction for the various supported connection methods. In this case it is an adapter over the created TCP connection.
+- handler_factory: A class which defines the handlers for the various requests which will be received over this RSocket connection.
+
+In the handler factory (lines 13-15), a single handler is defined for a 'response' request, which simply welcomes the user.
+The payload (data and metadata) of the request are ignored for now. The response is created using helper methods from the rsocket package:
+- create_future : The response can be async, This creates a simple future which contains the response data.
+- str_to_bytes : All values in a response must be either bytes or bytearrays. This is a simple method which encodes str to bytes.
+
+Next we will look at a simple client which connects to this server
+
+# Client side: first steps
+
+Here is the minimum required client code. The client will connect to the server, send a single "response" request and disconnect.
+
+```py
+# client.py
+import asyncio
+
+from rsocket.helpers import single_transport_provider, utf8_decode
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from rsocket.transports.tcp import TransportTCP
+
+
+async def main():
+    connection = await asyncio.open_connection('localhost', 6565)
+
+    async with RSocketClient(single_transport_provider(TransportTCP(*connection))) as client:
+        response = await client.request_response(Payload())
+
+        print(f"Server: {utf8_decode(response.data)}")
+
+
+if __name__ == '__main__':
+    asyncio.run(main())
+```
