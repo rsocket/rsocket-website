@@ -48,8 +48,17 @@ Options:
 
 ## Example usage
 
+The following example can be run against the example server from the rsocket-py codebase at
+`examples/
+
 Request-Response to TCP server on localhost:6464 with route 'single_request':
 
 ```
 rsocket-py --route single_request --data "simple request" --request tcp://localhost:6464
+```
+
+Request-Stream to WSS server on localhost:6464 with route 'stream', without verifying ssl, and with user/password authentication:
+
+```
+rsocket-py --authSimple abc:12345 --route stream --allowUntrustedSsl --stream wss://localhost:6565
 ```
