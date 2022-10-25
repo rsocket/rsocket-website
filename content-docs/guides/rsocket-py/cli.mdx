@@ -1,0 +1,55 @@
+---
+slug: /guides/rsocket-py/cli
+title: Command Line Interface
+sidebar_label: Command Line Interface
+---
+
+Rsocket requests can be sent using the command line interface. It is available when installing with pip using the [cli] extra.
+
+The command is `rsocket-py`. The output of `rsocket-py --help` is as follows:
+
+```
+Usage: rsocket-py [OPTIONS] URI
+
+  Supported connection strings: tcp/ws/wss
+
+Options:
+  --request                       Request response
+  --stream                        Request stream
+  --channel                       Request channel
+  --fnf                           Fire and Forget
+  -d, --data TEXT                 Data. Use "-" to read data from standard
+                                  input. (default: )
+  -l, --load TEXT                 Load a file as Data. (e.g. ./foo.txt,
+                                  /tmp/foo.txt)
+  -m, --metadata TEXT             Metadata (default: )
+  -r, --route TEXT                Enable Routing Metadata Extension
+  --limitRate INTEGER             Enable limitRate(rate)
+  --take INTEGER                  Enable take(n)
+  -u, --as, --authSimple TEXT     Enable Authentication Metadata Extension
+                                  (Simple). The format must be "username:
+                                  password"
+  --sd, --setupData TEXT          Data for Setup payload
+  --sm, --setupMetadata TEXT      Metadata for Setup payload
+  --ab, --authBearer TEXT         Enable Authentication Metadata Extension
+                                  (Bearer)
+  --dataMimeType, --dmt TEXT      MimeType for data (default:
+                                  application/json)
+  --metadataMimeType, --mmt TEXT  MimeType for metadata
+                                  (default:application/json)
+  --allowUntrustedSsl             Do not verify SSL certificate (for wss://
+                                  urls)
+  --httpHeader TEXT               ws/wss headers
+  --debug                         Show debug log
+  -q, --quiet                     Disable the output on next
+  --version                       Print version
+  --help                          Show this message and exit.
+```
+
+## Example usage
+
+Request-Response to TCP server on localhost:6464 with route 'single_request':
+
+```
+rsocket-py --route single_request --data "simple request" --request tcp://localhost:6464
+```
