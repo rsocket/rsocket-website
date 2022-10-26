@@ -9,16 +9,19 @@ Rsocket requests can be sent using the command line interface. It is available w
 The command is `rsocket-py`. The output of `rsocket-py --help` is as follows:
 
 ```
-Usage: rsocket-py [OPTIONS] URI
+Usage: rsocket-py [OPTIONS] [URI]
 
   Supported connection strings: tcp/ws/wss
 
 Options:
+  --im, --interactionModel [REQUEST_RESPONSE|REQUEST_STREAM|REQUEST_CHANNEL|FIRE_AND_FORGET|METADATA_PUSH]
+                                  Interaction Model
   --request                       Request response
   --stream                        Request stream
   --channel                       Request channel
   --fnf                           Fire and Forget
-  -d, --data TEXT                 Data. Use "-" to read data from standard
+  --metadataPush                  Metadata Push
+  -d, --data, --input TEXT        Data. Use "-" to read data from standard
                                   input. (default: )
   -l, --load TEXT                 Load a file as Data. (e.g. ./foo.txt,
                                   /tmp/foo.txt)
@@ -29,19 +32,26 @@ Options:
   -u, --as, --authSimple TEXT     Enable Authentication Metadata Extension
                                   (Simple). The format must be "username:
                                   password"
-  --sd, --setupData TEXT          Data for Setup payload
+  --sd, --setup, --setupData TEXT
+                                  Data for Setup payload
   --sm, --setupMetadata TEXT      Metadata for Setup payload
   --ab, --authBearer TEXT         Enable Authentication Metadata Extension
                                   (Bearer)
-  --dataMimeType, --dmt TEXT      MimeType for data (default:
+  --dataMimeType, --dataFormat, --dmt TEXT
+                                  MimeType for data (default:
                                   application/json)
-  --metadataMimeType, --mmt TEXT  MimeType for metadata
+  --metadataMimeType, --metadataFormat, --mmt TEXT
+                                  MimeType for metadata
                                   (default:application/json)
   --allowUntrustedSsl             Do not verify SSL certificate (for wss://
                                   urls)
-  --httpHeader TEXT               ws/wss headers
+  -H, --header, --httpHeader TEXT
+                                  ws/wss headers
+  --trustCert TEXT                PEM file for a trusted certificate. (e.g.
+                                  ./foo.crt, /tmp/foo.crt)
   --debug                         Show debug log
   -q, --quiet                     Disable the output on next
+  --timeout INTEGER               Timeout in seconds
   --version                       Print version
   --help                          Show this message and exit.
 ```
