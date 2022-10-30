@@ -18,5 +18,6 @@ module.exports = [
     "RxPy": [
       "guides/rsocket-py/rxpy/introduction"
     ]
-  }
+  },
+  "guides/rsocket-py/cli"
 ];
