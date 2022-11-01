@@ -68,6 +68,12 @@ Request-Response to TCP server on localhost:6565 with route 'single_request':
 rsocket-py --route single_request --data "simple request" --request tcp://localhost:6565
 ```
 
+For the following example, start the server_with_routing.py server with the following flags:
+
+```
+python3 ./examples/server_with_routing.py --transport wss --with-ssl
+```
+
 Request-Stream to WSS server on localhost:6565 with route 'stream', without verifying ssl, and with user/password authentication:
 
 ```
