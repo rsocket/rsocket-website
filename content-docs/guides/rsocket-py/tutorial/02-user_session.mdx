@@ -24,7 +24,7 @@ from rsocket.routing.request_router import RequestRouter
 from rsocket.routing.routing_request_handler import RoutingRequestHandler
 
 
-@dataclass(frozen=True)
+@dataclass()
 class UserSessionData:
     username: str
     session_id: str

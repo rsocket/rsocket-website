@@ -34,8 +34,9 @@ class ClientStatistics:
 from dataclasses import dataclass
 from typing import Optional
 
-from examples.tutorial.step5.models import ClientStatistics
-@dataclass(frozen=True)
+from .models import ClientStatistics
+
+@dataclass()
 class UserSessionData:
     ...
     statistics: Optional[ClientStatistics] = None
@@ -45,7 +46,7 @@ class UserSessionData:
 import asyncio
 import json
 
-from examples.tutorial.step5.models import (ClientStatistics, ServerStatisticsRequest,
+from .models import (ClientStatistics, ServerStatisticsRequest,
                                             ServerStatistics)
 from reactivestreams.publisher import DefaultPublisher
 from reactivestreams.subscriber import Subscriber, DefaultSubscriber
@@ -117,13 +118,14 @@ import asyncio
 import json
 from asyncio import Event
 
-from examples.tutorial.step5.models import ServerStatistics
+from .models import ServerStatistics
 from reactivestreams.publisher import DefaultPublisher
 from reactivestreams.subscriber import DefaultSubscriber, Subscriber
 from rsocket.extensions.helpers import composite, route
 from rsocket.helpers import utf8_decode
 from rsocket.payload import Payload
 from rsocket.rsocket_client import RSocketClient
+
 
 class ChatClient:
 

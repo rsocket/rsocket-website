@@ -14,7 +14,7 @@ First we will add a message queue on the UserSessionData class for incoming mess
 from dataclasses import dataclass, field
 from asyncio import Queue
 
-@dataclass(frozen=True)
+@dataclass()
 class UserSessionData:
     username: str
     session_id: str
