@@ -30,7 +30,6 @@ class ClientStatistics:
 # Server side
 
 ```py
-
 from dataclasses import dataclass
 from typing import Optional
 
@@ -46,8 +45,7 @@ class UserSessionData:
 import asyncio
 import json
 
-from .models import (ClientStatistics, ServerStatisticsRequest,
-                                            ServerStatistics)
+from .models import (ClientStatistics, ServerStatisticsRequest, ServerStatistics)
 from reactivestreams.publisher import DefaultPublisher
 from reactivestreams.subscriber import Subscriber, DefaultSubscriber
 from reactivestreams.subscription import DefaultSubscription

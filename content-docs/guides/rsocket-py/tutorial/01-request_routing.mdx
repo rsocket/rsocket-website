@@ -24,7 +24,7 @@ from rsocket.routing.request_router import RequestRouter
 from rsocket.routing.routing_request_handler import RoutingRequestHandler
 
 
-def handler_factory():
+def handler_factory() -> RoutingRequestHandler:
     router = RequestRouter()
 
     @router.response('login')
