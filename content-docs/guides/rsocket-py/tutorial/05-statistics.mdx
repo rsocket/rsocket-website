@@ -3,15 +3,158 @@ slug: /guides/rsocket-py/tutorial/statistics
 title: Statistics
 sidebar_label: Statistics
 ---
+# Shared code
+
+```py
+from dataclasses import dataclass, field
+from typing import Optional, List
+
+
+@dataclass(frozen=True)
+class ServerStatistics:
+    user_count: Optional[int] = None
+    channel_count: Optional[int] = None
+
+
+@dataclass()
+class ServerStatisticsRequest:
+    ids: Optional[List[str]] = field(default_factory=lambda: ['users', 'channels'])
+    period_seconds: Optional[int] = field(default_factory=lambda: 5)
+
+
+@dataclass(frozen=True)
+class ClientStatistics:
+    memory_usage: Optional[int] = None
+```
 
 # Server side
 
 ```py
 
+from dataclasses import dataclass
+from typing import Optional
+
+from examples.tutorial.step5.models import ClientStatistics
+@dataclass(frozen=True)
+class UserSessionData:
+    ...
+    statistics: Optional[ClientStatistics] = None
+```
+
+```py
+import asyncio
+import json
+
+from examples.tutorial.step5.models import (ClientStatistics, ServerStatisticsRequest,
+                                            ServerStatistics)
+from reactivestreams.publisher import DefaultPublisher
+from reactivestreams.subscriber import Subscriber, DefaultSubscriber
+from reactivestreams.subscription import DefaultSubscription
+from rsocket.frame_helpers import ensure_bytes
+from rsocket.helpers import utf8_decode
+from rsocket.payload import Payload
+from rsocket.routing.request_router import RequestRouter
+
+class UserSession:
+    def router_factory(self):
+        router = RequestRouter()
+
+        @router.fire_and_forget('statistics')
+        async def receive_statistics(payload: Payload):
+            statistics = ClientStatistics(**json.loads(utf8_decode(payload.data)))
+            self._session.statistics = statistics
+
+        @router.channel('statistics')
+        async def send_statistics(payload: Payload):
+
+            class StatisticsChannel(DefaultPublisher, DefaultSubscriber, DefaultSubscription):
+
+                def __init__(self, session: UserSessionData):
+                    super().__init__()
+                    self._session = session
+                    self._requested_statistics = ServerStatisticsRequest()
+
+                def cancel(self):
+                    self._sender.cancel()
+
+                def subscribe(self, subscriber: Subscriber):
+                    super().subscribe(subscriber)
+                    subscriber.on_subscribe(self)
+                    self._sender = asyncio.create_task(self._statistics_sender())
+
+                async def _statistics_sender(self):
+                    while True:
+                        await asyncio.sleep(self._requested_statistics.period_seconds)
+                        next_message = ServerStatistics(
+                            user_count=len(storage.session_state_map),
+                            channel_count=len(storage.channel_messages)
+                        )
+                        next_payload = Payload(ensure_bytes(json.dumps(next_message.__dict__)))
+                        self._subscriber.on_next(next_payload)
+
+                def on_next(self, value: Payload, is_complete=False):
+                    request = ServerStatisticsRequest(**json.loads(utf8_decode(value.data)))
+
+                    if request.ids is not None:
+                        self._requested_statistics.ids = request.ids
+
+                    if request.period_seconds is not None:
+                        self._requested_statistics.period_seconds = request.period_seconds
+
+            response = StatisticsChannel(self._session)
+
+            return response, response
 ```
 
 # Client side
 
-```py
+On the client side we will add the methods to access the new server side functionality:
+- send_statistics
+- listen_for_statistics
 
+```py
+import asyncio
+import json
+from asyncio import Event
+
+from examples.tutorial.step5.models import ServerStatistics
+from reactivestreams.publisher import DefaultPublisher
+from reactivestreams.subscriber import DefaultSubscriber, Subscriber
+from rsocket.extensions.helpers import composite, route
+from rsocket.helpers import utf8_decode
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+
+class ChatClient:
+
+    ...
+
+    def listen_for_statistics(self):
+
+        class StatisticsHandler(DefaultPublisher, DefaultSubscriber):
+
+            def __init__(self):
+                super().__init__()
+                self.done = Event()
+
+            def subscribe(self, subscriber: Subscriber):
+                super().subscribe(subscriber)
+
+            def on_next(self, value: Payload, is_complete=False):
+                statistics = ServerStatistics(**json.loads(utf8_decode(value.data)))
+                print(statistics)
+
+                if is_complete:
+                    self.done.set()
+
+        async def listen_for_statistics(client: RSocketClient, subscriber):
+            client.request_channel(Payload(metadata=composite(
+                route('statistics')
+            ))).subscribe(subscriber)
+
+            await subscriber.done.wait()
+
+        statistics_handler = StatisticsHandler()
+        self._statistics_task = asyncio.create_task(
+            listen_for_statistics(self._rsocket, statistics_handler))
 ```
