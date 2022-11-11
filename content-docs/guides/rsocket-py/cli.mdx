@@ -1,0 +1,75 @@
+---
+slug: /guides/rsocket-py/cli
+title: Command Line Interface
+sidebar_label: Command Line Interface
+---
+
+Rsocket requests can be sent using the command line interface. It is available when installing with pip using the [cli] extra.
+
+The command is `rsocket-py`. The output of `rsocket-py --help` is as follows:
+
+```
+Usage: rsocket-py [OPTIONS] [URI]
+
+  Supported connection strings: tcp/ws/wss
+
+Options:
+  --im, --interactionModel [REQUEST_RESPONSE|REQUEST_STREAM|REQUEST_CHANNEL|FIRE_AND_FORGET|METADATA_PUSH]
+                                  Interaction Model
+  --request                       Request response
+  --stream                        Request stream
+  --channel                       Request channel
+  --fnf                           Fire and Forget
+  --metadataPush                  Metadata Push
+  -d, --data, --input TEXT        Data. Use "-" to read data from standard
+                                  input. (default: )
+  -l, --load TEXT                 Load a file as Data. (e.g. ./foo.txt,
+                                  /tmp/foo.txt)
+  -m, --metadata TEXT             Metadata (default: )
+  -r, --route TEXT                Enable Routing Metadata Extension
+  --limitRate INTEGER             Enable limitRate(rate)
+  --take INTEGER                  Enable take(n)
+  -u, --as, --authSimple TEXT     Enable Authentication Metadata Extension
+                                  (Simple). The format must be "username:
+                                  password"
+  --sd, --setup, --setupData TEXT
+                                  Data for Setup payload
+  --sm, --setupMetadata TEXT      Metadata for Setup payload
+  --ab, --authBearer TEXT         Enable Authentication Metadata Extension
+                                  (Bearer)
+  --dataMimeType, --dataFormat, --dmt TEXT
+                                  MimeType for data (default:
+                                  application/json)
+  --metadataMimeType, --metadataFormat, --mmt TEXT
+                                  MimeType for metadata
+                                  (default:application/json)
+  --allowUntrustedSsl             Do not verify SSL certificate (for wss://
+                                  urls)
+  -H, --header, --httpHeader TEXT
+                                  ws/wss headers
+  --trustCert TEXT                PEM file for a trusted certificate. (e.g.
+                                  ./foo.crt, /tmp/foo.crt)
+  --debug                         Show debug log
+  -q, --quiet                     Disable the output on next
+  --timeout INTEGER               Timeout in seconds
+  --version                       Print version
+  --help                          Show this message and exit.
+```
+
+## Example usage
+
+The following example can be run against the example server from the rsocket-py codebase at
+`examples/server_with_routing.py`. Run that script with --help to show options.
+By default, it will start a TCP server on port 6565.
+
+Request-Response to TCP server on localhost:6464 with route 'single_request':
+
+```
+rsocket-py --route single_request --data "simple request" --request tcp://localhost:6464
+```
+
+Request-Stream to WSS server on localhost:6464 with route 'stream', without verifying ssl, and with user/password authentication:
+
+```
+rsocket-py --authSimple abcde:12345 --route stream --allowUntrustedSsl --stream wss://localhost:6565
+```
