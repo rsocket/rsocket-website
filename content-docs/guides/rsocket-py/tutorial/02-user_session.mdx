@@ -1,0 +1,94 @@
+---
+slug: /guides/rsocket-py/tutorial/user_session
+title: User session
+sidebar_label: User session
+---
+
+# Server side
+
+Below is the modified handler_factory and the relevant classes and helpers:
+
+```py
+import logging
+import uuid
+from dataclasses import dataclass, field
+from typing import Dict, Optional, Awaitable
+
+from rsocket.frame_helpers import ensure_bytes
+from rsocket.helpers import utf8_decode, create_response
+from rsocket.payload import Payload
+from rsocket.routing.request_router import RequestRouter
+from rsocket.routing.routing_request_handler import RoutingRequestHandler
+
+
+@dataclass(frozen=True)
+class UserSessionData:
+    username: str
+    session_id: str
+
+
+@dataclass(frozen=True)
+class ChatData:
+    user_session_by_id: Dict[str, UserSessionData] = field(default_factory=dict)
+
+
+chat_data = ChatData()
+
+
+class CustomRoutingRequestHandler(RoutingRequestHandler):
+    def __init__(self, session: 'ChatUserSession', router: RequestRouter):
+        super().__init__(router)
+        self._session = session
+
+
+class ChatUserSession:
+
+    def __init__(self):
+        self._session: Optional[UserSessionData] = None
+
+    def define_handler(self):
+        router = RequestRouter()
+
+        @router.response('login')
+        async def login(payload: Payload) -> Awaitable[Payload]:
+            username = utf8_decode(payload.data)
+
+            logging.info(f'New user: {username}')
+
+            session_id = str(uuid.uuid4())
+            self._session = UserSessionData(username, session_id)
+            chat_data.user_session_by_id[session_id] = self._session
+
+            return create_response(ensure_bytes(session_id))
+
+        return CustomRoutingRequestHandler(self, router)
+
+
+def handler_factory():
+    return ChatUserSession().define_handler()
+```
+
+# Client side
+
+Below is the modified ChatClient:
+
+```py
+
+
+from rsocket.extensions.helpers import composite, route
+from rsocket.frame_helpers import ensure_bytes
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+
+
+class ChatClient:
+    def __init__(self, rsocket: RSocketClient):
+        self._rsocket = rsocket
+        self._listen_task = None
+        self._session_id = None
+
+    async def login(self, username: str):
+        payload = Payload(ensure_bytes(username), composite(route('login')))
+        self._session_id = (await self._rsocket.request_response(payload)).data
+        return self
+```

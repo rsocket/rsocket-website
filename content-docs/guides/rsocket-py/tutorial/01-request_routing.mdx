@@ -1,16 +1,17 @@
 ---
-slug: /guides/rsocket-py/tutorial
-title: Chat Application - Request routing
-sidebar_label: Chat Application
+slug: /guides/rsocket-py/tutorial/request_routing
+title: Request routing
+sidebar_label: Request routing
 ---
 
 The chat application will have various functionality (private messages, channels etc.). Each request to the server will
 be identified by a route (similar to paths in an HTTP URL). To implement this we will use the RequestRouter and RoutingRequestHandler
 classes.
 
-# Server side: routing setup
+# Server side
 
-We will place the example from the previous step into a routed request response. Below is the modified handler_factory method in server.py:
+We will place the example from the previous step into a routed request response.
+Below is the modified handler_factory method in server.py:
 
 ```py
 from typing import Awaitable
@@ -34,11 +35,12 @@ def handler_factory():
     return RoutingRequestHandler(router)
 ```
 
-# Client side: request specific route
+# Client side
 
-Let's modify the client side to call this new routed request. For readability and maintanability, we will create a ChatClient
-which will wrap the RSocket client and provide the methods for interacting with the server. Below is the complete code for the
-new client.py module:
+Let's modify the client side to call this new routed request. For readability and maintainability, we will create a ChatClient
+which will wrap the RSocket client and provide the methods for interacting with the server.
+
+Below is the complete code for the new client.py module:
 
 ```py
 import logging
@@ -64,13 +66,13 @@ class ChatClient:
 
 
 async def main():
-    connection1 = await asyncio.open_connection('localhost', 6565)
+    connection = await asyncio.open_connection('localhost', 6565)
 
-    async with RSocketClient(single_transport_provider(TransportTCP(*connection1)),
-                             metadata_encoding=WellKnownMimeTypes.MESSAGE_RSOCKET_COMPOSITE_METADATA) as client1:
-        user1 = ChatClient(client1)
+    async with RSocketClient(single_transport_provider(TransportTCP(*connection)),
+                             metadata_encoding=WellKnownMimeTypes.MESSAGE_RSOCKET_COMPOSITE_METADATA) as client:
+        user = ChatClient(client)
 
-        await user1.login('user1')
+        await user.login('user1')
 
 
 if __name__ == '__main__':

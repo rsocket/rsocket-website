@@ -1,10 +1,23 @@
 module.exports = [
   "guides/rsocket-py/index",
   {
-    "Guides": [
-      "guides/rsocket-py/simple/index",
-      "guides/rsocket-py/tutorial/index"
-    ]
+    "Getting started": [
+
+      "guides/rsocket-py/simple/index"
+    ],
+    "Tutorial":
+      [
+        "guides/rsocket-py/tutorial/index",
+        "guides/rsocket-py/tutorial/base",
+        "guides/rsocket-py/tutorial/request_routing",
+        "guides/rsocket-py/tutorial/user_session",
+        "guides/rsocket-py/tutorial/messages",
+        "guides/rsocket-py/tutorial/channels",
+        "guides/rsocket-py/tutorial/files",
+        "guides/rsocket-py/tutorial/statistics",
+        "guides/rsocket-py/tutorial/post"
+      ]
+
   },
   {
     "Client": [
