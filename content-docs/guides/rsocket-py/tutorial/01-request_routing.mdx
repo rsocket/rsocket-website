@@ -58,15 +58,11 @@ which will wrap the RSocket client and provide the methods for interacting with 
 Below is the complete code for the new <b>client.py</b> module:
 
 ```py
-import asyncio
-
 from rsocket.extensions.helpers import composite, route
-from rsocket.extensions.mimetypes import WellKnownMimeTypes
 from rsocket.frame_helpers import ensure_bytes
-from rsocket.helpers import single_transport_provider, utf8_decode
+from rsocket.helpers import  utf8_decode
 from rsocket.payload import Payload
 from rsocket.rsocket_client import RSocketClient
-from rsocket.transports.tcp import TransportTCP
 
 
 class ChatClient:
@@ -77,6 +73,22 @@ class ChatClient:
         payload = Payload(ensure_bytes(username), composite(route('login')))
         response = await self._rsocket.request_response(payload)
         print(f'Server response: {utf8_decode(response.data)}')
+```
+
+Lines 12-19 define our new <b>ChatClient</b> which will encapsulate the methods used to interact with the chat server.
+
+Lines 16-19 defines a <b>login</b> method. It uses the <b>composite</b> and <b>route</b> helper methods to create the metadata which will ensure
+the payload is routed to the method registered on the server side in the previous step.
+
+Finally, we'll modify the client module to test our new <b>ChatClient</b>:
+
+```py
+import asyncio
+
+from rsocket.extensions.mimetypes import WellKnownMimeTypes
+from rsocket.helpers import single_transport_provider
+from rsocket.rsocket_client import RSocketClient
+from rsocket.transports.tcp import TransportTCP
 
 
 async def main():
@@ -89,11 +101,6 @@ async def main():
         await user.login('user1')
 ```
 
-Lines 12-19 define our new <b>ChatClient</b> which will encapsulate the methods used to interact with the chat server.
-
-Lines 16-19 defines a <b>login</b> method. It uses the <b>composite</b> and <b>route</b> helper methods to create the metadata which will ensure
-the payload is routed to the method registered on the server side in the previous step.
-
-In line 26 we modified the *metadata_encoding* type to be COMPOSITE_METADATA. This is required for routing support.
+In line 26 we modify the *metadata_encoding* type to be COMPOSITE_METADATA. This is required for routing support.
 
 Lines 27-29 instantiate a <b>ChatClient</b> and call the <b>login</b> method.

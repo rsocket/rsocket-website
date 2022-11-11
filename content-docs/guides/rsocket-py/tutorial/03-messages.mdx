@@ -167,3 +167,41 @@ class ChatClient:
         self._listen_task.add_done_callback(lambda _: messages_done.set())
         await messages_done.wait()
 ```
+
+Finally, let's test the new functionality. Modify the <b>main</b> method in the client:
+
+```py
+import asyncio
+
+from rsocket.extensions.mimetypes import WellKnownMimeTypes
+from rsocket.helpers import single_transport_provider
+from rsocket.rsocket_client import RSocketClient
+from rsocket.transports.tcp import TransportTCP
+
+
+async def main():
+    connection1 = await asyncio.open_connection('localhost', 6565)
+
+    async with RSocketClient(single_transport_provider(TransportTCP(*connection1)),
+                             metadata_encoding=WellKnownMimeTypes.MESSAGE_RSOCKET_COMPOSITE_METADATA) as client1:
+        connection2 = await asyncio.open_connection('localhost', 6565)
+
+        async with RSocketClient(single_transport_provider(TransportTCP(*connection2)),
+                                 metadata_encoding=WellKnownMimeTypes.MESSAGE_RSOCKET_COMPOSITE_METADATA) as client2:
+            user1 = ChatClient(client1)
+            user2 = ChatClient(client2)
+
+            await user1.login('user1')
+            await user2.login('user2')
+
+            user2.listen_for_messages()
+
+            await user1.private_message('user2', 'private message from user1')
+
+            try:
+                await asyncio.wait_for(user2.wait_for_messages(), 3)
+            except asyncio.TimeoutError:
+                pass
+
+            await user2.stop_listening_for_messages()
+```
