@@ -4,14 +4,113 @@ title: File upload/download
 sidebar_label: File upload/download
 ---
 
+In this section we will add very basic file upload/download functionality. All files will be stored in memory,
+and downloadable by all users.
+
 # Server side
 
-```py
+First we will add a dict to the <b>ChatData</b> class to store the files:
 
+```py
+from dataclasses import dataclass, field
+from typing import Dict
+
+@dataclass(frozen=True)
+class ChatData:
+    ...
+    files: Dict[str, bytes] = field(default_factory=dict)
+```
+
+The following is a helper method which we will use to extract the filename metadata from the upload/download payload:
+
+```py
+from examples.tutorial.step5.models import ( chat_filename_mimetype)
+from rsocket.helpers import utf8_decode
+
+def get_file_name(composite_metadata):
+    return utf8_decode(composite_metadata.find_by_mimetype(chat_filename_mimetype)[0].content)
+```
+
+Finally, we will register the request-response endpoints for uploading and downloading files, and for retrieving a list of
+available files:
+
+```py
+from typing import Awaitable
+
+from examples.tutorial.step5.models import (chat_filename_mimetype)
+from rsocket.extensions.composite_metadata import CompositeMetadata
+from rsocket.extensions.helpers import composite, metadata_item
+from rsocket.frame_helpers import ensure_bytes
+from rsocket.helpers import create_response
+from rsocket.payload import Payload
+from rsocket.routing.request_router import RequestRouter
+from rsocket.streams.stream_from_generator import StreamFromGenerator
+
+class ChatUserSession:
+    ...
+
+    def router_factory(self):
+        router = RequestRouter()
+
+        @router.response('upload')
+        async def upload_file(payload: Payload, composite_metadata: CompositeMetadata) -> Awaitable[Payload]:
+            storage.files[get_file_name(composite_metadata)] = payload.data
+            return create_response()
+
+        @router.response('download')
+        async def download_file(composite_metadata: CompositeMetadata) -> Awaitable[Payload]:
+            file_name = get_file_name(composite_metadata)
+            return create_response(storage.files[file_name],
+                                   composite(metadata_item(ensure_bytes(file_name), chat_filename_mimetype)))
+
+        @router.stream('file_names')
+        async def get_file_names():
+            count = len(storage.files)
+            generator = ((Payload(ensure_bytes(file_name)), index == count) for (index, file_name) in
+                         enumerate(storage.files.keys(), 1))
+            return StreamFromGenerator(lambda: generator)
 ```
 
 # Client side
 
-```py
+On the client side, we will add 3 methods to access the new server functionality:
+- upload
+- download
+- list_files
 
+```py
+from typing import List
+
+from examples.tutorial.step5.models import chat_filename_mimetype
+from reactivex import operators
+from rsocket.extensions.helpers import composite, route, metadata_item
+from rsocket.frame_helpers import ensure_bytes
+from rsocket.helpers import utf8_decode
+from rsocket.payload import Payload
+from rsocket.reactivex.reactivex_client import ReactiveXClient
+
+class ChatClient:
+
+    ...
+
+    async def upload(self, file_name: str, content: bytes):
+        await self._rsocket.request_response(Payload(content, composite(
+            route('upload'),
+            metadata_item(ensure_bytes(file_name), chat_filename_mimetype)
+        )))
+
+    async def download(self, file_name: str):
+        return await self._rsocket.request_response(Payload(
+            metadata=composite(
+                route('download'),
+                metadata_item(ensure_bytes(file_name), chat_filename_mimetype)
+            )))
+
+    async def list_files(self) -> List[str]:
+        request = Payload(metadata=composite(route('file_names')))
+
+        return await ReactiveXClient(self._rsocket).request_stream(
+            request
+        ).pipe(operators.map(lambda x: utf8_decode(x.data)),
+               operators.to_list())
 ```
