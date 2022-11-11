@@ -8,7 +8,7 @@ Let's add private messaging between users. We will use a request-stream to liste
 
 # Server side
 
-First we will add a message queue on the UserSessionData class for incoming messages:
+First we add a <b>messages</b> queue on the <b>UserSessionData</b> class for incoming messages:
 
 ```py
 from dataclasses import dataclass, field
@@ -16,15 +16,15 @@ from asyncio import Queue
 
 @dataclass()
 class UserSessionData:
-    username: str
-    session_id: str
+    ...
     messages: Queue = field(default_factory=Queue)
 ```
+
+Line 7 defined a messages queue. These messages will be sent to the connected user if they request them.
 
 Next we will register a request-response endpoint for sending messages:
 
 ```py
-
 import json
 from typing import Optional, Awaitable
 
@@ -37,7 +37,7 @@ from rsocket.routing.request_router import RequestRouter
 ...
 
 def find_session_by_username(username: str) -> Optional[UserSessionData]:
-    return first((session for session in storage.session_state_map.values() if
+    return first((session for session in chat_data.user_session_by_id.values() if
                   session.username == username), None)
 
 class ChatUserSession:

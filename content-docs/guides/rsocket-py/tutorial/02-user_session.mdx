@@ -9,19 +9,14 @@ the messages which will be delivered to the client.
 
 # Server side
 
+First we will add some dataclasses to represent a single user session, and a lookup dictionary for all user sessions
+by their id.
+
 Below is the modified handler_factory and the relevant classes and helpers:
 
 ```py
-import logging
-import uuid
 from dataclasses import dataclass, field
-from typing import Dict, Optional, Awaitable
-
-from rsocket.frame_helpers import ensure_bytes
-from rsocket.helpers import utf8_decode, create_response
-from rsocket.payload import Payload
-from rsocket.routing.request_router import RequestRouter
-from rsocket.routing.routing_request_handler import RoutingRequestHandler
+from typing import Dict
 
 
 @dataclass()
@@ -36,6 +31,20 @@ class ChatData:
 
 
 chat_data = ChatData()
+```
+
+Next let's implement the login functionality:
+
+```py
+import logging
+import uuid
+from typing import Optional, Awaitable
+
+from rsocket.frame_helpers import ensure_bytes
+from rsocket.helpers import utf8_decode, create_response
+from rsocket.payload import Payload
+from rsocket.routing.request_router import RequestRouter
+from rsocket.routing.routing_request_handler import RoutingRequestHandler
 
 
 class ChatUserSession:

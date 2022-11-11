@@ -85,8 +85,8 @@ class UserSession:
                     while True:
                         await asyncio.sleep(self._requested_statistics.period_seconds)
                         next_message = ServerStatistics(
-                            user_count=len(storage.session_state_map),
-                            channel_count=len(storage.channel_messages)
+                            user_count=len(chat_data.user_session_by_id),
+                            channel_count=len(chat_data.channel_messages)
                         )
                         next_payload = Payload(ensure_bytes(json.dumps(next_message.__dict__)))
                         self._subscriber.on_next(next_payload)
@@ -114,9 +114,10 @@ On the client side we will add the methods to access the new server side functio
 ```py
 import asyncio
 import json
+import resource
 from asyncio import Event
 
-from .models import ServerStatistics
+from .models import ServerStatistics, ClientStatistics
 from reactivestreams.publisher import DefaultPublisher
 from reactivestreams.subscriber import DefaultSubscriber, Subscriber
 from rsocket.extensions.helpers import composite, route
@@ -128,6 +129,12 @@ from rsocket.rsocket_client import RSocketClient
 class ChatClient:
 
     ...
+
+    async def send_statistics(self):
+            memory_usage = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+            payload = Payload(encode_dataclass(ClientStatistics(memory_usage=memory_usage)),
+                              metadata=composite(route('statistics')))
+            await self._rsocket.fire_and_forget(payload)
 
     def listen_for_statistics(self):
 

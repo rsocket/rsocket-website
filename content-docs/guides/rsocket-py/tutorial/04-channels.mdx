@@ -36,9 +36,9 @@ from rsocket.payload import Payload
 from rsocket.routing.request_router import RequestRouter
 
 def ensure_channel_exists(channel_name: str):
-    if channel_name not in storage.channel_users:
-        storage.channel_users[channel_name] = set()
-        storage.channel_messages[channel_name] = Queue()
+    if channel_name not in chat_data.channel_users:
+        chat_data.channel_users[channel_name] = set()
+        chat_data.channel_messages[channel_name] = Queue()
 
 
 class UserSession:
@@ -53,13 +53,13 @@ class UserSession:
         async def join_channel(payload: Payload) -> Awaitable[Payload]:
             channel_name = payload.data.decode('utf-8')
             ensure_channel_exists(channel_name)
-            storage.channel_users[channel_name].add(self._session.session_id)
+            chat_data.channel_users[channel_name].add(self._session.session_id)
             return create_response()
 
         @router.response('channel.leave')
         async def leave_channel(payload: Payload) -> Awaitable[Payload]:
             channel_name = payload.data.decode('utf-8')
-            storage.channel_users[channel_name].discard(self._session.session_id)
+            chat_data.channel_users[channel_name].discard(self._session.session_id)
             return create_response()
 ```
 
