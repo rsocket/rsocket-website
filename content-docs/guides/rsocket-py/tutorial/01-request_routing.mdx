@@ -1,0 +1,79 @@
+---
+slug: /guides/rsocket-py/tutorial
+title: Chat Application - Request routing
+sidebar_label: Chat Application
+---
+
+The chat application will have various functionality (private messages, channels etc.). Each request to the server will
+be identified by a route (similar to paths in an HTTP URL). To implement this we will use the RequestRouter and RoutingRequestHandler
+classes.
+
+# Server side: routing setup
+
+We will place the example from the previous step into a routed request response. Below is the modified handler_factory method in server.py:
+
+```py
+from typing import Awaitable
+
+from rsocket.frame_helpers import ensure_bytes
+from rsocket.helpers import utf8_decode, create_response
+from rsocket.payload import Payload
+from rsocket.routing.request_router import RequestRouter
+from rsocket.routing.routing_request_handler import RoutingRequestHandler
+
+
+def handler_factory():
+    router = RequestRouter()
+
+    @router.response('login')
+    async def login(payload: Payload) -> Awaitable[Payload]:
+        username = utf8_decode(payload.data)
+
+        return create_response(ensure_bytes(f'Hello {username}'))
+
+    return RoutingRequestHandler(router)
+```
+
+# Client side: request specific route
+
+Let's modify the client side to call this new routed request. For readability and maintanability, we will create a ChatClient
+which will wrap the RSocket client and provide the methods for interacting with the server. Below is the complete code for the
+new client.py module:
+
+```py
+import logging
+import asyncio
+
+from rsocket.extensions.helpers import composite, route
+from rsocket.extensions.mimetypes import WellKnownMimeTypes
+from rsocket.frame_helpers import ensure_bytes
+from rsocket.helpers import single_transport_provider, utf8_decode
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+from rsocket.transports.tcp import TransportTCP
+
+
+class ChatClient:
+    def __init__(self, rsocket: RSocketClient):
+        self._rsocket = rsocket
+
+    async def login(self, username: str):
+        payload = Payload(ensure_bytes(username), composite(route('login')))
+        response = await self._rsocket.request_response(payload)
+        print(f'Server response: {utf8_decode(response.data)}')
+
+
+async def main():
+    connection1 = await asyncio.open_connection('localhost', 6565)
+
+    async with RSocketClient(single_transport_provider(TransportTCP(*connection1)),
+                             metadata_encoding=WellKnownMimeTypes.MESSAGE_RSOCKET_COMPOSITE_METADATA) as client1:
+        user1 = ChatClient(client1)
+
+        await user1.login('user1')
+
+
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
+    asyncio.run(main())
+```
