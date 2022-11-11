@@ -115,7 +115,6 @@ from examples.tutorial.step2.models import Message
 from rsocket.extensions.helpers import composite, route
 from rsocket.frame_helpers import ensure_bytes
 from rsocket.payload import Payload
-from rsocket.rsocket_client import RSocketClient
 
 def encode_dataclass(obj):
     return ensure_bytes(json.dumps(obj.__dict__))
@@ -123,10 +122,6 @@ def encode_dataclass(obj):
 
 
 class ChatClient:
-
-    def __init__(self, rsocket: RSocketClient):
-        self._rsocket = rsocket
-        self._session_id = None
 
     ...
 
@@ -147,14 +142,9 @@ from reactivex import operators
 from rsocket.extensions.helpers import composite, route
 from rsocket.payload import Payload
 from rsocket.reactivex.reactivex_client import ReactiveXClient
-from rsocket.rsocket_client import RSocketClient
 
 
 class ChatClient:
-
-    def __init__(self, rsocket: RSocketClient):
-        self._rsocket = rsocket
-        self._session_id = None
 
     ...
 
