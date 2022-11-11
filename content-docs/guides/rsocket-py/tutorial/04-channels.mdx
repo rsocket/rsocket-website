@@ -41,7 +41,7 @@ def ensure_channel_exists(channel_name: str):
         chat_data.channel_messages[channel_name] = Queue()
 
 
-class UserSession:
+class ChatUserSession:
 
     ...
 
@@ -60,6 +60,35 @@ class UserSession:
         async def leave_channel(payload: Payload) -> Awaitable[Payload]:
             channel_name = payload.data.decode('utf-8')
             chat_data.channel_users[channel_name].discard(self._session.session_id)
+            return create_response()
+```
+
+Next we add the ability to send channel message. We will modify the <b>send_message</b> method:
+
+```py
+class ChatUserSession:
+
+    ...
+
+    def router_factory(self):
+        router = RequestRouter()
+
+        ...
+
+        @router.response('message')
+        async def send_message(payload: Payload) -> Awaitable[Payload]:
+            message = Message(**json.loads(payload.data))
+
+            if message.channel is not None:
+                channel_message = Message(self._session.username, message.content, message.channel)
+                await chat_data.channel_messages[message.channel].put(channel_message)
+            elif message.user is not None:
+                sessions = [session for session in chat_data.user_session_by_id.values() if
+                            session.username == message.user]
+
+                if len(sessions) > 0:
+                    await sessions[0].messages.put(message)
+
             return create_response()
 ```
 
