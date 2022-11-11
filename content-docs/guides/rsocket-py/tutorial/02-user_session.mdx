@@ -88,8 +88,6 @@ Finally, we modify the handler_factory (Lines 54-55) to instantiate the handler 
 Below is the modified ChatClient:
 
 ```py
-
-
 from rsocket.extensions.helpers import composite, route
 from rsocket.frame_helpers import ensure_bytes
 from rsocket.payload import Payload
@@ -107,4 +105,4 @@ class ChatClient:
         return self
 ```
 
-Instead of a greeting from the server, we now receive a session id in the response payload. We will store this on the client (Lines 16-17).
+Instead of a greeting from the server, we now receive a session id in the response payload. We will store this on the client (Lines 13-14).
