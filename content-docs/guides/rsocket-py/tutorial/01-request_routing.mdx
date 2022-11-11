@@ -11,6 +11,7 @@ classes.
 # Server side
 
 We will place the example from the previous step into a routed request response.
+
 Below is the modified handler_factory method in server.py:
 
 ```py
@@ -35,15 +36,28 @@ def handler_factory():
     return RoutingRequestHandler(router)
 ```
 
+Line 11 instantiates the <b>RequestRouter</b>. This helper is used as a method decorator to register the route of each request.
+It is similar to Flask and Quart syntax.
+
+Lines 13-17 define the login method and attach it to a request-response with the 'login' route. In future steps we will show examples
+of the other request types which can be registered.
+
+All methods decorated by the request router accept two optional arguments:
+- payload - An instance of a Payload class which contains the data and metadata of the request
+- composite_metadata - If rsocket is set up to use composite metadata, this will contain a parsed structure of the metadata in the request payload
+
+Both of these parameters must appear with the exact names as above, as that is how they are passed by the request handler.
+
+Line 19 returns the actual request handler, an instance of <b>RoutingRequestHandler</b>, which uses the request router instance.
+
 # Client side
 
-Let's modify the client side to call this new routed request. For readability and maintainability, we will create a ChatClient
+Let's modify the client side to call this new routed request. For readability and maintainability, we will create a <b>ChatClient</b>
 which will wrap the RSocket client and provide the methods for interacting with the server.
 
-Below is the complete code for the new client.py module:
+Below is the complete code for the new <b>client.py</b> module:
 
 ```py
-import logging
 import asyncio
 
 from rsocket.extensions.helpers import composite, route
@@ -73,9 +87,13 @@ async def main():
         user = ChatClient(client)
 
         await user.login('user1')
-
-
-if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
-    asyncio.run(main())
 ```
+
+Lines 12-19 define our new <b>ChatClient</b> which will encapsulate the methods used to interact with the chat server.
+
+Lines 16-19 defines a <b>login</b> method. It uses the <b>composite</b> and <b>route</b> helper methods to create the metadata which will ensure
+the payload is routed to the method registered on the server side in the previous step.
+
+In line 26 we modified the *metadata_encoding* type to be COMPOSITE_METADATA. This is required for routing support.
+
+Lines 27-29 instantiate a <b>ChatClient</b> and call the login method.
