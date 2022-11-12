@@ -9,6 +9,7 @@ the messages which will be delivered to the client.
 
 ## Server side
 
+### Data-classes
 First we will add some dataclasses to represent a single user session, and a lookup dictionary for all user sessions
 by their id.
 
@@ -32,6 +33,8 @@ class ChatData:
 
 chat_data = ChatData()
 ```
+
+### Login endpoint
 
 Next let's implement the login functionality:
 
@@ -68,14 +71,6 @@ class ChatUserSession:
             return create_response(ensure_bytes(session_id))
 
         return router
-
-class CustomRoutingRequestHandler(RoutingRequestHandler):
-    def __init__(self, session: 'ChatUserSession'):
-        super().__init__(session.router_factory())
-        self._session = session
-
-def handler_factory():
-    return CustomRoutingRequestHandler(ChatUserSession())
 ```
 
 *Lines 13-16* define a dataclass for the user's session on the server side. It contains two fields:
@@ -87,6 +82,16 @@ user sessions by their id. Line 24 instantiates a global instance of this class.
 
 In order to keep a reference to the UserSessionData we will modify the request handler factory.
 The ChatUserSession class (*Lines 27-47*) will keep the reference to the session data, and define the request routes.
+
+```py
+class CustomRoutingRequestHandler(RoutingRequestHandler):
+    def __init__(self, session: 'ChatUserSession'):
+        super().__init__(session.router_factory())
+        self._session = session
+
+def handler_factory():
+    return CustomRoutingRequestHandler(ChatUserSession())
+```
 
 The CustomRoutingRequestHandler class (*Lines 49-52*) is the actual request handler which will wrap the ChatUserSession instance.
 

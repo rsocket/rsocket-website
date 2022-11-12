@@ -6,21 +6,7 @@ sidebar_label: Private messages
 
 Let's add private messaging between users. We will use a request-stream to listen for new messages from other users.
 
-## Server side
-
-First we add a <b>messages</b> queue on the <b>UserSessionData</b> class for incoming messages:
-
-```py
-from dataclasses import dataclass, field
-from asyncio import Queue
-
-@dataclass()
-class UserSessionData:
-    ...
-    messages: Queue = field(default_factory=Queue)
-```
-
-Line 7 defined a messages queue. These messages will be sent to the connected user if they request them.
+## Shared
 
 Let's add an object representation of a message to the <b>shared</b> module:
 
@@ -37,6 +23,22 @@ class Message:
 *Lines 4-7* defines a frozen dataclass with two fields:
 - user : the username of the recipient user
 - content : the message text
+
+## Server side
+
+First we add a queue for incoming user messages:
+
+```py
+from dataclasses import dataclass, field
+from asyncio import Queue
+
+@dataclass()
+class UserSessionData:
+    ...
+    messages: Queue = field(default_factory=Queue)
+```
+
+Line 7 defined a messages queue. These <b>messages</b> will be sent to the connected user if they request them.
 
 Next we will register a request-response endpoint for sending messages:
 
