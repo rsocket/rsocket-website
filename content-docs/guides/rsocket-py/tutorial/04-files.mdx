@@ -107,7 +107,7 @@ On the client side, we will add 3 methods to access the new server functionality
 ```py
 from typing import List
 
-from examples.tutorial.step5.models import chat_filename_mimetype
+from .shared import chat_filename_mimetype
 from reactivex import operators
 from rsocket.extensions.helpers import composite, route, metadata_item
 from rsocket.frame_helpers import ensure_bytes

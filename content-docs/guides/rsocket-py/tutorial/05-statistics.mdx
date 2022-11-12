@@ -33,7 +33,7 @@ class ClientStatistics:
 from dataclasses import dataclass
 from typing import Optional
 
-from .models import ClientStatistics
+from .shared import ClientStatistics
 
 @dataclass()
 class UserSessionData:
@@ -45,7 +45,7 @@ class UserSessionData:
 import asyncio
 import json
 
-from .models import (ClientStatistics, ServerStatisticsRequest, ServerStatistics)
+from .shared import ClientStatistics, ServerStatisticsRequest, ServerStatistics
 from reactivestreams.publisher import DefaultPublisher
 from reactivestreams.subscriber import Subscriber, DefaultSubscriber
 from reactivestreams.subscription import DefaultSubscription
@@ -117,7 +117,7 @@ import json
 import resource
 from asyncio import Event
 
-from .models import ServerStatistics, ClientStatistics
+from .shared import ServerStatistics, ClientStatistics
 from reactivestreams.publisher import DefaultPublisher
 from reactivestreams.subscriber import DefaultSubscriber, Subscriber
 from rsocket.extensions.helpers import composite, route

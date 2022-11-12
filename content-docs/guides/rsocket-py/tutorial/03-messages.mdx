@@ -28,7 +28,7 @@ Next we will register a request-response endpoint for sending messages:
 import json
 from typing import Optional, Awaitable
 
-from .models import Message
+from .shared import Message
 from more_itertools import first
 from rsocket.helpers import create_response
 from rsocket.payload import Payload
@@ -111,7 +111,7 @@ First let's add a client method for sending private messages:
 ```py
 import json
 
-from examples.tutorial.step2.models import Message
+from .shared import Message
 from rsocket.extensions.helpers import composite, route
 from rsocket.frame_helpers import ensure_bytes
 from rsocket.payload import Payload
@@ -139,11 +139,11 @@ Next we add a method which will listen for incoming messages:
 import asyncio
 import json
 
-from examples.tutorial.step2.models import Message
-from reactivex import operators
+from reactivestreams.subscriber import DefaultSubscriber
+from reactivestreams.subscription import DefaultSubscription
+from .shared import Message
 from rsocket.extensions.helpers import composite, route
 from rsocket.payload import Payload
-from rsocket.reactivex.reactivex_client import ReactiveXClient
 
 
 class ChatClient:
@@ -155,19 +155,36 @@ class ChatClient:
             message = Message(**json.loads(data))
             print(f'{message.user} : {message.content}')
 
-        async def listen_for_messages(client):
-            await ReactiveXClient(client).request_stream(
-                Payload(metadata=composite(route('messages.incoming')))
-            ).pipe(
-                operators.do_action(on_next=lambda value: print_message(value.data),
-                                    on_error=lambda exception: print(exception)))
+        class MessageListener(DefaultSubscriber, DefaultSubscription):
+            def __init__(self):
+                super().__init__()
+                self.messages_done = asyncio.Event()
 
-        self._listen_task = asyncio.create_task(listen_for_messages(self._rsocket))
+            def on_next(self, value, is_complete=False):
+                print_message(value.data)
+
+                if is_complete:
+                    self.messages_done.set()
+
+            def on_error(self, exception: Exception):
+                print(exception)
+
+            def cancel(self):
+                self.subscription.cancel()
+
+            def on_complete(self):
+                self.messages_done.set()
+
+        self._subscriber = MessageListener()
+        self._rsocket.request_stream(
+            Payload(metadata=composite(route('messages.incoming')))
+        ).subscribe(self._subscriber)
+
+    async def stop_listening_for_messages(self):
+        self._subscriber.cancel()
 
     async def wait_for_messages(self):
-        messages_done = asyncio.Event()
-        self._listen_task.add_done_callback(lambda _: messages_done.set())
-        await messages_done.wait()
+        await self._subscriber.messages_done.wait()
 ```
 
 Finally, let's test the new functionality. Modify the <b>main</b> method in the client:
