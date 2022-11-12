@@ -95,9 +95,13 @@ class ChatUserSession:
 ## Client side
 
 ```py
+from typing import List
+
+from rsocket.awaitable.awaitable_rsocket import AwaitableRSocket
 from rsocket.extensions.helpers import composite, route
 from rsocket.frame_helpers import ensure_bytes
 from rsocket.payload import Payload
+from rsocket.helpers import utf8_decode
 
 
 class ChatClient:
@@ -113,4 +117,9 @@ class ChatClient:
         request = Payload(ensure_bytes(channel_name), composite(route('channel.leave')))
         await self._rsocket.request_response(request)
         return self
+
+    async def list_channels(self) -> List[str]:
+        request = Payload(metadata=composite(route('channels')))
+        response = await AwaitableRSocket(self._rsocket).request_stream(request)
+        return list(map(lambda _: utf8_decode(_.data), response))
 ```

@@ -107,13 +107,13 @@ On the client side, we will add 3 methods to access the new server functionality
 ```py
 from typing import List
 
-from .shared import chat_filename_mimetype
-from reactivex import operators
+from rsocket.awaitable.awaitable_rsocket import AwaitableRSocket
 from rsocket.extensions.helpers import composite, route, metadata_item
 from rsocket.frame_helpers import ensure_bytes
 from rsocket.helpers import utf8_decode
 from rsocket.payload import Payload
-from rsocket.reactivex.reactivex_client import ReactiveXClient
+
+from .shared import chat_filename_mimetype
 
 class ChatClient:
 
@@ -132,12 +132,19 @@ class ChatClient:
 
     async def list_files(self) -> List[str]:
         request = Payload(metadata=composite(route('file_names')))
-
-        return await ReactiveXClient(self._rsocket).request_stream(
-            request
-        ).pipe(operators.map(lambda x: utf8_decode(x.data)),
-               operators.to_list())
+        response = await AwaitableRSocket(self._rsocket).request_stream(request)
+        return list(map(lambda _: utf8_decode(_.data), response))
 ```
+
+*Lines 13-17* define the upload method. the Payload of the request-response consists of a body with the file's contents,
+and metadata which contains routing and the filename. To specify the filename a custom mimetype was used 'chat/file-name'.
+This mime type was used to create a metadata item using the <b>metadata_item</b> method. the <b>composite</b> method was used to combine
+the two metadata items to the complete metadata of the payload.
+
+*Lines 19-24* define the download method. It is similar to the upload method, except for the absence of the payload data,
+and a different route: 'download'.
+
+*Lines 26-32* defines the list_files method. It uses the request-stream endpoint to get a list of files.
 
 Same as on the server size, fragmentation must be enabled to allow uploading files larger than 16MB.
 This is done by adding the <b>fragment_size</b> argument to the <b>RSocketClient</b> instantiation. Do this for both clients:
