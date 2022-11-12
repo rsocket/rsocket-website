@@ -9,7 +9,8 @@ and downloadable by all users.
 
 # Server side
 
-First we will add a dict to the <b>ChatData</b> class to store the files:
+First we will add a dict to the <b>ChatData</b> class to store the files. The keys will be the file names, and the values
+the file content.
 
 ```py
 from dataclasses import dataclass, field
@@ -24,20 +25,24 @@ class ChatData:
 The following is a helper method which we will use to extract the filename metadata from the upload/download payload:
 
 ```py
-from examples.tutorial.step5.models import ( chat_filename_mimetype)
+from .shared import chat_filename_mimetype
+from rsocket.extensions.composite_metadata import CompositeMetadata
 from rsocket.helpers import utf8_decode
 
-def get_file_name(composite_metadata):
+def get_file_name(composite_metadata: CompositeMetadata):
     return utf8_decode(composite_metadata.find_by_mimetype(chat_filename_mimetype)[0].content)
 ```
 
-Finally, we will register the request-response endpoints for uploading and downloading files, and for retrieving a list of
+This helper uses the <b>find_by_mimetype</b> method of <b>CompositeMetadata</b> to get a list of metadata items with the
+specified mimetype.
+
+Next, register the request-response endpoints for uploading and downloading files, and for retrieving a list of
 available files:
 
 ```py
 from typing import Awaitable
 
-from examples.tutorial.step5.models import (chat_filename_mimetype)
+from .shared import chat_filename_mimetype
 from rsocket.extensions.composite_metadata import CompositeMetadata
 from rsocket.extensions.helpers import composite, metadata_item
 from rsocket.frame_helpers import ensure_bytes
@@ -64,11 +69,32 @@ class ChatUserSession:
                                    composite(metadata_item(ensure_bytes(file_name), chat_filename_mimetype)))
 
         @router.stream('file_names')
-        async def get_file_names():
+        async def get_file_names() -> Publisher:
             count = len(chat_data.files)
             generator = ((Payload(ensure_bytes(file_name)), index == count) for (index, file_name) in
                          enumerate(chat_data.files.keys(), 1))
             return StreamFromGenerator(lambda: generator)
+```
+
+Line 34 uses the <b>StreamFromGenerator</b> helper which creates a stream publisher from a generator factory.
+
+The generator must return a tuple of 2 values for each iteration:
+- Payload instance
+- boolean value denoting if it is the last element in the generator.
+The argument for the helper class is a method which returns a generator, not the generator itself.
+
+In the <b>download_file</b> method (Line 24), even though the frame size limit of rsocket is 16MB, larger files can be downloaded.
+To allow this, fragmentation must be enabled. This is done by adding the <b>fragment_size</b> argument to the
+<b>RSocketServer</b> instantiation:
+
+```py
+from rsocket.rsocket_server import RSocketServer
+from rsocket.transports.tcp import TransportTCP
+
+def session(*connection):
+        RSocketServer(TransportTCP(*connection),
+                      handler_factory=handler_factory,
+                      fragment_size_bytes=1_000_000)
 ```
 
 # Client side
@@ -91,8 +117,6 @@ from rsocket.reactivex.reactivex_client import ReactiveXClient
 
 class ChatClient:
 
-    ...
-
     async def upload(self, file_name: str, content: bytes):
         await self._rsocket.request_response(Payload(content, composite(
             route('upload'),
@@ -113,4 +137,19 @@ class ChatClient:
             request
         ).pipe(operators.map(lambda x: utf8_decode(x.data)),
                operators.to_list())
+```
+
+Same as on the server size, fragmentation must be enabled to allow uploading files larger than 16MB.
+This is done by adding the <b>fragment_size</b> argument to the <b>RSocketClient</b> instantiation. Do this for both clients:
+
+```py
+from rsocket.extensions.mimetypes import WellKnownMimeTypes
+from rsocket.helpers import single_transport_provider
+from rsocket.rsocket_client import RSocketClient
+from rsocket.transports.tcp import TransportTCP
+
+async with RSocketClient(single_transport_provider(TransportTCP(*connection1)),
+                             metadata_encoding=WellKnownMimeTypes.MESSAGE_RSOCKET_COMPOSITE_METADATA,
+                             fragment_size_bytes=1_000_000) as client1:
+    ...
 ```
