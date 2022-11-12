@@ -120,7 +120,6 @@ def encode_dataclass(obj):
     return ensure_bytes(json.dumps(obj.__dict__))
 
 
-
 class ChatClient:
 
     ...
@@ -130,6 +129,9 @@ class ChatClient:
         await self._rsocket.request_response(Payload(encode_dataclass(Message(username, content)),
                                                      composite(route('message'))))
 ```
+
+<b>encode_dataclass</b> (Line 8-9) is a helper method to serialize dataclasses to json bytes. This only handles simple
+dataclasses with fields only containing primitives.
 
 Next we add a method which will listen for incoming messages:
 
@@ -205,3 +207,11 @@ async def main():
 
             await user2.stop_listening_for_messages()
 ```
+
+In this example, we open two rsocket connections to the server (Lines 10-13 and Lines 14-17).
+
+Lines 18-22 wrap the rsocket clients with the chat client adapter and login the two users.
+
+Line 24 makes user2 listen for messages, while line 26 has user1 send a message to user2.
+
+Finally, lines 28-33 make the application wait for 3 seconds, then stop listening for messages.
