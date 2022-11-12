@@ -8,7 +8,7 @@ The chat application will have various functionality (private messages, channels
 be identified by a route (similar to paths in an HTTP URL). To implement this we will use the RequestRouter and RoutingRequestHandler
 classes.
 
-# Server side
+## Server side
 
 We will place the example from the previous step into a routed request response.
 
@@ -50,7 +50,7 @@ Both of these parameters must appear with the exact names as above, as that is h
 
 Line 19 returns the actual request handler, an instance of <b>RoutingRequestHandler</b>, which uses the request router instance.
 
-# Client side
+## Client side
 
 Let's modify the client side to call this new routed request. For readability and maintainability, we will create a <b>ChatClient</b>
 which will wrap the RSocket client and provide the methods for interacting with the server.

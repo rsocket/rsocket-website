@@ -8,7 +8,7 @@ In this section we will add basic channel support:
 - Joining and leaving channels
 - Sending messages to channels
 
-# Server side
+## Server side
 
 First we will add functionality to store the channel state. Add the following fields to the ChatData class:
 
@@ -92,7 +92,7 @@ class ChatUserSession:
             return create_response()
 ```
 
-# Client side
+## Client side
 
 ```py
 from rsocket.extensions.helpers import composite, route

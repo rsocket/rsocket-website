@@ -7,7 +7,7 @@ sidebar_label: File upload/download
 In this section we will add very basic file upload/download functionality. All files will be stored in memory,
 and downloadable by all users.
 
-# Server side
+## Server side
 
 First we will add a dict to the <b>ChatData</b> class to store the files. The keys will be the file names, and the values
 the file content.
@@ -97,7 +97,7 @@ def session(*connection):
                       fragment_size_bytes=1_000_000)
 ```
 
-# Client side
+## Client side
 
 On the client side, we will add 3 methods to access the new server functionality:
 - upload

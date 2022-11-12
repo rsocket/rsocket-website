@@ -3,7 +3,7 @@ slug: /guides/rsocket-py/tutorial/statistics
 title: Statistics
 sidebar_label: Statistics
 ---
-# Shared code
+## Shared code
 
 ```py
 from dataclasses import dataclass, field
@@ -27,7 +27,7 @@ class ClientStatistics:
     memory_usage: Optional[int] = None
 ```
 
-# Server side
+## Server side
 
 ```py
 from dataclasses import dataclass
@@ -105,7 +105,7 @@ class ChatUserSession:
             return response, response
 ```
 
-# Client side
+## Client side
 
 On the client side we will add the methods to access the new server side functionality:
 - send_statistics

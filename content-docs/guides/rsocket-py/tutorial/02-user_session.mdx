@@ -7,7 +7,7 @@ sidebar_label: User session
 Let's add a server side session to store the logged-in user's state. Later on it will be used to temporarily store
 the messages which will be delivered to the client.
 
-# Server side
+## Server side
 
 First we will add some dataclasses to represent a single user session, and a lookup dictionary for all user sessions
 by their id.
@@ -92,7 +92,7 @@ The CustomRoutingRequestHandler class (Lines 49-52) is the actual request handle
 
 Finally, we modify the handler_factory (Lines 54-55) to instantiate the handler and the session.
 
-# Client side
+## Client side
 
 Below is the modified ChatClient:
 

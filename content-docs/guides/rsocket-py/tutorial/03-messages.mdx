@@ -6,7 +6,7 @@ sidebar_label: Private messages
 
 Let's add private messaging between users. We will use a request-stream to listen for new messages from other users.
 
-# Server side
+## Server side
 
 First we add a <b>messages</b> queue on the <b>UserSessionData</b> class for incoming messages:
 
@@ -104,7 +104,7 @@ class ChatUserSession:
           return MessagePublisher(self._session)
 ```
 
-# Client side
+## Client side
 
 First let's add a client method for sending private messages:
 
