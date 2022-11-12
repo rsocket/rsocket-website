@@ -164,7 +164,7 @@ class ChatClient:
                                                      composite(route('message'))))
 ```
 
-<b>encode_dataclass</b> (Line 8-9) is a helper method to serialize dataclasses to json bytes. This only handles simple
+*Lines 8-9* defines <b>encode_dataclass</b>, a helper method to serialize dataclasses to json bytes. This only handles simple
 dataclasses with fields only containing primitives.
 
 Next we add a method which will listen for incoming messages:
@@ -263,6 +263,6 @@ In this example, we open two rsocket connections to the server (*lines 10-13* an
 
 *Lines 18-22* wrap the rsocket clients with the chat client adapter and login the two users.
 
-*Line 24* makes user2 listen for messages, while line 26 has user1 send a message to user2.
+*Line 24* makes user2 listen for messages, while *line 26* has user1 send a message to user2.
 
 Finally, *lines 28-33* make the application wait for 3 seconds, then stop listening for messages.
