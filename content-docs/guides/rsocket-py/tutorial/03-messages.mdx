@@ -22,23 +22,46 @@ class UserSessionData:
 
 Line 7 defined a messages queue. These messages will be sent to the connected user if they request them.
 
+Let's add an object representation of a message to the <b>shared</b> module:
+
+```py
+from dataclasses import dataclass
+from typing import Optional
+
+@dataclass(frozen=True)
+class Message:
+    user: Optional[str] = None
+    content: Optional[str] = None
+```
+
+*Lines 4-7* defines a frozen dataclass with two fields:
+- user : the username of the recipient user
+- content : the message text
+
 Next we will register a request-response endpoint for sending messages:
 
 ```py
-import json
-from typing import Optional, Awaitable
+from typing import Optional
 
-from .shared import Message
 from more_itertools import first
-from rsocket.helpers import create_response
-from rsocket.payload import Payload
-from rsocket.routing.request_router import RequestRouter
-
-...
 
 def find_session_by_username(username: str) -> Optional[UserSessionData]:
     return first((session for session in chat_data.user_session_by_id.values() if
                   session.username == username), None)
+```
+
+*Lines 5-7* define a helper for looking up a user's session by username. This will be used to deliver private messages
+(and later on channel messages).
+
+```py
+import json
+from typing import Awaitable
+
+from rsocket.helpers import create_response
+from rsocket.payload import Payload
+from rsocket.routing.request_router import RequestRouter
+
+from .shared import Message
 
 class ChatUserSession:
 
@@ -58,7 +81,11 @@ class ChatUserSession:
           return create_response()
 ```
 
-Finally, we will register a request-stream endpoint for listening to incoming messages:
+*Lines 17-25* define the endpoint for sending messages. The Payload must contain a json serialized <b>Message</b> object.
+The recipient's session is found, and the message is placed in the message queue. As always, the response must be a future.
+In this case it is an empty payload.
+
+As a last step on the server side, we register a request-stream endpoint for listening to incoming messages:
 
 ```py
 import asyncio
@@ -67,7 +94,6 @@ import json
 from reactivestreams.publisher import DefaultPublisher
 from reactivestreams.subscriber import Subscriber
 from reactivestreams.subscription import DefaultSubscription
-from rsocket.extensions.composite_metadata import CompositeMetadata
 from rsocket.frame_helpers import ensure_bytes
 from rsocket.payload import Payload
 from rsocket.routing.request_router import RequestRouter
@@ -81,7 +107,7 @@ class ChatUserSession:
       ...
 
       @router.stream('messages.incoming')
-      async def messages_incoming(composite_metadata: CompositeMetadata):
+      async def messages_incoming():
           class MessagePublisher(DefaultPublisher, DefaultSubscription):
               def __init__(self, session: UserSessionData):
                   self._session = session
@@ -103,6 +129,14 @@ class ChatUserSession:
 
           return MessagePublisher(self._session)
 ```
+
+*Lines 19-40* define the endpoint for listening to new messages.
+
+*Lines 21-38* define the publisher which will be returned.
+The same class will be used as the subscription for controlling the message stream. The message stream is created by listening
+to the user session's message queue and delivering them to the client (subscriber).
+
+The loop (*Lines 35-38*) is placed in an asyncio.Task which can be canceled by the client (*Lines 26-27*)
 
 ## Client side
 
@@ -225,10 +259,10 @@ async def main():
             await user2.stop_listening_for_messages()
 ```
 
-In this example, we open two rsocket connections to the server (Lines 10-13 and Lines 14-17).
+In this example, we open two rsocket connections to the server (*lines 10-13* and *lines 14-17*).
 
-Lines 18-22 wrap the rsocket clients with the chat client adapter and login the two users.
+*Lines 18-22* wrap the rsocket clients with the chat client adapter and login the two users.
 
-Line 24 makes user2 listen for messages, while line 26 has user1 send a message to user2.
+*Line 24* makes user2 listen for messages, while line 26 has user1 send a message to user2.
 
-Finally, lines 28-33 make the application wait for 3 seconds, then stop listening for messages.
+Finally, *lines 28-33* make the application wait for 3 seconds, then stop listening for messages.

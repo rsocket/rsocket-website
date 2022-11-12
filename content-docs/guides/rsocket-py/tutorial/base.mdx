@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
 Line 24-25 start a standard TCP server using the asyncio module.
 
-Lines 21-22 define that the response to this session will be an RSocketServer instance.
+*Lines 21-22* define that the response to this session will be an RSocketServer instance.
 There is no need to specify anything else here since the RSocketServer starts internal
 tasks which listen for requests, and responds accordingly.
 
@@ -56,7 +56,7 @@ The 2 parameters passed are:
 
 In the example, the handler factory is a subclass of BaseRequestHandler.
 
-Lines 13-15 define a handler for a 'response' request, which simply welcome the user.
+*Lines 13-15* define a handler for a 'response' request, which simply welcome the user.
 
 The username is taken from the data property of the payload, and a response is created using helper methods from the rsocket package:
 - create_future : This creates a future which contains the response data.

@@ -78,19 +78,19 @@ def handler_factory():
     return CustomRoutingRequestHandler(ChatUserSession())
 ```
 
-Lines 13-16 define a dataclass for the user's session on the server side. It contains two fields:
+*Lines 13-16* define a dataclass for the user's session on the server side. It contains two fields:
 - username - Human readable name specified in the login payload.
 - session_id - unique id (e.g. UUID4) generated to identify the session.
 
-Lines 19-21 define a dataclass for the chat application's data. It contains only a dict for looking up
+*Lines 19-21* define a dataclass for the chat application's data. It contains only a dict for looking up
 user sessions by their id. Line 24 instantiates a global instance of this class.
 
 In order to keep a reference to the UserSessionData we will modify the request handler factory.
-The ChatUserSession class (Lines 27-47) will keep the reference to the session data, and define the request routes.
+The ChatUserSession class (*Lines 27-47*) will keep the reference to the session data, and define the request routes.
 
-The CustomRoutingRequestHandler class (Lines 49-52) is the actual request handler which will wrap the ChatUserSession instance.
+The CustomRoutingRequestHandler class (*Lines 49-52*) is the actual request handler which will wrap the ChatUserSession instance.
 
-Finally, we modify the handler_factory (Lines 54-55) to instantiate the handler and the session.
+Finally, we modify the handler_factory (*Lines 54-55*) to instantiate the handler and the session.
 
 ## Client side
 
@@ -115,4 +115,4 @@ class ChatClient:
 ```
 
 Instead of a greeting from the server, we now receive a session id in the response payload.
-We will store this on the client (Lines 13-14).
+We will store this on the client (*Lines 13-14*).
