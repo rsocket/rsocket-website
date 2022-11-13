@@ -12,6 +12,8 @@ classes.
 
 We will modify the example from the previous step into a routed request response.
 
+### Routing request handler
+
 The <b>handler_factory</b> method below replaces the <b>Handler</b> class from the previous step:
 
 ```py
@@ -48,6 +50,8 @@ Both of these parameters must appear with the exact names as above, as that is h
 
 *Line 17* returns the actual request handler, an instance of <b>RoutingRequestHandler</b>, which uses the request router instance.
 
+### Use the new request handler
+
 Modify the <b>RSocketServer</b> instantiation from the previous example and pass the <b>handler_factory</b> method as the *handler_factory* parameter:
 
 ```py
@@ -64,6 +68,8 @@ async def run_server():
 
 Let's modify the client side to call this new routed request. For readability and maintainability, we will create a <b>ChatClient</b>
 which will wrap the RSocket client and provide the methods for interacting with the server.
+
+### ChatClient class
 
 Below is the complete code for the new <b>client.py</b> module:
 
@@ -89,7 +95,9 @@ class ChatClient:
 *Lines 11-14* defines a <b>login</b> method. It uses the <b>composite</b> and <b>route</b> helper methods to create the metadata which will ensure
 the payload is routed to the method registered on the server side in the previous step.
 
-Finally, we'll modify the client module to test our new <b>ChatClient</b>:
+### Use the new ChatClient class
+
+Let's modify the client module to test our new <b>ChatClient</b>:
 
 ```py
 from rsocket.extensions.mimetypes import WellKnownMimeTypes
