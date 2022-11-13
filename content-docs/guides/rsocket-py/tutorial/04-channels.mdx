@@ -138,7 +138,6 @@ from rsocket.frame_helpers import ensure_bytes
 from rsocket.payload import Payload
 from rsocket.helpers import utf8_decode
 
-
 class ChatClient:
 
     ...
@@ -158,3 +157,7 @@ class ChatClient:
         response = await AwaitableRSocket(self._rsocket).request_stream(request)
         return list(map(lambda _: utf8_decode(_.data), response))
 ```
+
+*Lines 13-21* define the join/leave methods. They are both simple routed <b>request_response</b> calls, with the channel name as the payload data.
+
+*Lines 23-26* define the list_channels method. This method uses the <b>AwaitableRSocket</b> adapter to simplify getting the response stream as a list.

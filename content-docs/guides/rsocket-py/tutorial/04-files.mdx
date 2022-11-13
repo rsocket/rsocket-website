@@ -72,12 +72,12 @@ class ChatUserSession:
     def router_factory(self):
         router = RequestRouter()
 
-        @router.response('upload')
+        @router.response('file.upload')
         async def upload_file(payload: Payload, composite_metadata: CompositeMetadata) -> Awaitable[Payload]:
             chat_data.files[get_file_name(composite_metadata)] = payload.data
             return create_response()
 
-        @router.response('download')
+        @router.response('file.download')
         async def download_file(composite_metadata: CompositeMetadata) -> Awaitable[Payload]:
             file_name = get_file_name(composite_metadata)
             return create_response(chat_data.files[file_name],
@@ -141,19 +141,19 @@ class ChatClient:
 
     async def upload(self, file_name: str, content: bytes):
         await self._rsocket.request_response(Payload(content, composite(
-            route('upload'),
+            route('file.upload'),
             metadata_item(ensure_bytes(file_name), chat_filename_mimetype)
         )))
 
     async def download(self, file_name: str):
         return await self._rsocket.request_response(Payload(
             metadata=composite(
-                route('download'),
+                route('file.download'),
                 metadata_item(ensure_bytes(file_name), chat_filename_mimetype)
             )))
 
     async def list_files(self) -> List[str]:
-        request = Payload(metadata=composite(route('file_names')))
+        request = Payload(metadata=composite(route('list_files')))
         response = await AwaitableRSocket(self._rsocket).request_stream(request)
         return list(map(lambda _: utf8_decode(_.data), response))
 ```
@@ -164,9 +164,10 @@ This mime type was used to create a metadata item using the <b>metadata_item</b>
 the two metadata items to the complete metadata of the payload.
 
 *Lines 19-24* define the download method. It is similar to the upload method, except for the absence of the payload data,
-and a different route: 'download'.
+and a different route: 'file.download'.
 
-*Lines 26-32* defines the list_files method. It uses the request-stream endpoint to get a list of files.
+*Lines 26-32* defines the list_files method. Same as the <b>list_channels</b> method in the previous section,
+it uses the request-stream 'files' endpoint to get a list of files.
 
 ### Large file support
 
