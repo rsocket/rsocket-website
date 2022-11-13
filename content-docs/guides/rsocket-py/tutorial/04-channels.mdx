@@ -45,6 +45,9 @@ def ensure_channel_exists(channel_name: str):
         asyncio.create_task(channel_message_delivery(channel_name))
 ```
 
+If the channel doesn't exist yet (*Line 4*) It will be added to the <b>channel_users</b> and <b>channel_messages</b> dictionaries.
+*Line 7* starts an asyncio task (described below) which will deliver messages sent to the channel, to the channel's users.
+
 ```py
 import logging
 
@@ -62,6 +65,9 @@ async def channel_message_delivery(channel_name: str):
         except Exception as exception:
             logging.error(str(exception), exc_info=True)
 ```
+
+The above method will loop infinitely and watch the <b>channel_messages</b> queue of the specified
+channel (*Line 8*). Upon receiving a message, it will be delivered to all the users in the channel (*Lines 9-13*).
 
 ### Join/Leave Channel
 

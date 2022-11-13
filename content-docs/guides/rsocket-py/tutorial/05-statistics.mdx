@@ -3,24 +3,28 @@ slug: /guides/rsocket-py/tutorial/statistics
 title: Statistics
 sidebar_label: Statistics
 ---
+
+As a last step, we will add passing some statistics between the client and the server:
+- The client will be able to send its memory usage to the server.
+- The server will report the number of users and channels. The client will be able to specify which of these statistics it wants.
+
 ## Shared code
+
+We will define some data-classes to represent the payloads being sent between the client and server:
 
 ```py
 from dataclasses import dataclass, field
 from typing import Optional, List
-
 
 @dataclass(frozen=True)
 class ServerStatistics:
     user_count: Optional[int] = None
     channel_count: Optional[int] = None
 
-
 @dataclass()
 class ServerStatisticsRequest:
     ids: Optional[List[str]] = field(default_factory=lambda: ['users', 'channels'])
     period_seconds: Optional[int] = field(default_factory=lambda: 5)
-
 
 @dataclass(frozen=True)
 class ClientStatistics:
@@ -28,6 +32,10 @@ class ClientStatistics:
 ```
 
 ## Server side
+
+# Data-classes
+
+First we will add a field on the <b>UserSessionData</b> to store the last statistics sent by the client.
 
 ```py
 from dataclasses import dataclass
@@ -40,6 +48,10 @@ class UserSessionData:
     ...
     statistics: Optional[ClientStatistics] = None
 ```
+
+### Endpoints
+
+We will add the endpoints for receiving/sending statistics from/to the client.
 
 ```py
 import asyncio
@@ -105,6 +117,12 @@ class ChatUserSession:
             return response, response
 ```
 
+*Lines 17-20* defines an endpoint for receiving statistics from the client. It uses the fire-and-forget request type, since this
+data is not critical to the application.
+
+*Lines 22-61* defines an endpoint for sending statistics to the client. It uses the request-channel request type, which will allow
+the client to both receive the server statistics, and update the server as to which statistics it wants to receive.
+
 ## Client side
 
 On the client side we will add the methods to access the new server side functionality:
@@ -124,7 +142,6 @@ from rsocket.extensions.helpers import composite, route
 from rsocket.helpers import utf8_decode
 from rsocket.payload import Payload
 from rsocket.rsocket_client import RSocketClient
-
 
 class ChatClient:
 
