@@ -21,8 +21,8 @@ class Message:
 ```
 
 *Lines 4-7* defines a frozen dataclass with two fields:
-- user : the username of the recipient user
-- content : the message text
+- <b>user</b> : name of the recipient user
+- <b>content</b> : message text
 
 ## Server side
 
@@ -38,7 +38,7 @@ class UserSessionData:
     messages: Queue = field(default_factory=Queue)
 ```
 
-Line 7 defined a messages queue. These <b>messages</b> will be sent to the connected user if they request them.
+*Line 7* defined a messages queue. These <b>messages</b> will be sent to the connected user if they request them.
 
 Next we will register a request-response endpoint for sending messages:
 
@@ -52,8 +52,8 @@ def find_session_by_username(username: str) -> Optional[UserSessionData]:
                   session.username == username), None)
 ```
 
-*Lines 5-7* define a helper for looking up a user's session by username. This will be used to deliver private messages
-(and later on channel messages).
+*Lines 5-7* define a helper for looking up a user's session by username. This will be used to deliver private messages,
+and later on channel messages.
 
 ```py
 import json
@@ -75,19 +75,16 @@ class ChatUserSession:
       @router.response('message')
       async def send_message(payload: Payload) -> Awaitable[Payload]:
           message = Message(**json.loads(payload.data))
-
           session = find_session_by_username(message.user)
-
           await session.messages.put(message)
-
           return create_response()
 ```
 
-*Lines 17-25* define the endpoint for sending messages. The Payload must contain a json serialized <b>Message</b> object.
-The recipient's session is found, and the message is placed in the message queue. As always, the response must be a future.
-In this case it is an empty payload.
+*Lines 17-22* define the endpoint for sending messages. The Payload must contain a json serialized <b>Message</b> object.
+The recipient's session is found, and the message is placed in the message queue. The response is a future empty payload.
 
-As a last step on the server side, we register a request-stream endpoint for listening to incoming messages:
+As a last step on the server side, we register a request-stream endpoint which listens for incoming messages and sends
+them to the client:
 
 ```py
 import asyncio
@@ -133,11 +130,11 @@ class ChatUserSession:
 
 *Lines 19-40* define the endpoint for listening to new messages.
 
-*Lines 21-38* define the publisher which will be returned.
-The same class will be used as the subscription for controlling the message stream. The message stream is created by listening
-to the user session's message queue and delivering them to the client (subscriber).
+*Lines 20-37* define the publisher which will be returned.
+The same class will be used as the subscription for canceling the stream. The messages are taken from the user's
+session message queue and delivering them to the client.
 
-The loop (*Lines 35-38*) is placed in an asyncio.Task which can be canceled by the client (*Lines 26-27*)
+The loop (*Lines 35-38*) is placed in an asyncio.Task which can be canceled by the client (*Lines 25-26*)
 
 ## Client side
 
