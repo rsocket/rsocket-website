@@ -82,7 +82,7 @@ The <b>ChatUserSession</b> class will keep the reference to the session data, an
 
 ```py
 class CustomRoutingRequestHandler(RoutingRequestHandler):
-    def __init__(self, session: 'ChatUserSession'):
+    def __init__(self, session: ChatUserSession):
         super().__init__(session.router_factory())
         self._session = session
 
