@@ -23,7 +23,6 @@ from rsocket.payload import Payload
 from rsocket.routing.request_router import RequestRouter
 from rsocket.routing.routing_request_handler import RoutingRequestHandler
 
-
 def handler_factory() -> RoutingRequestHandler:
     router = RequestRouter()
 
@@ -64,7 +63,6 @@ from rsocket.helpers import  utf8_decode
 from rsocket.payload import Payload
 from rsocket.rsocket_client import RSocketClient
 
-
 class ChatClient:
     def __init__(self, rsocket: RSocketClient):
         self._rsocket = rsocket
@@ -89,7 +87,6 @@ from rsocket.extensions.mimetypes import WellKnownMimeTypes
 from rsocket.helpers import single_transport_provider
 from rsocket.rsocket_client import RSocketClient
 from rsocket.transports.tcp import TransportTCP
-
 
 async def main():
     connection = await asyncio.open_connection('localhost', 6565)

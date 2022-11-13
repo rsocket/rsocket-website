@@ -33,12 +33,10 @@ from rsocket.request_handler import BaseRequestHandler
 from rsocket.rsocket_server import RSocketServer
 from rsocket.transports.tcp import TransportTCP
 
-
 class Handler(BaseRequestHandler):
     async def request_response(self, payload: Payload) -> Awaitable[Payload]:
         username = utf8_decode(payload.data)
         return create_future(Payload(ensure_bytes(f'Welcome to chat, {username}')))
-
 
 async def run_server():
     def session(*connection):
@@ -46,7 +44,6 @@ async def run_server():
 
     async with await asyncio.start_server(session, 'localhost', 6565) as server:
         await server.serve_forever()
-
 
 if __name__ == '__main__':
     asyncio.run(run_server())
@@ -85,7 +82,6 @@ from rsocket.helpers import single_transport_provider, utf8_decode
 from rsocket.payload import Payload
 from rsocket.rsocket_client import RSocketClient
 from rsocket.transports.tcp import TransportTCP
-
 
 async def main():
     connection = await asyncio.open_connection('localhost', 6565)

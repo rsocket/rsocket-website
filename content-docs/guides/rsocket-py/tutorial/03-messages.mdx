@@ -100,7 +100,6 @@ from rsocket.frame_helpers import ensure_bytes
 from rsocket.payload import Payload
 from rsocket.routing.request_router import RequestRouter
 
-
 class ChatUserSession:
 
   def router_factory(self):
@@ -155,7 +154,6 @@ from rsocket.payload import Payload
 def encode_dataclass(obj):
     return ensure_bytes(json.dumps(obj.__dict__))
 
-
 class ChatClient:
 
     ...
@@ -180,7 +178,6 @@ from reactivestreams.subscription import DefaultSubscription
 from .shared import Message
 from rsocket.extensions.helpers import composite, route
 from rsocket.payload import Payload
-
 
 class ChatClient:
 
@@ -232,7 +229,6 @@ from rsocket.extensions.mimetypes import WellKnownMimeTypes
 from rsocket.helpers import single_transport_provider
 from rsocket.rsocket_client import RSocketClient
 from rsocket.transports.tcp import TransportTCP
-
 
 async def main():
     connection1 = await asyncio.open_connection('localhost', 6565)
