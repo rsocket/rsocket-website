@@ -29,7 +29,7 @@ def handler_factory() -> RoutingRequestHandler:
     @router.response('login')
     async def login(payload: Payload) -> Awaitable[Payload]:
         username = utf8_decode(payload.data)
-        return create_response(ensure_bytes(f'Welcome to chat,  {username}'))
+        return create_response(ensure_bytes(f'Welcome to chat, {username}'))
 
     return RoutingRequestHandler(router)
 ```
