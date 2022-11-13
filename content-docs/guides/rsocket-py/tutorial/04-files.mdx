@@ -7,10 +7,21 @@ sidebar_label: File upload/download
 In this section we will add very basic file upload/download functionality. All files will be stored in memory,
 and downloadable by all users.
 
+## Shared
+
+First, define a mimetype which will represent file names in the payloads. This will be used by both server and client, so
+place it in the <b>shared</b> module:
+
+```py
+chat_filename_mimetype = b'chat/file-name'
+```
+
 ## Server side
 
-First we will add a dict to the <b>ChatData</b> class to store the files. The keys will be the file names, and the values
-the file content.
+### Data-classes
+
+Next, we need a place to store the files in memory. Add a dictionary to the <b>ChatData</b> class to store the files.
+The keys will be the file names, and the values the file content.
 
 ```py
 from dataclasses import dataclass, field
@@ -22,7 +33,9 @@ class ChatData:
     files: Dict[str, bytes] = field(default_factory=dict)
 ```
 
-The following is a helper method which we will use to extract the filename metadata from the upload/download payload:
+### Helper methods
+
+Next, define a helper method which extracts the filename from the upload/download payload:
 
 ```py
 from .shared import chat_filename_mimetype
@@ -35,6 +48,8 @@ def get_file_name(composite_metadata: CompositeMetadata):
 
 This helper uses the <b>find_by_mimetype</b> method of <b>CompositeMetadata</b> to get a list of metadata items with the
 specified mimetype.
+
+### Endpoints
 
 Next, register the request-response endpoints for uploading and downloading files, and for retrieving a list of
 available files:
@@ -76,12 +91,17 @@ class ChatUserSession:
             return StreamFromGenerator(lambda: generator)
 ```
 
+The <b>upload_file</b> and <b>download_file</b> methods (*Lines 18-27*) extract the filename from the metadata using the helper method we created,
+and set and get the file content from the <b>chat_data</b> storage respectively.
+
 Line 34 uses the <b>StreamFromGenerator</b> helper which creates a stream publisher from a generator factory.
 
-The generator must return a tuple of 2 values for each iteration:
+The generator must return a tuple of two values for each iteration:
 - Payload instance
 - boolean value denoting if it is the last element in the generator.
 The argument for the helper class is a method which returns a generator, not the generator itself.
+
+### Large file support
 
 In the <b>download_file</b> method (Line 24), even though the frame size limit of rsocket is 16MB, larger files can be downloaded.
 To allow this, fragmentation must be enabled. This is done by adding the <b>fragment_size</b> argument to the
@@ -98,6 +118,8 @@ def session(*connection):
 ```
 
 ## Client side
+
+### Methods
 
 On the client side, we will add 3 methods to access the new server functionality:
 - upload
@@ -145,6 +167,8 @@ the two metadata items to the complete metadata of the payload.
 and a different route: 'download'.
 
 *Lines 26-32* defines the list_files method. It uses the request-stream endpoint to get a list of files.
+
+### Large file support
 
 Same as on the server size, fragmentation must be enabled to allow uploading files larger than 16MB.
 This is done by adding the <b>fragment_size</b> argument to the <b>RSocketClient</b> instantiation. Do this for both clients:

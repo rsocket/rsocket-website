@@ -10,6 +10,7 @@ In this section we will add basic channel support:
 
 ## Server side
 
+### Data-classes
 First we will add functionality to store the channel state. Add the following fields to the ChatData class:
 
 ```py
@@ -25,22 +26,48 @@ class ChatData:
     channel_messages: Dict[str, Queue] = field(default_factory=lambda: defaultdict(Queue))
 ```
 
-Now let's add the channel join/leave handling request-response endpoints.
+In the <b>channel_users</b> dict, the keys are channel names, and the value is a set of user session ids.
+In the <b>channel_messages</b> dict, the keys are the channel names, and the value is a <b>Queue</b> of messages sent by users to the channel.
+
+### Helper methods
+
+Next, we will define some helper methods for managing channel messages:
+- <b>ensure_channel_exists</b>: initialize the data for a new channel if it doesn't exist.
+- <b>channel_message_delivery</b>: an asyncio task which will deliver channel messages to all the users in a channel.
 
 ```py
 from asyncio import Queue
-from typing import Awaitable
-
-from rsocket.helpers import create_response
-from rsocket.payload import Payload
-from rsocket.routing.request_router import RequestRouter
 
 def ensure_channel_exists(channel_name: str):
     if channel_name not in chat_data.channel_users:
         chat_data.channel_users[channel_name] = set()
         chat_data.channel_messages[channel_name] = Queue()
+        asyncio.create_task(channel_message_delivery(channel_name))
+```
 
+```py
+import logging
 
+from .shared import Message
+
+async def channel_message_delivery(channel_name: str):
+    while True:
+        try:
+            message = await chat_data.channel_messages[channel_name].get()
+            for session_id in chat_data.channel_users[channel_name]:
+                user_specific_message = Message(user=message.user,
+                                                content=message.content,
+                                                channel=channel_name)
+                chat_data.user_session_by_id[session_id].messages.put_nowait(user_specific_message)
+        except Exception as exception:
+            logging.error(str(exception), exc_info=True)
+```
+
+### Join/Leave Channel
+
+Now let's add the channel join/leave handling request-response endpoints.
+
+```py
 class ChatUserSession:
 
     ...
@@ -62,6 +89,8 @@ class ChatUserSession:
             chat_data.channel_users[channel_name].discard(self._session.session_id)
             return create_response()
 ```
+
+### Send channel message
 
 Next we add the ability to send channel message. We will modify the <b>send_message</b> method:
 
