@@ -31,9 +31,18 @@ class ChatData:
 chat_data = ChatData()
 ```
 
+*Lines 4-7* define the <b>UserSessionData</b> dataclass which represents the user's session. It contains two fields:
+- <b>username</b> - Human readable name specified in the login payload.
+- <b>session_id</b> - unique id (e.g. UUID4) generated to identify the session.
+
+*Lines 9-11* define the <b>ChatData</b> dataclass which represents the application's data. It contains only a dict for looking up
+user sessions by their id.
+
+*Line 13* instantiates a global instance of this class.
+
 ### Login endpoint
 
-Next let's implement the login functionality:
+Next we will modify the login endpoint to create a user session:
 
 ```py
 import logging
@@ -68,15 +77,8 @@ class ChatUserSession:
         return router
 ```
 
-*Lines 13-16* define a dataclass for the user's session on the server side. It contains two fields:
-- username - Human readable name specified in the login payload.
-- session_id - unique id (e.g. UUID4) generated to identify the session.
-
-*Lines 19-21* define a dataclass for the chat application's data. It contains only a dict for looking up
-user sessions by their id. Line 24 instantiates a global instance of this class.
-
-In order to keep a reference to the UserSessionData we will modify the request handler factory.
-The ChatUserSession class (*Lines 27-47*) will keep the reference to the session data, and define the request routes.
+In order to keep a reference to the <b>UserSessionData</b> we will modify the request handler factory.
+The <b>ChatUserSession</b> class will keep the reference to the session data, and define the request routes.
 
 ```py
 class CustomRoutingRequestHandler(RoutingRequestHandler):
@@ -88,9 +90,9 @@ def handler_factory():
     return CustomRoutingRequestHandler(ChatUserSession())
 ```
 
-The CustomRoutingRequestHandler class (*Lines 49-52*) is the actual request handler which will wrap the ChatUserSession instance.
+The <b>CustomRoutingRequestHandler</b> class (*Lines 1-4*) is the actual request handler which will wrap the <b>ChatUserSession</b> instance.
 
-Finally, we modify the handler_factory (*Lines 54-55*) to instantiate the handler and the session.
+Finally, we modify the <b>handler_factory</b> (*Lines 6-7*) to instantiate the handler and the session.
 
 ## Client side
 
@@ -102,7 +104,6 @@ from rsocket.frame_helpers import ensure_bytes
 from rsocket.payload import Payload
 from rsocket.rsocket_client import RSocketClient
 
-
 class ChatClient:
     def __init__(self, rsocket: RSocketClient):
         self._rsocket = rsocket
@@ -110,9 +111,10 @@ class ChatClient:
 
     async def login(self, username: str):
         payload = Payload(ensure_bytes(username), composite(route('login')))
-        self._session_id = (await self._rsocket.request_response(payload)).data
+        response = await self._rsocket.request_response(payload)
+        self._session_id = response.data
         return self
 ```
 
 Instead of a greeting from the server, we now receive a session id in the response payload.
-We will store this on the client (*Lines 13-14*).
+*Line 14* stores this session on the client class.
