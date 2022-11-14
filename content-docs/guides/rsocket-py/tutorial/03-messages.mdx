@@ -24,6 +24,16 @@ class Message:
 - <b>user</b> : name of the recipient user
 - <b>content</b> : message text
 
+We will use json to serialize the messages for transport over rsocket. Add the following helper method to <b>shared</b>:
+
+```py
+import json
+from rsocket.frame_helpers import ensure_bytes
+
+def encode_dataclass(obj):
+    return ensure_bytes(json.dumps(obj.__dict__))
+```
+
 ## Server side
 
 First we add a queue for incoming user messages:
@@ -59,7 +69,7 @@ and later on channel messages.
 import json
 from typing import Awaitable
 
-from rsocket.helpers import create_response
+from rsocket.helpers import create_response, utf8_decode
 from rsocket.payload import Payload
 from rsocket.routing.request_router import RequestRouter
 
@@ -74,7 +84,7 @@ class ChatUserSession:
 
       @router.response('message')
       async def send_message(payload: Payload) -> Awaitable[Payload]:
-          message = Message(**json.loads(payload.data))
+          message = Message(**json.loads(utf8_decode(payload.data)))
           session = find_session_by_username(message.user)
           await session.messages.put(message)
           return create_response()
@@ -88,12 +98,11 @@ them to the client:
 
 ```py
 import asyncio
-import json
 
+from .shared import encode_dataclass
 from reactivestreams.publisher import DefaultPublisher
 from reactivestreams.subscriber import Subscriber
 from reactivestreams.subscription import DefaultSubscription
-from rsocket.frame_helpers import ensure_bytes
 from rsocket.payload import Payload
 from rsocket.routing.request_router import RequestRouter
 
@@ -122,34 +131,28 @@ class ChatUserSession:
               async def _message_sender(self):
                   while True:
                       next_message = await self._session.messages.get()
-                      next_payload = Payload(ensure_bytes(json.dumps(next_message.__dict__)))
+                      next_payload = Payload(encode_dataclass(next_message))
                       self._subscriber.on_next(next_payload)
 
           return MessagePublisher(self._session)
 ```
 
-*Lines 19-40* define the endpoint for listening to new messages.
+*Lines 17-38* define the endpoint for listening to new messages.
 
-*Lines 20-37* define the publisher which will be returned.
+*Lines 19-36* define the publisher which will be returned.
 The same class will be used as the subscription for canceling the stream. The messages are taken from the user's
 session message queue and delivering them to the client.
 
-The loop (*Lines 35-38*) is placed in an asyncio.Task which can be canceled by the client (*Lines 25-26*)
+The loop (*Lines 33-36*) is placed in an asyncio.Task which can be canceled by the client (*Lines 24-25*)
 
 ## Client side
 
 First let's add a client method for sending private messages:
 
 ```py
-import json
-
-from .shared import Message
+from .shared import Message, encode_dataclass
 from rsocket.extensions.helpers import composite, route
-from rsocket.frame_helpers import ensure_bytes
 from rsocket.payload import Payload
-
-def encode_dataclass(obj):
-    return ensure_bytes(json.dumps(obj.__dict__))
 
 class ChatClient:
 
