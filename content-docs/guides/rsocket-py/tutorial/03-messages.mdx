@@ -29,9 +29,13 @@ We will use json to serialize the messages for transport over rsocket. Add the f
 ```py
 import json
 from rsocket.frame_helpers import ensure_bytes
+from rsocket.payload import Payload
 
 def encode_dataclass(obj):
     return ensure_bytes(json.dumps(obj.__dict__))
+
+def dataclass_to_payload(obj) -> Payload:
+    return Payload(encode_dataclass(obj))
 ```
 
 ## Server side
@@ -172,14 +176,19 @@ Next we add a method which will listen for incoming messages:
 ```py
 import asyncio
 import json
+from typing import Optional
 
+from .shared import Message
 from reactivestreams.subscriber import DefaultSubscriber
 from reactivestreams.subscription import DefaultSubscription
-from .shared import Message
+from rsocket.rsocket_client import RSocketClient
 from rsocket.extensions.helpers import composite, route
 from rsocket.payload import Payload
 
 class ChatClient:
+    def __init__(self, rsocket: RSocketClient):
+        ...
+        self._message_subscriber: Optional = None
 
     ...
 
@@ -208,16 +217,13 @@ class ChatClient:
             def on_complete(self):
                 self.messages_done.set()
 
-        self._subscriber = MessageListener()
+        self._message_subscriber = MessageListener()
         self._rsocket.request_stream(
             Payload(metadata=composite(route('messages.incoming')))
-        ).subscribe(self._subscriber)
+        ).subscribe(self._message_subscriber)
 
-    async def stop_listening_for_messages(self):
-        self._subscriber.cancel()
-
-    async def wait_for_messages(self):
-        await self._subscriber.messages_done.wait()
+    def stop_listening_for_messages(self):
+        self._message_subscriber.cancel()
 ```
 
 Finally, let's test the new functionality. Modify the <b>main</b> method in the client:
@@ -249,10 +255,7 @@ async def main():
 
             await user1.private_message('user2', 'private message from user1')
 
-            try:
-                await asyncio.wait_for(user2.wait_for_messages(), 3)
-            except asyncio.TimeoutError:
-                pass
+            await asyncio.sleep(3)
 
             await user2.stop_listening_for_messages()
 ```
