@@ -31,6 +31,13 @@ class ClientStatistics:
     memory_usage: Optional[int] = None
 ```
 
+*Lines 4-7* define the data sent to the client upon request. It contains two optional fields, the user count and the channel count.
+
+*Lines 9-12* define a request from the client which specified which statistics it wants and how often to report. The <b>ids</b> list
+represents the two values in the <b>ServerStatistics</b> class.
+
+*Lines 14-16* define the statistics sent from the client to the server.
+
 ## Server side
 
 # Data-classes
@@ -75,7 +82,7 @@ class ChatUserSession:
             self._session.statistics = statistics
 
         @router.channel('statistics')
-        async def send_statistics(payload: Payload):
+        async def send_statistics():
 
             class StatisticsChannel(DefaultPublisher, DefaultSubscriber, DefaultSubscription):
 
@@ -125,22 +132,15 @@ the client to both receive the server statistics, and update the server as to wh
 ## Client side
 
 On the client side we will add the methods to access the new server side functionality:
-- send_statistics
-- listen_for_statistics
+- <b>send_statistics</b>
+- <b>listen_for_statistics</b>
 
 ```py
-import asyncio
-import json
 import resource
-from asyncio import Event
 
 from .shared import ServerStatistics, ClientStatistics
-from reactivestreams.publisher import DefaultPublisher
-from reactivestreams.subscriber import DefaultSubscriber, Subscriber
 from rsocket.extensions.helpers import composite, route
-from rsocket.helpers import utf8_decode
 from rsocket.payload import Payload
-from rsocket.rsocket_client import RSocketClient
 
 class ChatClient:
 
@@ -151,6 +151,30 @@ class ChatClient:
             payload = Payload(encode_dataclass(ClientStatistics(memory_usage=memory_usage)),
                               metadata=composite(route('statistics')))
             await self._rsocket.fire_and_forget(payload)
+```
+
+The <b>send_statistics</b> uses a fire-and-forget request (*Line 15*) to send statistics to the server. This request does not receive a response,
+so does not wait for confirmation that the payload was delivered, as it is not critical information (at least for this tutorial).
+
+Next we will request statistics from the server:
+
+```py
+import asyncio
+import json
+from asyncio import Event
+
+from reactivestreams.publisher import DefaultPublisher
+from reactivestreams.subscriber import DefaultSubscriber, Subscriber
+from rsocket.extensions.helpers import composite, route
+from rsocket.helpers import utf8_decode
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+
+from .shared import ServerStatistics
+
+class ChatClient:
+
+    ...
 
     def listen_for_statistics(self):
 
