@@ -140,21 +140,62 @@ async def send_statistics() -> ReactivexChannel:
 
 ### Client adapter
 
-```py
-
-```
+On the client side, the <b>ReactiveXClient</b> adapter is used to get <b>Observable</b>s from the rsocket requests.
 
 ### Request response
 
-```py
+Below is an example of a request-response using the ReactiveX client adapter:
 
+```py
+from examples.tutorial.reactivex.models import chat_filename_mimetype
+
+from reactivex import operators
+from rsocket.extensions.helpers import composite, route, metadata_item
+from rsocket.frame_helpers import ensure_bytes
+from rsocket.payload import Payload
+from rsocket.reactivex.reactivex_client import ReactiveXClient
+
+async def download(self, file_name):
+    request = Payload(metadata=composite(
+        route('file.download'),
+        metadata_item(ensure_bytes(file_name), chat_filename_mimetype))
+    )
+
+    return await ReactiveXClient(self._rsocket).request_response(request).pipe(
+        operators.map(lambda _:_.data),
+        operators.last()
+    )
 ```
+
+*Line 15* wraps the existing rsocket client in self._rsocket with the ReactiveXClient adapter. As a result, the <b>request_response</b>
+method now returns an <b>Observable</b>. Although the Observable potentially represents a stream of more than one item, this response will contain
+at most one <b>Payload</b>. The <b>Observable</b> can be piped to operators which extract
+the data (*Line 16*) and get the single item from the stream (*Line 17*).
 
 ### Streaming
 
+Below is an example of the <b>list_files</b> method:
 ```py
+from typing import List
 
+from reactivex import operators
+from rsocket.extensions.helpers import composite, route
+from rsocket.helpers import utf8_decode
+from rsocket.payload import Payload
+from rsocket.reactivex.reactivex_client import ReactiveXClient
+
+async def list_files(self) -> List[str]:
+    request = Payload(metadata=composite(route('files')))
+
+    return await ReactiveXClient(self._rsocket).request_stream(request).pipe(
+        operators.map(lambda _: utf8_decode(_.data)),
+        operators.to_list()
+    )
 ```
+
+*Line 12* wraps the existing rsocket client in self._rsocket with the ReactiveXClient adapter. As a result, the <b>request_stream</b>
+method now returns an <b>Observable</b>. This provides a stream of <b>Payload</b>s, which can be piped to operators which extract
+the file names (*Line 13*) and collects them to a list (*Line 14*).
 
 ### Channel
 
