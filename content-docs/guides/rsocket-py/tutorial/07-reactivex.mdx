@@ -65,6 +65,8 @@ async def download_file(composite_metadata: CompositeMetadata) -> reactivex.Obse
 Python ReactiveX does not natively support any backpressure mechanism. You can either use native observables, which will
 have backpressure at the rsocket level, or wrap them with helpers which will provide backpressure at the application level.
 
+#### Direct observable
+
 An example with a simple observable for the <b>channels</b> endpoint:
 
 ```py
@@ -75,6 +77,8 @@ async def get_channels() -> reactivex.Observable:
     return reactivex.from_iterable(
         (Payload(ensure_bytes(channel)) for channel in chat_data.channel_messages.keys()))
 ```
+
+#### Observable from asyncio.Queue
 
 An example of sending the values from an asyncio.Queue using some helper methods:
 
@@ -91,6 +95,24 @@ async def messages_incoming() -> Callable[[Subject], Observable]:
         ).pipe(
             operators.map(dataclass_to_payload)
         )
+    )
+```
+
+#### Observable from async generator
+
+An example of an Observable from an async generator:
+
+```py
+from reactivex import Observable, operators
+
+@router.stream('files')
+async def get_file_names() -> Observable:
+    async def generator():
+        for file_name in chat_data.files.keys():
+            yield file_name
+
+    return observable_from_async_generator(generator()).pipe(
+        operators.map(lambda file_anme: Payload(ensure_bytes(file_name)))
     )
 ```
 
