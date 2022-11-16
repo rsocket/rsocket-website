@@ -20,11 +20,22 @@ The handler class needs to implement <b>ReactivexHandler</b> instead of <b>Reque
 When using routing, use the same <b>RequestRouter</b> instance, but the return values from the registered methods must
 match the return values specified on <b>ReactivexHandler</b>
 
+Below is the new session initialization code:
+
+```py
+from rsocket.reactivex.reactivex_handler_adapter import reactivex_handler_factory
+
+def session(*connection):
+    RSocketServer(TransportTCP(*connection),
+                  handler_factory=reactivex_handler_factory(handler_factory),
+                  fragment_size_bytes=1_000_000)
+```
+
 ### Request response
 
 For <b>response</b> endpoints, return any <b>Observable</b> with a single value, or a <b>reactivex.empty()</b>
 
-Below is the modified upload endpoin:
+Below is the modified upload endpoint, which has no response:
 
 ```py
 import reactivex
@@ -35,19 +46,94 @@ async def upload_file(payload: Payload, composite_metadata: CompositeMetadata) -
     return reactivex.empty()
 ```
 
-### Streaming
-
-Python ReactiveX does not natively support any backpressure mechanism. You can either use native observables, or wrap them
-with helpers which will provide backpressure.
+You can return a single value using <b>reactivex.just</b>. See the download endpoint example:
 
 ```py
+import reactivex
 
+@router.response('file.download')
+async def download_file(composite_metadata: CompositeMetadata) -> reactivex.Observable:
+    file_name = get_file_name(composite_metadata)
+    return reactivex.just(
+        Payload(chat_data.files[file_name],
+                composite(metadata_item(ensure_bytes(file_name), chat_filename_mimetype)))
+    )
 ```
+
+### Streaming
+
+Python ReactiveX does not natively support any backpressure mechanism. You can either use native observables, which will
+have backpressure at the rsocket level, or wrap them with helpers which will provide backpressure at the application level.
+
+An example with a simple observable for the <b>channels</b> endpoint:
+
+```py
+import reactivex
+
+@router.stream('channels')
+async def get_channels() -> reactivex.Observable:
+    return reactivex.from_iterable(
+        (Payload(ensure_bytes(channel)) for channel in chat_data.channel_messages.keys()))
+```
+
+An example of sending the values from an asyncio.Queue using some helper methods:
+
+```py
+from typing import Callable
+from reactivex import Observable, Subject
+from rsocket.reactivex.back_pressure_publisher import from_observable_with_backpressure, observable_from_queue
+
+@router.stream('messages.incoming')
+async def messages_incoming() -> Callable[[Subject], Observable]:
+    return from_observable_with_backpressure(
+        lambda backpressure: observable_from_queue(
+            self._session.messages, backpressure
+        ).pipe(
+            operators.map(dataclass_to_payload)
+        )
+    )
+```
+
 
 ### Channel
 
 ```py
+import asyncio
+import logging
 
+from rsocket.reactivex.back_pressure_publisher import from_observable_with_backpressure, observable_from_async_generator
+
+@router.channel('statistics')
+async def send_statistics() -> ReactivexChannel:
+
+    def on_next(value: Payload):
+        request = ServerStatisticsRequest(**json.loads(utf8_decode(value.data)))
+
+        logging.info(f'Received statistics request {request.ids}, {request.period_seconds}')
+
+        if request.ids is not None:
+            self._session.requested_statistics.ids = request.ids
+
+        if request.period_seconds is not None:
+            self._session.requested_statistics.period_seconds = request.period_seconds
+
+    async def statistics_generator():
+        while True:
+            try:
+                await asyncio.sleep(self._session.requested_statistics.period_seconds)
+                yield new_statistics_data(self._session.requested_statistics)
+            except Exception:
+                logging.error('Statistics', exc_info=True)
+
+    return ReactivexChannel(
+        from_observable_with_backpressure(
+            lambda backpressure: observable_from_async_generator(
+                statistics_generator(), backpressure
+            ).pipe(
+                operators.map(dataclass_to_payload)
+            )),
+        Observer(on_next=on_next),
+        limit_rate=2)
 ```
 
 ## Client side
