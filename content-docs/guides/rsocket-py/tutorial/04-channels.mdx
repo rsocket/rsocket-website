@@ -103,8 +103,6 @@ Next we add the ability to send channel message. We will modify the <b>send_mess
 ```py
 class ChatUserSession:
 
-    ...
-
     def router_factory(self):
         router = RequestRouter()
 
@@ -125,6 +123,31 @@ class ChatUserSession:
                     await sessions[0].messages.put(message)
 
             return create_response()
+```
+
+### Get channel users
+
+```py
+class ChatUserSession:
+
+    def router_factory(self):
+        router = RequestRouter()
+
+        ...
+
+    @router.stream('channel.users')
+    async def get_channel_users(payload: Payload) -> Publisher:
+        channel_name = utf8_decode(payload.data)
+
+        if channel_name not in chat_data.channel_users:
+            return EmptyStream()
+
+        count = len(chat_data.channel_users[channel_name])
+        generator = ((Payload(ensure_bytes(find_username_by_session(session_id))), index == count) for
+                     (index, session_id) in
+                     enumerate(chat_data.channel_users[channel_name], 1))
+
+        return StreamFromGenerator(lambda: generator)
 ```
 
 ## Client side
@@ -156,6 +179,11 @@ class ChatClient:
         request = Payload(metadata=composite(route('channels')))
         response = await AwaitableRSocket(self._rsocket).request_stream(request)
         return list(map(lambda _: utf8_decode(_.data), response))
+
+      async def get_users(self, channel_name: str) -> List[str]:
+        request = Payload(ensure_bytes(channel_name), composite(route('channel.users')))
+        users = await AwaitableRSocket(self._rsocket).request_stream(request)
+        return [utf8_decode(user.data) for user in users]
 ```
 
 *Lines 13-21* define the join/leave methods. They are both simple routed <b>request_response</b> calls, with the channel name as the payload data.
