@@ -77,11 +77,8 @@ Now let's add the channel join/leave handling request-response endpoints.
 ```py
 class ChatUserSession:
 
-    ...
-
     def router_factory(self):
         router = RequestRouter()
-        ...
 
         @router.response('channel.join')
         async def join_channel(payload: Payload) -> Awaitable[Payload]:
@@ -107,24 +104,25 @@ class ChatUserSession:
     def router_factory(self):
         router = RequestRouter()
 
-        ...
-
         @router.response('message')
         async def send_message(payload: Payload) -> Awaitable[Payload]:
             message = Message(**json.loads(payload.data))
 
-            if message.channel is not None:
-                channel_message = Message(self._session.username, message.content, message.channel)
-                await chat_data.channel_messages[message.channel].put(channel_message)
-            elif message.user is not None:
-                sessions = [session for session in chat_data.user_session_by_id.values() if
-                            session.username == message.user]
+            logging.info('Received message for user: %s, channel: %s', message.user, message.channel)
 
-                if len(sessions) > 0:
-                    await sessions[0].messages.put(message)
+            target_message = Message(self._session.username, message.content, message.channel)
+
+            if message.channel is not None:
+                await chat_data.channel_messages[message.channel].put(target_message)
+            elif message.user is not None:
+                session = find_session_by_username(message.user)
+                await session.messages.put(target_message)
 
             return create_response()
 ```
+
+*Lines 16-20* decide whether it is a private message or a channel message, and add it to the relevant queue.
+
 
 ### Get channel users
 
@@ -133,8 +131,6 @@ class ChatUserSession:
 
     def router_factory(self):
         router = RequestRouter()
-
-        ...
 
         @router.stream('channel.users')
         async def get_channel_users(payload: Payload) -> Publisher:
@@ -163,8 +159,6 @@ from rsocket.payload import Payload
 from rsocket.helpers import utf8_decode
 
 class ChatClient:
-
-    ...
 
     async def join(self, channel_name: str):
         request = Payload(ensure_bytes(channel_name), composite(route('channel.join')))

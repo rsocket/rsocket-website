@@ -84,13 +84,17 @@ class ChatUserSession:
   def router_factory(self):
       router = RequestRouter()
 
-      ...
-
       @router.response('message')
       async def send_message(payload: Payload) -> Awaitable[Payload]:
-          message = Message(**json.loads(utf8_decode(payload.data)))
+          message = Message(**json.loads(payload.data))
+
+          logging.info('Received message for user: %s, channel: %s', message.user, message.channel)
+
+          target_message = Message(self._session.username, message.content, message.channel)
+
           session = find_session_by_username(message.user)
-          await session.messages.put(message)
+          await session.messages.put(target_message)
+
           return create_response()
 ```
 
@@ -114,8 +118,6 @@ class ChatUserSession:
 
   def router_factory(self):
       router = RequestRouter()
-
-      ...
 
       @router.stream('messages.incoming')
       async def messages_incoming():
@@ -160,8 +162,6 @@ from rsocket.payload import Payload
 
 class ChatClient:
 
-    ...
-
     async def private_message(self, username: str, content: str):
         print(f'Sending {content} to user {username}')
         await self._rsocket.request_response(Payload(encode_dataclass(Message(username, content)),
@@ -189,8 +189,6 @@ class ChatClient:
     def __init__(self, rsocket: RSocketClient):
         ...
         self._message_subscriber: Optional = None
-
-    ...
 
     def listen_for_messages(self):
         def print_message(data):

@@ -103,8 +103,6 @@ class ChatUserSession:
     def router_factory(self):
         router = RequestRouter()
 
-        ...
-
         @router.channel('statistics')
         async def send_statistics():
 
@@ -165,8 +163,6 @@ from rsocket.payload import Payload
 
 class ChatClient:
 
-    ...
-
     async def send_statistics(self):
             memory_usage = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
             payload = Payload(encode_dataclass(ClientStatistics(memory_usage=memory_usage)),
@@ -194,8 +190,6 @@ from rsocket.rsocket_client import RSocketClient
 from .shared import ServerStatistics
 
 class ChatClient:
-
-    ...
 
     def listen_for_statistics(self):
 
