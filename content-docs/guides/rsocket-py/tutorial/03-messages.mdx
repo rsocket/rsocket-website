@@ -54,19 +54,6 @@ class UserSessionData:
 
 *Line 7* defined a messages queue. These <b>messages</b> will be sent to the connected user if they request them.
 
-We need to define a global storage for all logged-in user session:
-
-```py
-@dataclass(frozen=True)
-class ChatData:
-    user_session_by_id: Dict[str, UserSessionData] = field(default_factory=dict)
-
-
-chat_data = ChatData()
-```
-
-We will also define a helper method for looking up a session based on it's id:
-
 ```py
 from typing import Optional
 

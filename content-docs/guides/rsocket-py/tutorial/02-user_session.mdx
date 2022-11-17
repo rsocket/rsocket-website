@@ -18,27 +18,35 @@ Below is the modified handler_factory and the relevant classes and helpers:
 ```py
 from dataclasses import dataclass, field
 from typing import Dict
+from weakref import WeakValueDictionary
+
+class SessionId(str):
+    pass
 
 @dataclass()
 class UserSessionData:
     username: str
-    session_id: str
+    session_id: SessionId
 
 @dataclass(frozen=True)
 class ChatData:
-    user_session_by_id: Dict[str, UserSessionData] = field(default_factory=dict)
+    user_session_by_id: Dict[SessionId, UserSessionData] = field(default_factory=WeakValueDictionary)
 
 chat_data = ChatData()
 ```
 
-*Lines 4-7* define the <b>UserSessionData</b> dataclass which represents the user's session. It contains two fields:
+The <b>SessionId</b> defined in *Lines 5-6* is required in order to store the string session-id as a weak reference later on.
+
+*Lines 8-11* define the <b>UserSessionData</b> dataclass which represents the user's session. It contains two fields:
 - <b>username</b> - Human readable name specified in the login payload.
 - <b>session_id</b> - unique id (e.g. UUID4) generated to identify the session.
 
-*Lines 9-11* define the <b>ChatData</b> dataclass which represents the application's data. It contains only a dict for looking up
-user sessions by their id.
+*Lines 13-15* define the <b>ChatData</b> dataclass which represents the application's data. It contains only a dict for looking up
+user sessions by their id. It is initialized as a <b>WeakValueDictionary</b> in order for the session to be removed when the user disconnects.
 
-*Line 13* instantiates a global instance of this class.
+*Line 17* instantiates a global instance of this class.
+
+We will also define a helper method for looking up a session based on it's id:
 
 ### Login endpoint
 
@@ -68,7 +76,7 @@ class ChatUserSession:
 
             logging.info(f'New user: {username}')
 
-            session_id = str(uuid.uuid4())
+            session_id = SessionId(uuid.uuid4())
             self._session = UserSessionData(username, session_id)
             chat_data.user_session_by_id[session_id] = self._session
 
