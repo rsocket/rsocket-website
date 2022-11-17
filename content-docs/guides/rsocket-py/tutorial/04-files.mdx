@@ -93,8 +93,8 @@ class ChatUserSession:
 The <b>upload_file</b> and <b>download_file</b> methods (*Lines 18-27*) extract the filename from the metadata using the helper method we created,
 and set and get the file content from the <b>chat_data</b> storage respectively.
 
-In this section we introduce the second argument which can be passed to routed endpoints. If rsocket is set up to use
-composite metadata, <b>composite_metadata</b> will contain a parsed structure of the metadata in the request payload.
+In this section we introduce the second argument which can be passed to routed endpoints. If the session is set up to use
+composite metadata, the <b>composite_metadata</b> parameter will contain a parsed structure of the metadata in the request payload.
 
 Line 34 uses the <b>StreamFromGenerator</b> helper which creates a stream publisher from a generator factory.
 
@@ -105,7 +105,7 @@ The argument for the helper class is a method which returns a generator, not the
 
 ### Large file support
 
-In the <b>download_file</b> method (Line 24), even though the frame size limit of rsocket is 16MB, larger files can be downloaded.
+In the <b>download_file</b> method (Line 24), even though the frame size limit is 16MB, larger files can be downloaded.
 To allow this, fragmentation must be enabled. This is done by adding the <b>fragment_size_bytes</b> argument to the <b>RSocketServer</b> instantiation:
 
 ```py
