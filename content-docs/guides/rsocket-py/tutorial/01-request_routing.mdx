@@ -59,7 +59,6 @@ from rsocket.transports.tcp import TransportTCP
 async def run_server():
     def session(*connection):
         RSocketServer(TransportTCP(*connection), handler_factory=handler_factory)
-    ...
 ```
 
 ## Client side
