@@ -39,12 +39,10 @@ def handler_factory() -> RoutingRequestHandler:
 *Line 10* instantiates the <b>RequestRouter</b>. This helper is used as a method decorator to register the route of each request.
 It is similar to Flask and Quart syntax.
 
-*Lines 12-15* define the login method and attach it to a request-response with the 'login' route. In future steps we will show examples
-of the other request types which can be registered.
+*Lines 12-15* define the login method and attach it to a *request-response* with the <b>login</b> route. The method name does not have to match the route.
 
-All methods decorated by the request router accept two optional arguments:
-- payload - An instance of a Payload class which contains the data and metadata of the request
-- composite_metadata - If rsocket is set up to use composite metadata, this will contain a parsed structure of the metadata in the request payload
+All methods decorated by the request router accept two optional arguments, payload and composite_metadata. For now we only pass the payload.
+It is ann instance of a <b>Payload</b> class which contains the data and metadata of the request.
 
 Both of these parameters must appear with the exact names as above, as that is how they are passed by the request handler.
 

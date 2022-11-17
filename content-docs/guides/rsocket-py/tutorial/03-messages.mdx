@@ -54,7 +54,18 @@ class UserSessionData:
 
 *Line 7* defined a messages queue. These <b>messages</b> will be sent to the connected user if they request them.
 
-Next we will register a request-response endpoint for sending messages:
+We need to define a global storage for all logged-in user session:
+
+```py
+@dataclass(frozen=True)
+class ChatData:
+    user_session_by_id: Dict[str, UserSessionData] = field(default_factory=dict)
+
+
+chat_data = ChatData()
+```
+
+We will also define a helper method for looking up a session based on it's id:
 
 ```py
 from typing import Optional
@@ -68,6 +79,8 @@ def find_session_by_username(username: str) -> Optional[UserSessionData]:
 
 *Lines 5-7* define a helper for looking up a user's session by username. This will be used to deliver private messages,
 and later on channel messages.
+
+Next we will register a request-response endpoint for sending messages:
 
 ```py
 import json

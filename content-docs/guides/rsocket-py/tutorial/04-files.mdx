@@ -94,6 +94,9 @@ class ChatUserSession:
 The <b>upload_file</b> and <b>download_file</b> methods (*Lines 18-27*) extract the filename from the metadata using the helper method we created,
 and set and get the file content from the <b>chat_data</b> storage respectively.
 
+In this section we introduce the second argument which can be passed to routed endpoints. If rsocket is set up to use
+composite metadata, <b>composite_metadata</b> will contain a parsed structure of the metadata in the request payload.
+
 Line 34 uses the <b>StreamFromGenerator</b> helper which creates a stream publisher from a generator factory.
 
 The generator must return a tuple of two values for each iteration:
