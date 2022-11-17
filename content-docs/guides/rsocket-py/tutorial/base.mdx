@@ -6,24 +6,25 @@ sidebar_label: Getting started
 
 ## Application structure
 
-In this step we will set up a minimal example server/client code required by rsocket.
+In this step we will set up a minimal code required for both the server and the client.
 
 The application will be composed of 3 modules:
 - <b>shared.py</b> - code shared between client and server
 - <b>server.py</b> - server side
 - <b>client.py</b> - client side and example usage
 
-We will start with <b>server.py</b> and <b>client.py</b>. For now <b>shared.py</b> will be empty.
+We will start with <b>server.py</b> and <b>client.py</b>. <b>shared.py</b> will be empty for now.
 
 ## Server side
 
-Let's set up a simple server which will accept connections and respond to the client sending the user's name.
+We will set up a simple server to accept connections and respond to the client sending the user's name.
 The server will listen on TCP port 6565.
 
-Here is the basic code for the <b>server.py</b> module:
+Below is the basic code for the <b>server.py</b> module:
 
 ```py
 import asyncio
+import logging
 
 from rsocket.frame_helpers import ensure_bytes
 from rsocket.helpers import create_future, utf8_decode
@@ -46,6 +47,7 @@ async def run_server():
         await server.serve_forever()
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
     asyncio.run(run_server())
 ```
 
@@ -78,6 +80,7 @@ Here is the basic code for the <b>client.py</b> module:
 
 ```py
 import asyncio
+import logging
 
 from rsocket.helpers import single_transport_provider, utf8_decode
 from rsocket.payload import Payload
@@ -92,8 +95,8 @@ async def main():
 
         print(f"Server response: {utf8_decode(response.data)}")
 
-
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
     asyncio.run(main())
 ```
 
