@@ -104,8 +104,7 @@ The argument for the helper class is a method which returns a generator, not the
 ### Large file support
 
 In the <b>download_file</b> method (Line 24), even though the frame size limit of rsocket is 16MB, larger files can be downloaded.
-To allow this, fragmentation must be enabled. This is done by adding the <b>fragment_size</b> argument to the
-<b>RSocketServer</b> instantiation:
+To allow this, fragmentation must be enabled. This is done by adding the <b>fragment_size_bytes</b> argument to the <b>RSocketServer</b> instantiation:
 
 ```py
 from rsocket.rsocket_server import RSocketServer
@@ -172,7 +171,7 @@ it uses the request-stream 'files' endpoint to get a list of files.
 ### Large file support
 
 Same as on the server size, fragmentation must be enabled to allow uploading files larger than 16MB.
-This is done by adding the <b>fragment_size</b> argument to the <b>RSocketClient</b> instantiation. Do this for both clients:
+This is done by adding the <b>fragment_size_bytes</b> argument to the <b>RSocketClient</b> instantiation. Do this for both clients:
 
 ```py
 from rsocket.extensions.mimetypes import WellKnownMimeTypes

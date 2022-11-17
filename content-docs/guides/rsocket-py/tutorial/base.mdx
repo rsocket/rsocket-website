@@ -11,7 +11,7 @@ In this step we will set up a minimal example server/client code required by rso
 The application will be composed of 3 modules:
 - <b>shared.py</b> - code shared between client and server
 - <b>server.py</b> - server side
-- <b>client.py</b> - client side and test code
+- <b>client.py</b> - client side and example usage
 
 We will start with <b>server.py</b> and <b>client.py</b>. For now <b>shared.py</b> will be empty.
 
@@ -20,7 +20,7 @@ We will start with <b>server.py</b> and <b>client.py</b>. For now <b>shared.py</
 Let's set up a simple server which will accept connections and respond to the client sending the user's name.
 The server will listen on TCP port 6565.
 
-Here is the basic code for the server.py module:
+Here is the basic code for the <b>server.py</b> module:
 
 ```py
 import asyncio
@@ -49,31 +49,32 @@ if __name__ == '__main__':
     asyncio.run(run_server())
 ```
 
-Line 24-25 start a standard TCP server using the asyncio module.
+*Lines 24-25* start a standard TCP server using the asyncio module.
 
-*Lines 21-22* define that the response to this session will be an RSocketServer instance.
-There is no need to specify anything else here since the RSocketServer starts internal
-tasks which listen for requests, and responds accordingly.
+*Lines 21-22* define that the response to this session will be instantiating an <b>RSocketServer</b>.
 
 The 2 parameters passed are:
 - transport : An instance of a supported connection method. In this case it is an adapter over the TCP connection.
-- handler_factory: A callable which returns an RSocketHandler instance. This will be used to respond to the chat client's requests.
+- handler_factory: A callable which returns an <b>RSocketHandler</b> instance. This will be used to respond to the chat client's requests.
+
+There is no need to specify anything else here since the RSocketServer starts internal
+tasks which listen for requests, and responds accordingly. The session will close when the connection is lost.
 
 In the example, the handler factory is a subclass of BaseRequestHandler.
 
-*Lines 13-15* define a handler for a 'response' request, which simply welcome the user.
+*Lines 13-15* define a handler for a *response* request which welcomes the user.
 
 The username is taken from the data property of the payload, and a response is created using helper methods from the rsocket package:
 - create_future : This creates a future which contains the response data.
-- str_to_bytes : All values in a response must be either bytes or bytearrays. This method encodes str to bytes and assumes utf-8 for the input.
+- ensure_bytes : All values in a response must be either bytes or bytearrays. This method encodes str to bytes and assumes utf-8 for the input.
 
 Next we will look at a simple client which connects to this server.
 
 ## Client side
 
-The client will connect to the server, send a single "response" request and disconnect.
+The client will connect to the server, send a single *response* request and disconnect.
 
-Here is the basic code for the client.py module:
+Here is the basic code for the <b>client.py</b> module:
 
 ```py
 import asyncio
@@ -95,3 +96,5 @@ async def main():
 if __name__ == '__main__':
     asyncio.run(main())
 ```
+
+*Line 11* instantiates an <b>RSocketClient</b>, and *line 12* sends the request. The response is a <b>Payload</b> instance, the <b>data</b> of which is printed (*Line 14*).

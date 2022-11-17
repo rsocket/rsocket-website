@@ -42,7 +42,7 @@ represents the two values in the <b>ServerStatistics</b> class.
 
 # Data-classes
 
-First we will add a field on the <b>UserSessionData</b> to store the last statistics sent by the client.
+First we will add a field on the <b>UserSessionData</b> to store the last statistics sent by the client:
 
 ```py
 from dataclasses import dataclass
@@ -58,7 +58,34 @@ class UserSessionData:
 
 ### Endpoints
 
-We will add the endpoints for receiving/sending statistics from/to the client.
+We will add two endpoints, one for receiving from the client, and one for requesting specific statistics from the server.
+
+#### Client send statistics
+
+```py
+import json
+
+from .shared import ClientStatistics
+from rsocket.helpers import utf8_decode
+from rsocket.payload import Payload
+from rsocket.routing.request_router import RequestRouter
+
+class ChatUserSession:
+    def router_factory(self):
+        router = RequestRouter()
+
+        ...
+
+        @router.fire_and_forget('statistics')
+        async def receive_statistics(payload: Payload):
+            statistics = ClientStatistics(**json.loads(utf8_decode(payload.data)))
+            self._session.statistics = statistics
+```
+
+*Lines 14-17* defines an endpoint for receiving statistics from the client. It uses the fire-and-forget request type, since this
+data is not critical to the application. No return value is required from this method, and if provided will be ignored.
+
+#### Receive requested statistics
 
 ```py
 import asyncio
@@ -76,10 +103,7 @@ class ChatUserSession:
     def router_factory(self):
         router = RequestRouter()
 
-        @router.fire_and_forget('statistics')
-        async def receive_statistics(payload: Payload):
-            statistics = ClientStatistics(**json.loads(utf8_decode(payload.data)))
-            self._session.statistics = statistics
+        ...
 
         @router.channel('statistics')
         async def send_statistics():
@@ -123,10 +147,7 @@ class ChatUserSession:
             return response, response
 ```
 
-*Lines 16-19* defines an endpoint for receiving statistics from the client. It uses the fire-and-forget request type, since this
-data is not critical to the application.
-
-*Lines 21-60* defines an endpoint for sending statistics to the client. It uses the request-channel request type, which will allow
+*Lines 18-57* defines an endpoint for sending statistics to the client. It uses the request-channel request type, which will allow
 the client to both receive the server statistics, and update the server as to which statistics it wants to receive.
 
 ## Client side
