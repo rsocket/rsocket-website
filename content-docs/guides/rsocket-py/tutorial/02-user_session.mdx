@@ -14,8 +14,6 @@ the messages which will be delivered to the client.
 First we will add some dataclasses to represent a single user session, and a lookup dictionary for all user sessions
 by their id.
 
-Below is the modified handler_factory and the relevant classes and helpers:
-
 ```py
 from dataclasses import dataclass, field
 from typing import Dict
@@ -46,8 +44,6 @@ The <b>SessionId</b> defined in *Lines 5-6* is required in order to store the st
 user sessions by their id. It is initialized as a <b>WeakValueDictionary</b> in order for the session to be removed when the user disconnects.
 
 *Line 17* instantiates a global instance of this class.
-
-We will also define a helper method for looking up a session based on it's id:
 
 ### Login endpoint
 
@@ -88,6 +84,8 @@ class ChatUserSession:
 
 In order to keep a reference to the <b>UserSessionData</b> we will modify the request handler factory.
 The <b>ChatUserSession</b> class will keep the reference to the session data, and define the request routes.
+
+Below is the modified handler_factory:
 
 ```py
 class CustomRoutingRequestHandler(RoutingRequestHandler):
