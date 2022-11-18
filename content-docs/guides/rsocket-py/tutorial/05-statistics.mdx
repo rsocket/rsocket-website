@@ -173,50 +173,79 @@ class ChatClient:
 The <b>send_statistics</b> uses a fire-and-forget request (*Line 15*) to send statistics to the server. This request does not receive a response,
 so does not wait for confirmation that the payload was delivered, as it is not critical information (at least for this tutorial).
 
-Next we will request statistics from the server:
+Next we will request statistics from the server. First we will define a handler to listen on the channel request and control it:
 
 ```py
-import asyncio
 import json
 from asyncio import Event
+from datetime import timedelta
+from typing import List
 
+from examples.tutorial.step6.models import ServerStatistics, ServerStatisticsRequest, dataclass_to_payload
 from reactivestreams.publisher import DefaultPublisher
-from reactivestreams.subscriber import DefaultSubscriber, Subscriber
-from rsocket.extensions.helpers import composite, route
+from reactivestreams.subscriber import DefaultSubscriber
+from reactivestreams.subscription import DefaultSubscription
 from rsocket.helpers import utf8_decode
 from rsocket.payload import Payload
-from rsocket.rsocket_client import RSocketClient
 
-from shared import ServerStatistics
+class StatisticsHandler(DefaultPublisher, DefaultSubscriber, DefaultSubscription):
+
+    def __init__(self):
+        super().__init__()
+        self.done = Event()
+
+    def on_next(self, value: Payload, is_complete=False):
+        statistics = ServerStatistics(**json.loads(utf8_decode(value.data)))
+        print(statistics)
+
+        if is_complete:
+            self.done.set()
+
+    def cancel(self):
+        self.subscription.cancel()
+
+    def set_requested_statistics(self, ids: List[str]):
+        self._subscriber.on_next(dataclass_to_payload(ServerStatisticsRequest(ids=ids)))
+
+    def set_period(self, period: timedelta):
+        self._subscriber.on_next(
+            dataclass_to_payload(ServerStatisticsRequest(period_seconds=int(period.total_seconds()))))
+```
+
+Next we will use this new handler in the <b>ChatClient</b>:
+
+```py
+from rsocket.extensions.helpers import composite, route
+from rsocket.payload import Payload
 
 class ChatClient:
 
-    def listen_for_statistics(self):
+    def listen_for_statistics(self) -> StatisticsHandler:
+        self._statistics_subscriber = StatisticsHandler()
+        self._rsocket.request_channel(Payload(metadata=composite(
+            route('statistics')
+        )), publisher=self._statistics_subscriber).subscribe(self._statistics_subscriber)
+        return self._statistics_subscriber
 
-        class StatisticsHandler(DefaultPublisher, DefaultSubscriber):
-
-            def __init__(self):
-                super().__init__()
-                self.done = Event()
-
-            def subscribe(self, subscriber: Subscriber):
-                super().subscribe(subscriber)
-
-            def on_next(self, value: Payload, is_complete=False):
-                statistics = ServerStatistics(**json.loads(utf8_decode(value.data)))
-                print(statistics)
-
-                if is_complete:
-                    self.done.set()
-
-        async def listen_for_statistics(client: RSocketClient, subscriber):
-            client.request_channel(Payload(metadata=composite(
-                route('statistics')
-            ))).subscribe(subscriber)
-
-            await subscriber.done.wait()
-
-        statistics_handler = StatisticsHandler()
-        self._statistics_task = asyncio.create_task(
-            listen_for_statistics(self._rsocket, statistics_handler))
+    def stop_listening_for_statistics(self):
+        self._statistics_subscriber.cancel()
 ```
+
+Finally, let's try out this new functionality in the client:
+
+```py
+async def statistics_example(user1):
+    await user1.send_statistics()
+
+    statistics_control = user1.listen_for_statistics()
+
+    await asyncio.sleep(5)
+
+    statistics_control.set_requested_statistics(['users'])
+
+    await asyncio.sleep(5)
+
+    user1.stop_listening_for_statistics()
+```
+
+Call this new method from the client <b>main</b> method.

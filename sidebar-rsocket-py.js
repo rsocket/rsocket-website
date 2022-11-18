@@ -15,7 +15,6 @@ module.exports = [
         "guides/rsocket-py/tutorial/channels",
         "guides/rsocket-py/tutorial/files",
         "guides/rsocket-py/tutorial/statistics",
-        "guides/rsocket-py/tutorial/client_side_handler",
         "guides/rsocket-py/tutorial/reactivex"
       ]
 
