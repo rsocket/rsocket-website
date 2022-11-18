@@ -39,6 +39,7 @@ Below is the modified upload endpoint, which has no response:
 
 ```py
 import reactivex
+from reactivex import Observable
 
 @router.response('file.upload')
 async def upload_file(payload: Payload, composite_metadata: CompositeMetadata) -> Observable:
@@ -73,7 +74,7 @@ An example with a simple observable for the <b>channels</b> endpoint:
 import reactivex
 
 @router.stream('channels')
-async def get_channels() -> reactivex.Observable:
+async def get_channels() -> Observable:
     return reactivex.from_iterable(
         (Payload(ensure_bytes(channel)) for channel in chat_data.channel_messages.keys()))
 ```
@@ -86,6 +87,7 @@ An example of sending the values from an asyncio.Queue using some helper methods
 from typing import Callable
 from reactivex import Observable, Subject, operators
 from rsocket.reactivex.back_pressure_publisher import from_observable_with_backpressure, observable_from_queue
+from shared import dataclass_to_payload
 
 @router.stream('messages.incoming')
 async def messages_incoming() -> Callable[[Subject], Observable]:
@@ -104,6 +106,7 @@ An example of an Observable from an async generator:
 
 ```py
 from reactivex import Observable, operators
+from rsocket.reactivex.back_pressure_publisher import observable_from_async_generator
 
 @router.stream('files')
 async def get_file_names() -> Observable:
@@ -112,11 +115,24 @@ async def get_file_names() -> Observable:
             yield file_name
 
     return observable_from_async_generator(generator()).pipe(
-        operators.map(lambda file_anme: Payload(ensure_bytes(file_name)))
+        operators.map(lambda file_name: Payload(ensure_bytes(file_name)))
     )
 ```
 
 ### Channel
+
+```py
+def new_statistics_data(requested_statistics: ServerStatisticsRequest):
+    statistics_data = {}
+
+    if 'users' in requested_statistics.ids:
+        statistics_data['user_count'] = len(chat_data.user_session_by_id)
+
+    if 'channels' in requested_statistics.ids:
+        statistics_data['channel_count'] = len(chat_data.channel_messages)
+
+    return ServerStatistics(**statistics_data)
+```
 
 ```py
 import asyncio
