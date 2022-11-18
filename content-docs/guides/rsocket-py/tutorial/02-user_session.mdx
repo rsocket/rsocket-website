@@ -116,14 +116,16 @@ class ChatClient:
     def __init__(self, rsocket: RSocketClient):
         self._rsocket = rsocket
         self._session_id = None
+        self._username: Optional[str] = None
 
     async def login(self, username: str):
         payload = Payload(ensure_bytes(username), composite(route('login')))
         response = await self._rsocket.request_response(payload)
         self._session_id = response.data
+        self._username = username
         return self
 ```
 
-Instead of a greeting from the server, we now receive a session id in the response payload.
+Instead of a greeting from the server, we now receive a session id in the response payload. *Line 14* stores this session on the client class.
 
-*Line 14* stores this session on the client class.
+We will also save the username on the client side for later printing of responses from the server.

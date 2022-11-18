@@ -191,9 +191,9 @@ class ChatClient:
         self._message_subscriber: Optional = None
 
     def listen_for_messages(self):
-        def print_message(data):
+        def print_message(data: bytes):
             message = Message(**json.loads(data))
-            print(f'{message.user} : {message.content}')
+            print(f'{self._username}: from {message.user}: {message.content}')
 
         class MessageListener(DefaultSubscriber, DefaultSubscription):
             def __init__(self):

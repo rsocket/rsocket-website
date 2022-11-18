@@ -177,6 +177,8 @@ class ChatUserSession:
 
 ## Client side
 
+We will add the methods on the <b>ChatClient</b> to interact with the new server functionality:
+
 ```py
 from typing import List
 
@@ -221,6 +223,14 @@ class ChatClient:
 *Lines 25-28* define the list_channels method. This method uses the <b>AwaitableRSocket</b> adapter to simplify getting the response stream as a list.
 
 *Lines 30-31* define the get_users method, which lists a channel's users.
+
+Update the <b>print_message</b> method to include the channel:
+
+```py
+def print_message(data: bytes):
+    message = Message(**json.loads(data))
+    print(f'{self._username}: from {message.user} ({message.channel}): {message.content}')
+```
 
 Let's test the new functionality using the following code:
 
