@@ -40,7 +40,7 @@ The <b>SessionId</b> defined in *Lines 5-6* is required in order to store the st
 - <b>username</b> - Human readable name specified in the login payload.
 - <b>session_id</b> - unique id (e.g. UUID4) generated to identify the session.
 
-*Lines 13-15* define the <b>ChatData</b> dataclass which represents the application's data. It contains only a dict for looking up
+*Lines 13-15* define the <b>ChatData</b> dataclass which represents the application's data. For now, it contains only a dict for looking up
 user sessions by their id. It is initialized as a [WeakValueDictionary](https://docs.python.org/3/library/weakref.html#weakref.WeakValueDictionary) in order for the session to be removed when the user disconnects.
 
 *Line 17* instantiates a global instance of this class.
@@ -127,4 +127,4 @@ class ChatClient:
 
 Instead of a greeting from the server, we now receive a session id in the response payload. *Line 14* stores this session on the client class.
 
-We will also save the username on the client side for later printing of responses from the server.
+We will also store the username on the client for later printing as part of incoming messages.
