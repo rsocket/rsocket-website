@@ -82,7 +82,7 @@ class ChatUserSession:
             return create_response(chat_data.files[file_name],
                                    composite(metadata_item(ensure_bytes(file_name), chat_filename_mimetype)))
 
-        @router.stream('file_names')
+        @router.stream('files')
         async def get_file_names() -> Publisher:
             count = len(chat_data.files)
             generator = ((Payload(ensure_bytes(file_name)), index == count) for (index, file_name) in
@@ -154,7 +154,7 @@ class ChatClient:
             )))
 
     async def list_files(self) -> List[str]:
-        request = Payload(metadata=composite(route('list_files')))
+        request = Payload(metadata=composite(route('files')))
         response = await AwaitableRSocket(self._rsocket).request_stream(request)
         return list(map(lambda _: utf8_decode(_.data), response))
 ```
@@ -186,3 +186,24 @@ async with RSocketClient(single_transport_provider(TransportTCP(*connection1)),
                              fragment_size_bytes=1_000_000) as client1:
     ...
 ```
+
+We will try out the new functionality with the following code:
+
+```py
+async def files_example(user1: ChatClient, user2: ChatClient):
+    file_contents = b'abcdefg1234567'
+    file_name = 'file_name_1.txt'
+
+    await user1.upload(file_name, file_contents)
+
+    print(f'Files: {await user1.list_files()}')
+
+    download = await user2.download(file_name)
+
+    if download.data != file_contents:
+        raise Exception('File download failed')
+    else:
+        print(f'Downloaded file: {len(download.data)} bytes')
+```
+
+call the <b>files_example</b> method from the main client method.
