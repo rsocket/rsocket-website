@@ -37,8 +37,9 @@ class ChatData:
     channel_messages: Dict[str, Queue] = field(default_factory=lambda: defaultdict(Queue))
 ```
 
-In the <b>channel_users</b> dict, the keys are channel names, and the value is a set of user session ids.
-In the <b>channel_messages</b> dict, the keys are the channel names, and the value is a <b>Queue</b> of messages sent by users to the channel.
+In the <b>channel_users</b> dict, the keys are channel names, and the value is a set of user session ids. A [WeakSet](https://docs.python.org/3/library/weakref.html#weakref.WeakSet) is used to automatically remove logged out users.
+
+In the <b>channel_messages</b> dict, the keys are the channel names, and the value is a [Queue](https://docs.python.org/3/library/asyncio-queue.html) of messages sent by users to the channel.
 
 ### Helper methods
 
