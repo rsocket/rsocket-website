@@ -168,12 +168,12 @@ class ChatClient:
 
     async def private_message(self, username: str, content: str):
         print(f'Sending {content} to user {username}')
+
         await self._rsocket.request_response(Payload(encode_dataclass(Message(username, content)),
                                                      composite(route('message'))))
 ```
 
-*Lines 8-9* defines <b>encode_dataclass</b>, a helper method to serialize dataclasses to json bytes. This only handles simple
-dataclasses with fields only containing primitives.
+*Line 10-11* creates a <b>Payload</b> with the messages and sends it to the 'message' route.
 
 Next we add a method which will listen for incoming messages:
 
@@ -228,6 +228,14 @@ class ChatClient:
         self._message_subscriber.cancel()
 ```
 
+*Lines 22-40* define the <b>Subscriber</b> which will listen for incoming messages and print them on the client side.
+
+An instance of the <b>MessageListener</b> is stores on the client (*Line 42*) to later allow stopping the incoming message stream.
+
+*Lines 43-45* send the request and subscribe to the resulting <b>Publisher</b>.
+
+The method in *Lines 47-48* can be used to stop the above message listener.
+
 Finally, let's test the new functionality. Modify the <b>main</b> method in the client:
 
 ```py
@@ -264,8 +272,8 @@ async def main():
 
 In this example, we open two rsocket connections to the server (*lines 10-13* and *lines 14-17*).
 
-*Lines 18-22* wrap the rsocket clients with the chat client adapter and login the two users.
+*Lines 17-21* wrap the rsocket clients with the chat client adapter and login the two users.
 
-*Line 24* makes user2 listen for messages, while *line 26* has user1 send a message to user2.
+*Line 23* makes user2 listen for incoming messages, while *line 25* has user1 send a message to user2.
 
-Finally, *lines 28-33* make the application wait for 3 seconds, then stop listening for messages.
+Finally, *lines 27-29* make the application wait for 3 seconds, then stops user2 listening for messages.
