@@ -11,7 +11,7 @@ the messages which will be delivered to the client.
 
 ### Data-classes
 
-First we will add some dataclasses to represent a single user session, and a lookup dictionary for all user sessions
+First we will add some [dataclasses](https://docs.python.org/3/library/dataclasses.html) to represent a single user session, and a lookup dictionary for all user sessions
 by their id.
 
 ```py
@@ -34,13 +34,13 @@ class ChatData:
 chat_data = ChatData()
 ```
 
-The <b>SessionId</b> defined in *Lines 5-6* is required in order to store the string session-id as a [weak reference](https://docs.python.org/3/library/weakref.html) later on.
+The `SessionId` defined in *Lines 5-6* is required in order to store the string session-id as a [weak reference](https://docs.python.org/3/library/weakref.html) later on.
 
-*Lines 8-11* define the <b>UserSessionData</b> dataclass which represents the user's session. It contains two fields:
-- <b>username</b> - Human readable name specified in the login payload.
-- <b>session_id</b> - unique id (e.g. UUID4) generated to identify the session.
+*Lines 8-11* define the `UserSessionData` dataclass which represents the user's session. It contains two fields:
+- `username` - Human readable name specified in the login payload.
+- `session_id` - unique id (e.g. UUID4) generated to identify the session.
 
-*Lines 13-15* define the <b>ChatData</b> dataclass which represents the application's data. For now, it contains only a dict for looking up
+*Lines 13-15* define the `ChatData` dataclass which represents the application's data. For now, it contains only a dict for looking up
 user sessions by their id. It is initialized as a [WeakValueDictionary](https://docs.python.org/3/library/weakref.html#weakref.WeakValueDictionary) in order for the session to be removed when the user disconnects.
 
 *Line 17* instantiates a global instance of this class.
@@ -82,10 +82,10 @@ class ChatUserSession:
         return router
 ```
 
-In order to keep a reference to the <b>UserSessionData</b> we will modify the request handler factory.
-The <b>ChatUserSession</b> class will keep the reference to the session data, and define the request routes.
+In order to keep a reference to the `UserSessionData` we will modify the request handler factory.
+The `ChatUserSession` class will keep the reference to the session data, and define the request routes.
 
-Below is the modified handler_factory:
+Below is the modified `handler_factory`:
 
 ```py
 class CustomRoutingRequestHandler(RoutingRequestHandler):
@@ -97,9 +97,9 @@ def handler_factory():
     return CustomRoutingRequestHandler(ChatUserSession())
 ```
 
-The <b>CustomRoutingRequestHandler</b> class (*Lines 1-4*) is the actual request handler which will wrap the <b>ChatUserSession</b> instance.
+The `CustomRoutingRequestHandler` class (*Lines 1-4*) is the actual request handler which will wrap the `ChatUserSession` instance.
 
-Finally, we modify the <b>handler_factory</b> (*Lines 6-7*) to instantiate the handler and the session.
+Finally, we modify the `handler_factory` (*Lines 6-7*) to instantiate the handler and the session.
 
 ## Client side
 

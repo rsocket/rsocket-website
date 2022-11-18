@@ -33,8 +33,8 @@ class ClientStatistics:
 
 *Lines 4-7* define the data sent to the client upon request. It contains two optional fields, the user count and the channel count.
 
-*Lines 9-12* define a request from the client which specified which statistics it wants and how often to report. The <b>ids</b> list
-represents the two values in the <b>ServerStatistics</b> class.
+*Lines 9-12* define a request from the client which specified which statistics it wants and how often to report. The `ids` list
+represents the two values in the `ServerStatistics` class.
 
 *Lines 14-16* define the statistics sent from the client to the server.
 
@@ -42,7 +42,7 @@ represents the two values in the <b>ServerStatistics</b> class.
 
 # Data-classes
 
-First we will add a field on the <b>UserSessionData</b> to store the last statistics sent by the client:
+First we will add a field on the `UserSessionData` to store the last statistics sent by the client:
 
 ```py
 from dataclasses import dataclass
@@ -151,8 +151,8 @@ the client to both receive the server statistics, and update the server as to wh
 ## Client side
 
 On the client side we will add the methods to access the new server side functionality:
-- <b>send_statistics</b>
-- <b>listen_for_statistics</b>
+- `send_statistics`
+- `listen_for_statistics`
 
 ```py
 import resource
@@ -170,7 +170,7 @@ class ChatClient:
             await self._rsocket.fire_and_forget(payload)
 ```
 
-The <b>send_statistics</b> uses a fire-and-forget request (*Line 15*) to send statistics to the server. This request does not receive a response,
+The `send_statistics` uses a fire-and-forget request (*Line 15*) to send statistics to the server. This request does not receive a response,
 so does not wait for confirmation that the payload was delivered, as it is not critical information (at least for this tutorial).
 
 Next we will request statistics from the server. First we will define a handler to listen on the channel request and control it:
@@ -212,7 +212,7 @@ class StatisticsHandler(DefaultPublisher, DefaultSubscriber, DefaultSubscription
             dataclass_to_payload(ServerStatisticsRequest(period_seconds=int(period.total_seconds()))))
 ```
 
-Next we will use this new handler in the <b>ChatClient</b>:
+Next we will use this new handler in the `ChatClient`:
 
 ```py
 from rsocket.extensions.helpers import composite, route
@@ -248,4 +248,4 @@ async def statistics_example(user1):
     user1.stop_listening_for_statistics()
 ```
 
-Call this new method from the client <b>main</b> method.
+Call this new method from the client `main` method.

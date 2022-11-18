@@ -5,7 +5,7 @@ sidebar_label: Request routing
 ---
 
 The chat application will have various functionality (private messages, channels etc.). Each request to the server will
-be identified by a route (similar to paths in an HTTP URL). To implement this we will use the <b>RequestRouter</b> and <b>RoutingRequestHandler</b>
+be identified by a route (similar to paths in an HTTP URL). To implement this we will use the `RequestRouter` and `RoutingRequestHandler`
 classes.
 
 ## Server side
@@ -14,7 +14,7 @@ We will modify the example from the previous step into a routed request response
 
 ### Routing request handler
 
-The <b>handler_factory</b> method below replaces the <b>Handler</b> class from the previous step:
+The `handler_factory` method below replaces the `Handler` class from the previous step:
 
 ```py
 from typing import Awaitable
@@ -36,21 +36,21 @@ def handler_factory() -> RoutingRequestHandler:
     return RoutingRequestHandler(router)
 ```
 
-*Line 10* instantiates the <b>RequestRouter</b>. This helper is used as a method decorator to register the route of each request.
+*Line 10* instantiates the `RequestRouter`. This helper is used as a method decorator to register the route of each request.
 It is similar to Flask and Quart syntax.
 
-*Lines 12-15* define the login method and attach it to a *request-response* with the <b>login</b> route. The method name does not have to match the route.
+*Lines 12-15* define the login method and attach it to a request-response with the <b>login</b> route. The method name does not have to match the route.
 
 All methods decorated by the request router accept two optional arguments, payload and composite_metadata. For now, we only pass the payload.
-It is ann instance of a <b>Payload</b> class which contains the data and metadata of the request.
+It is ann instance of a `Payload` class which contains the data and metadata of the request.
 
 Both of these parameters must appear with the exact names as above, as that is how they are passed by the request handler.
 
-*Line 17* returns the actual request handler, an instance of <b>RoutingRequestHandler</b>, which uses the request router instance.
+*Line 17* returns the actual request handler, an instance of `RoutingRequestHandler`, which uses the request router instance.
 
 ### Use the new request handler
 
-Modify the <b>RSocketServer</b> instantiation from the previous example and pass the <b>handler_factory</b> method as the *handler_factory* parameter:
+Modify the `RSocketServer` instantiation from the previous example and pass the `handler_factory` method as the *handler_factory* parameter:
 
 ```py
 from rsocket.rsocket_server import RSocketServer
@@ -63,7 +63,7 @@ async def run_server():
 
 ## Client side
 
-Let's modify the client side to call this new routed request. For readability and maintainability, we will create a <b>ChatClient</b>
+Let's modify the client side to call this new routed request. For readability and maintainability, we will create a `ChatClient`
 which will wrap the RSocket client and provide the methods for interacting with the server.
 
 ### ChatClient class
@@ -87,14 +87,14 @@ class ChatClient:
         print(f'Server response: {utf8_decode(response.data)}')
 ```
 
-*Lines 7-14* define our new <b>ChatClient</b> which will encapsulate the methods used to interact with the chat server.
+*Lines 7-14* define our new `ChatClient` which will encapsulate the methods used to interact with the chat server.
 
-*Lines 11-14* defines a <b>login</b> method. It uses the <b>composite</b> and <b>route</b> helper methods to create the metadata which will ensure
+*Lines 11-14* defines a <b>login</b> method. It uses the `composite` and `route` helper methods to create the metadata which will ensure
 the payload is routed to the method registered on the server side in the previous step.
 
 ### Use the new ChatClient class
 
-Let's modify the client module to test our new <b>ChatClient</b>:
+Let's modify the client module to test our new `ChatClient`:
 
 ```py
 from rsocket.extensions.mimetypes import WellKnownMimeTypes
@@ -112,4 +112,4 @@ async def main():
 
 *Line 9* changes the *metadata_encoding* type to be COMPOSITE_METADATA. This is required for routing support.
 
-*Lines 10-11* instantiate a <b>ChatClient</b> and call the <b>login</b> method.
+*Lines 10-11* instantiate a `ChatClient` and call the `login` method.

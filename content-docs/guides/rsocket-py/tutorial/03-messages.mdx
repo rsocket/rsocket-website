@@ -21,8 +21,8 @@ class Message:
 ```
 
 *Lines 4-7* defines a frozen dataclass with two fields:
-- <b>user</b> : name of the recipient user
-- <b>content</b> : message text
+- `user` : name of the recipient user
+- `content` : message text
 
 We will use json to serialize the messages for transport. Add the following helper method to <b>shared</b>:
 
@@ -40,7 +40,7 @@ def dataclass_to_payload(obj) -> Payload:
 
 *Lines 5-6* Defines a minimal dataclass json encoder which assumes all the fields in the dataclass are python primitives, or builtin collections of those.
 
-*Lines 8-9* Defines a helper method for creating <b>Payload</b>s containing only data fields.
+*Lines 8-9* Defines a helper method for creating `Payload`s containing only data fields.
 
 ## Server side
 
@@ -56,7 +56,7 @@ class UserSessionData:
     messages: Queue = field(default_factory=Queue)
 ```
 
-*Line 7* defines a <b>messages</b> queue. These are private (and later on channel) messages to the user from other clients.
+*Line 7* defines a `messages` queue. These are private (and later on channel) messages to the user from other clients.
 
 ```py
 from typing import Optional
@@ -100,10 +100,10 @@ class ChatUserSession:
           return create_response()
 ```
 
-*Lines 15-26* define the endpoint for sending messages. The Payload must contain a json serialized <b>Message</b> object.
+*Lines 15-26* define the endpoint for sending messages. The Payload must contain a json serialized `Message` object.
 The recipient's session is found (*Line 23*), and the message is placed in the user's message queue (*Line 24*).
 
-*Line 25* returns an empty <b>Payload</b> future using the <b>create_response</b> helper method.
+*Line 25* returns an empty `Payload` future using the `create_response` helper method.
 
 As a last step on the server side, we register a request-stream endpoint which listens for incoming messages and sends
 them to the client:
@@ -173,7 +173,7 @@ class ChatClient:
                                                      composite(route('message'))))
 ```
 
-*Line 10-11* creates a <b>Payload</b> with the messages and sends it to the 'message' route.
+*Line 10-11* creates a `Payload` with the messages and sends it to the 'message' route.
 
 Next we add a method which will listen for incoming messages:
 
@@ -219,15 +219,15 @@ class ChatClient:
         self._message_subscriber.cancel()
 ```
 
-*Lines 21-31* define the <b>Subscriber</b> which will listen for incoming messages and print them on the client side.
+*Lines 21-31* define the `Subscriber` which will listen for incoming messages and print them on the client side.
 
-An instance of the <b>MessageListener</b> is stored on the client (*Line 33*) to later allow stopping the incoming message stream.
+An instance of the `MessageListener` is stored on the client (*Line 33*) to later allow stopping the incoming message stream.
 
-*Lines 34-36* send the request and subscribe to the resulting <b>Publisher</b>.
+*Lines 34-36* send the request and subscribe to the resulting `Publisher`.
 
 The method in *Lines 38-39* can be used to stop the above message listener.
 
-Finally, let's test the new functionality. Modify the <b>main</b> method in the client:
+Finally, let's test the new functionality. Modify the `main` method in the client:
 
 ```py
 import asyncio

@@ -53,22 +53,22 @@ if __name__ == '__main__':
 
 *Lines 21-22* start a TCP server listening on localhost:6565 using [asyncio](https://docs.python.org/3/library/asyncio-stream.html).
 
-*Lines 18-19* define that the response to this session will be instantiating an <b>RSocketServer</b>.
+*Lines 18-19* define that the response to this session will be instantiating an `RSocketServer`.
 
 The 2 parameters passed are:
 - transport : An instance of a supported connection method. In this case it is an adapter over the TCP connection.
-- handler_factory: A callable which returns an <b>RSocketHandler</b> instance. This will be used to respond to the client's requests.
+- handler_factory: A callable which returns an `RSocketHandler` instance. This will be used to respond to the client's requests.
 
-There is no need to specify anything else here since the <b>RSocketServer</b> starts internal
+There is no need to specify anything else here since the `RSocketServer` starts internal
 tasks which listen for requests, and responds accordingly. The session will close when the connection is lost.
 
-In the example, the handler factory (*Line 12*) is a subclass of <b>BaseRequestHandler</b>.
+In the example, the handler factory (*Line 12*) is a subclass of `BaseRequestHandler`.
 
-*Lines 13-15* define a handler for a *response* request which welcomes the user.
+*Lines 13-15* define a handler for a Response request which welcomes the user.
 
-The username is taken from the <b>data</b> property of the <b>Payload</b>, and a response is created using helper methods:
-- <b>create_future</b> : This creates a future which contains the response data.
-- <b>ensure_bytes</b> : All values in a response must be either bytes or bytearrays. This method encodes string to bytes and assumes utf-8 for the input.
+The username is taken from the `data` property of the `Payload`, and a response is created using helper methods:
+- `create_future` : This creates a future which contains the response data.
+- `ensure_bytes` : All values in a response must be either bytes or bytearrays. This method encodes string to bytes and assumes utf-8 for the input.
 
 Next we will look at a simple client which connects to this server.
 
@@ -100,6 +100,6 @@ if __name__ == '__main__':
     asyncio.run(main())
 ```
 
-*Line 12* instantiates an <b>RSocketClient</b>, and *line 13* sends the request.
+*Line 12* instantiates an `RSocketClient`, and *line 13* sends the request.
 
-The response is a <b>Payload</b> instance, the <b>data</b> of which is printed (*Line 15*).
+The response is a `Payload` instance, the `data` of which is printed (*Line 15*).

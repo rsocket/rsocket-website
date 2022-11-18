@@ -18,10 +18,10 @@ On the server side, the response, stream and channel request types can be simpli
 
 ### Handler interface
 
-The handler class needs to implement <b>ReactivexHandler</b> instead of <b>RequestHandler</b>. Use the
-<b>reactivex_handler_factory</b> to pass the handler to the <b>RSocketServer</b> init argument.
-When using routing, use the same <b>RequestRouter</b> instance, but the return values from the registered methods must
-match the return values specified on <b>ReactivexHandler</b>
+The handler class needs to implement `ReactivexHandler` instead of `RequestHandler`. Use the
+`reactivex_handler_factory` to pass the handler to the `RSocketServer` init argument.
+When using routing, use the same `RequestRouter` instance, but the return values from the registered methods must
+match the return values specified on `ReactivexHandler`
 
 Below is the new session initialization code:
 
@@ -36,7 +36,7 @@ def session(*connection):
 
 ### Request response
 
-For <b>response</b> endpoints, return any <b>Observable</b> with a single value, or a <b>reactivex.empty()</b>
+For <b>response</b> endpoints, return any `Observable` with a single value, or a `reactivex.empty()`
 
 Below is the modified upload endpoint, which has no response:
 
@@ -50,7 +50,7 @@ async def upload_file(payload: Payload, composite_metadata: CompositeMetadata) -
     return reactivex.empty()
 ```
 
-You can return a single value using <b>reactivex.just</b>. See the download endpoint example:
+You can return a single value using `reactivex.just`. See the download endpoint example:
 
 ```py
 import reactivex
@@ -105,7 +105,7 @@ async def messages_incoming() -> Callable[[Subject], Observable]:
 
 #### Observable from async generator
 
-An example of an Observable from an async generator:
+An example of an `Observable` from an [async generator](https://peps.python.org/pep-0525/):
 
 ```py
 from reactivex import Observable, operators
@@ -181,7 +181,7 @@ async def send_statistics() -> ReactivexChannel:
 
 ### Client adapter
 
-On the client side, the <b>ReactiveXClient</b> adapter is used to get <b>Observable</b>s from the requests.
+On the client side, the `ReactiveXClient` adapter is used to get `Observable`s from the requests.
 
 ### Request response
 
