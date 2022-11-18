@@ -48,7 +48,7 @@ First we will add a field on the <b>UserSessionData</b> to store the last statis
 from dataclasses import dataclass
 from typing import Optional
 
-from .shared import ClientStatistics
+from shared import ClientStatistics
 
 @dataclass()
 class UserSessionData:
@@ -65,7 +65,7 @@ We will add two endpoints, one for receiving from the client, and one for reques
 ```py
 import json
 
-from .shared import ClientStatistics
+from shared import ClientStatistics
 from rsocket.helpers import utf8_decode
 from rsocket.payload import Payload
 from rsocket.routing.request_router import RequestRouter
@@ -91,7 +91,7 @@ data is not critical to the application. No return value is required from this m
 import asyncio
 import json
 
-from .shared import ClientStatistics, ServerStatisticsRequest, ServerStatistics, encode_dataclass
+from shared import ClientStatistics, ServerStatisticsRequest, ServerStatistics, encode_dataclass
 from reactivestreams.publisher import DefaultPublisher
 from reactivestreams.subscriber import Subscriber, DefaultSubscriber
 from reactivestreams.subscription import DefaultSubscription
@@ -157,7 +157,7 @@ On the client side we will add the methods to access the new server side functio
 ```py
 import resource
 
-from .shared import ServerStatistics, ClientStatistics
+from shared import ServerStatistics, ClientStatistics
 from rsocket.extensions.helpers import composite, route
 from rsocket.payload import Payload
 
@@ -187,7 +187,7 @@ from rsocket.helpers import utf8_decode
 from rsocket.payload import Payload
 from rsocket.rsocket_client import RSocketClient
 
-from .shared import ServerStatistics
+from shared import ServerStatistics
 
 class ChatClient:
 

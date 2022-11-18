@@ -52,7 +52,7 @@ If the channel doesn't exist yet (*Line 4*) It will be added to the <b>channel_u
 ```py
 import logging
 
-from .shared import Message
+from shared import Message
 
 async def channel_message_delivery(channel_name: str):
     while True:

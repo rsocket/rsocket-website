@@ -77,7 +77,7 @@ from rsocket.helpers import create_response, utf8_decode
 from rsocket.payload import Payload
 from rsocket.routing.request_router import RequestRouter
 
-from .shared import Message
+from shared import Message
 
 class ChatUserSession:
 
@@ -88,9 +88,9 @@ class ChatUserSession:
       async def send_message(payload: Payload) -> Awaitable[Payload]:
           message = Message(**json.loads(payload.data))
 
-          logging.info('Received message for user: %s, channel: %s', message.user, message.channel)
+          logging.info('Received message for user: %s', message.user)
 
-          target_message = Message(self._session.username, message.content, message.channel)
+          target_message = Message(self._session.username, message.content)
 
           session = find_session_by_username(message.user)
           await session.messages.put(target_message)
@@ -107,7 +107,7 @@ them to the client:
 ```py
 import asyncio
 
-from .shared import encode_dataclass
+from shared import encode_dataclass
 from reactivestreams.publisher import DefaultPublisher
 from reactivestreams.subscriber import Subscriber
 from reactivestreams.subscription import DefaultSubscription
@@ -156,7 +156,7 @@ The loop (*Lines 33-36*) is placed in an asyncio.Task which can be canceled by t
 First let's add a client method for sending private messages:
 
 ```py
-from .shared import Message, encode_dataclass
+from shared import Message, encode_dataclass
 from rsocket.extensions.helpers import composite, route
 from rsocket.payload import Payload
 
@@ -178,7 +178,7 @@ import asyncio
 import json
 from typing import Optional
 
-from .shared import Message
+from shared import Message
 from reactivestreams.subscriber import DefaultSubscriber
 from reactivestreams.subscription import DefaultSubscription
 from rsocket.rsocket_client import RSocketClient
@@ -255,7 +255,7 @@ async def main():
 
             await asyncio.sleep(3)
 
-            await user2.stop_listening_for_messages()
+            user2.stop_listening_for_messages()
 ```
 
 In this example, we open two rsocket connections to the server (*lines 10-13* and *lines 14-17*).

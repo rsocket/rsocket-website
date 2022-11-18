@@ -38,7 +38,7 @@ class ChatData:
 Next, define a helper method which extracts the filename from the upload/download payload:
 
 ```py
-from .shared import chat_filename_mimetype
+from shared import chat_filename_mimetype
 from rsocket.extensions.composite_metadata import CompositeMetadata
 from rsocket.helpers import utf8_decode
 
@@ -57,7 +57,7 @@ available files:
 ```py
 from typing import Awaitable
 
-from .shared import chat_filename_mimetype
+from shared import chat_filename_mimetype
 from rsocket.extensions.composite_metadata import CompositeMetadata
 from rsocket.extensions.helpers import composite, metadata_item
 from rsocket.frame_helpers import ensure_bytes
@@ -136,7 +136,7 @@ from rsocket.frame_helpers import ensure_bytes
 from rsocket.helpers import utf8_decode
 from rsocket.payload import Payload
 
-from .shared import chat_filename_mimetype
+from shared import chat_filename_mimetype
 
 class ChatClient:
 
