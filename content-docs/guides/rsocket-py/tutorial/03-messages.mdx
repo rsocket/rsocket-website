@@ -178,7 +178,6 @@ class ChatClient:
 Next we add a method which will listen for incoming messages:
 
 ```py
-import asyncio
 import json
 from typing import Optional
 
@@ -201,23 +200,15 @@ class ChatClient:
 
         class MessageListener(DefaultSubscriber, DefaultSubscription):
             def __init__(self):
-                super().__init__()
-                self.messages_done = asyncio.Event()
 
             def on_next(self, value, is_complete=False):
                 print_message(value.data)
-
-                if is_complete:
-                    self.messages_done.set()
 
             def on_error(self, exception: Exception):
                 print(exception)
 
             def cancel(self):
                 self.subscription.cancel()
-
-            def on_complete(self):
-                self.messages_done.set()
 
         self._message_subscriber = MessageListener()
         self._rsocket.request_stream(
@@ -228,13 +219,13 @@ class ChatClient:
         self._message_subscriber.cancel()
 ```
 
-*Lines 22-40* define the <b>Subscriber</b> which will listen for incoming messages and print them on the client side.
+*Lines 21-31* define the <b>Subscriber</b> which will listen for incoming messages and print them on the client side.
 
-An instance of the <b>MessageListener</b> is stored on the client (*Line 42*) to later allow stopping the incoming message stream.
+An instance of the <b>MessageListener</b> is stored on the client (*Line 33*) to later allow stopping the incoming message stream.
 
-*Lines 43-45* send the request and subscribe to the resulting <b>Publisher</b>.
+*Lines 34-36* send the request and subscribe to the resulting <b>Publisher</b>.
 
-The method in *Lines 47-48* can be used to stop the above message listener.
+The method in *Lines 38-39* can be used to stop the above message listener.
 
 Finally, let's test the new functionality. Modify the <b>main</b> method in the client:
 
