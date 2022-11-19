@@ -108,34 +108,29 @@ async def messages_incoming() -> Callable[[Subject], Observable]:
 An example of an `Observable` from an [async generator](https://peps.python.org/pep-0525/):
 
 ```py
-from reactivex import Observable, operators
-from rsocket.reactivex.back_pressure_publisher import observable_from_async_generator
+from typing import Callable
+
+from reactivex import Observable, operators, Subject
+from rsocket.frame_helpers import ensure_bytes
+from rsocket.payload import Payload
+from rsocket.reactivex.back_pressure_publisher import (from_observable_with_backpressure,
+                                                       observable_from_async_generator)
 
 @router.stream('files')
-async def get_file_names() -> Observable:
+async def get_file_names() -> Callable[[Subject], Observable]:
     async def generator():
         for file_name in chat_data.files.keys():
             yield file_name
 
-    return observable_from_async_generator(generator()).pipe(
-        operators.map(lambda file_name: Payload(ensure_bytes(file_name)))
-    )
+    return from_observable_with_backpressure(
+        lambda backpressure: observable_from_async_generator(generator(), backpressure).pipe(
+            operators.map(lambda file_name: Payload(ensure_bytes(file_name)))
+        ))
 ```
 
 ### Channel
 
-```py
-def new_statistics_data(requested_statistics: ServerStatisticsRequest):
-    statistics_data = {}
-
-    if 'users' in requested_statistics.ids:
-        statistics_data['user_count'] = len(chat_data.user_session_by_id)
-
-    if 'channels' in requested_statistics.ids:
-        statistics_data['channel_count'] = len(chat_data.channel_messages)
-
-    return ServerStatistics(**statistics_data)
-```
+Below is an example of a reactivex backed channel response:
 
 ```py
 import asyncio

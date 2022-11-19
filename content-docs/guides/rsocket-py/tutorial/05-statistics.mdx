@@ -24,7 +24,7 @@ class ServerStatistics:
 @dataclass()
 class ServerStatisticsRequest:
     ids: Optional[List[str]] = field(default_factory=lambda: ['users', 'channels'])
-    period_seconds: Optional[int] = field(default_factory=lambda: 5)
+    period_seconds: Optional[int] = field(default_factory=lambda: 2)
 
 @dataclass(frozen=True)
 class ClientStatistics:
@@ -87,6 +87,23 @@ data is not critical to the application. No return value is required from this m
 
 #### Receive requested statistics
 
+We will add a helper method for creating a new statistics response:
+
+```py
+def new_statistics_data(statistics_request: ServerStatisticsRequest):
+    statistics_data = {}
+
+    if 'users' in statistics_request.ids:
+        statistics_data['user_count'] = len(chat_data.user_session_by_id)
+
+    if 'channels' in statistics_request.ids:
+        statistics_data['channel_count'] = len(chat_data.channel_messages)
+
+    return ServerStatistics(**statistics_data)
+```
+
+Next we define the endpoint for sending statistics to the client:
+
 ```py
 import asyncio
 import json
@@ -123,16 +140,18 @@ class ChatUserSession:
 
                 async def _statistics_sender(self):
                     while True:
-                        await asyncio.sleep(self._requested_statistics.period_seconds)
-                        next_message = ServerStatistics(
-                            user_count=len(chat_data.user_session_by_id),
-                            channel_count=len(chat_data.channel_messages)
-                        )
-                        next_payload = Payload(encode_dataclass(next_message))
-                        self._subscriber.on_next(next_payload)
+                        try:
+                            await asyncio.sleep(self._requested_statistics.period_seconds)
+                            next_message = new_statistics_data(self._requested_statistics)
+
+                            self._subscriber.on_next(dataclass_to_payload(next_message))
+                        except Exception:
+                            logging.error('Statistics', exc_info=True)
 
                 def on_next(self, value: Payload, is_complete=False):
                     request = ServerStatisticsRequest(**json.loads(utf8_decode(value.data)))
+
+                    logging.info(f'Received statistics request {request.ids}, {request.period_seconds}')
 
                     if request.ids is not None:
                         self._requested_statistics.ids = request.ids
