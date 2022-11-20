@@ -4,8 +4,8 @@ title: Request routing
 sidebar_label: Request routing
 ---
 
-The chat application will have various functionality (private messages, channels etc.). Each request to the server will
-be identified by a route (similar to paths in an HTTP URL). To implement this we will use the `RequestRouter` and `RoutingRequestHandler`
+The chat application will have various functionality (e.g. private messages and channels). Each request to the server will
+be identified by a [route](https://github.com/rsocket/rsocket/blob/master/Extensions/Routing.md) (similar to paths in an HTTP URL). To implement this we will use the `RequestRouter` and `RoutingRequestHandler`
 classes.
 
 ## Server side
@@ -36,19 +36,19 @@ def handler_factory() -> RoutingRequestHandler:
     return RoutingRequestHandler(router)
 ```
 
-*Line 10* instantiates the `RequestRouter`. This helper is used as a method decorator to register the route of each request.
-It is similar to Flask and Quart syntax.
+*Line 10* instantiates the `RequestRouter`. This helper is used as a method decorator to register the route of each request
+(it is similar to Flask and Quart syntax).
 
-*Lines 12-15* define the login method and attach it to a request-response with the <b>login</b> route. The method name does not have to match the route.
+*Lines 12-15* define the login method and attach it to a request-response with the <b>login</b> route.
+The method name does not have to match the route.
 
-All methods decorated by the request router accept two optional arguments, payload and composite_metadata. For now, we only pass the payload.
-It is ann instance of a `Payload` class which contains the data and metadata of the request.
-
-Both of these parameters must appear with the exact names as above, as that is how they are passed by the request handler.
+All methods decorated by the request router accept two optional arguments, *payload* and *composite_metadata*. For now, we only pass the payload.
+It is ann instance of a `Payload` class which contains the data and metadata of the request. This argument must appear with the exact names as above,
+as that is how the decorator detects where to pass the payload. The argument type hints are optional.
 
 *Line 17* returns the actual request handler, an instance of `RoutingRequestHandler`, which uses the request router instance.
 
-### Use the new request handler
+### Use the routing request handler
 
 Modify the `RSocketServer` instantiation from the previous example and pass the `handler_factory` method as the *handler_factory* parameter:
 
@@ -89,7 +89,7 @@ class ChatClient:
 
 *Lines 7-14* define our new `ChatClient` which will encapsulate the methods used to interact with the chat server.
 
-*Lines 11-14* defines a <b>login</b> method. It uses the `composite` and `route` helper methods to create the metadata which will ensure
+*Lines 11-14* define a `login` method. It uses the `composite` and `route` helper methods to create the metadata which will ensure
 the payload is routed to the method registered on the server side in the previous step.
 
 ### Use the new ChatClient class

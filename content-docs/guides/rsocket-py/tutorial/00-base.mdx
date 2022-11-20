@@ -62,9 +62,16 @@ The 2 parameters passed are:
 There is no need to specify anything else here since the `RSocketServer` starts internal
 tasks which listen for requests, and responds accordingly. The session will close when the connection is lost.
 
-In the example, the handler factory (*Line 12*) is a subclass of `BaseRequestHandler`.
+In the example, the handler factory (*Line 12*) is a subclass of `BaseRequestHandler`. In this class, we can implement any of the methods
+which handle the 4 RSocket request types:
+- `request_response`
+- `request_stream`
+- `request_channel`
+- `fire_and_forget`
 
-*Lines 13-15* define a handler for a Response request which welcomes the user.
+Check the `BaseRequestHandler` for other methods which can be implemented.
+
+*Lines 13-15* implement the `request_response` handler, which welcomes the user.
 
 The username is taken from the `data` property of the `Payload`, and a response is created using helper methods:
 - `create_future` : This creates a future which contains the response data.
