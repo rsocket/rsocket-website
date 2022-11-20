@@ -153,6 +153,9 @@ class ChatUserSession:
             return StreamFromGenerator(lambda: generator)
 ```
 
+*Lines 6-11* define an endpoint for getting a list of channels. It uses the `StreamFromGenerator` helper. Note that the argument to this class
+is a factory method for the [generator](https://docs.python.org/3/glossary.html#term-generator), not the generator itself.
+
 ### Get channel users
 
 ```py
@@ -175,6 +178,10 @@ class ChatUserSession:
 
             return StreamFromGenerator(lambda: generator)
 ```
+*Lines 6-11* define an endpoint for getting a list of users in a given channel. The `find_username_by_session` helper method is used to
+convert the session ids to usernames.
+
+If the channel does not exist (*Line 10*) the `EmptyStream` helper can be used as a response.
 
 ## Client side
 
