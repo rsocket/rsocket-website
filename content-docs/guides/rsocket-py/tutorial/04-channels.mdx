@@ -12,7 +12,7 @@ See resulting code on [GitHub](https://github.com/rsocket/rsocket-py/tree/master
 
 ## Shared code
 
-First we will add the channel property to the `Message` class:
+Let's add a `channel` property to the `Message` class. It will contain the name of the channel the message is intended for.
 
 ```py
 class Message:
@@ -23,7 +23,7 @@ class Message:
 ## Server side
 
 ### Data-classes
-First we will add functionality to store the channel state. Add the following fields to the `ChatData` class:
+We will add functionality to store the channel state. Add the following fields to the `ChatData` class:
 
 ```py
 from asyncio import Queue
@@ -39,7 +39,7 @@ class ChatData:
     channel_messages: Dict[str, Queue] = field(default_factory=lambda: defaultdict(Queue))
 ```
 
-In the `channel_users` dict, the keys are channel names, and the value is a set of user session ids. A [WeakSet](https://docs.python.org/3/library/weakref.html#weakref.WeakSet) is used to automatically remove logged out users.
+In the `channel_users` dict, the keys are channel names, and the value is a set of user session ids. A [WeakSet](https://docs.python.org/3/library/weakref.html#weakref.WeakSet) is used to automatically remove logged-out users.
 
 In the `channel_messages` dict, the keys are the channel names, and the value is a [Queue](https://docs.python.org/3/library/asyncio-queue.html) of messages sent by users to the channel.
 

@@ -23,10 +23,10 @@ class Message:
 ```
 
 *Lines 4-7* defines a frozen dataclass with two fields:
-- `user` : name of the recipient user
-- `content` : message text
+- `user` : name of the recipient user when sending a message, and the name of the sender when receiving it.
+- `content` : the message body.
 
-We will use json to serialize the messages for transport. Add the following helper method to <b>shared</b>:
+We will use json to serialize the messages for transport. Add the following helper method to the <b>shared</b> module:
 
 ```py
 import json
