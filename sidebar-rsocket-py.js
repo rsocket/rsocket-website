@@ -1,10 +1,7 @@
 module.exports = [
   "guides/rsocket-py/index",
+  "guides/rsocket-py/simple",
   {
-    "Getting started": [
-
-      "guides/rsocket-py/simple/index"
-    ],
     "Tutorial":
       [
         "guides/rsocket-py/tutorial/index",
@@ -34,10 +31,6 @@ module.exports = [
       "guides/rsocket-py/server/rsocket-websocket-server",
     ]
   },
-  {
-    "RxPy": [
-      "guides/rsocket-py/rxpy/introduction"
-    ]
-  },
+  "guides/rsocket-py/rxpy",
   "guides/rsocket-py/cli"
 ];
