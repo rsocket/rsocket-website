@@ -62,13 +62,19 @@ The following example can be run against the example server from the rsocket-py 
 `examples/server_with_routing.py`. Run that script with --help to show options.
 By default, it will start a TCP server on port 6565.
 
-Request-Response to TCP server on localhost:6464 with route 'single_request':
+Request-Response to TCP server on localhost:6565 with route 'single_request':
 
 ```
-rsocket-py --route single_request --data "simple request" --request tcp://localhost:6464
+rsocket-py --route single_request --data "simple request" --request tcp://localhost:6565
 ```
 
-Request-Stream to WSS server on localhost:6464 with route 'stream', without verifying ssl, and with user/password authentication:
+For the following example, start the server_with_routing.py server with the following flags:
+
+```
+python3 ./examples/server_with_routing.py --transport wss --with-ssl
+```
+
+Request-Stream to WSS server on localhost:6565 with route 'stream', without verifying ssl, and with user/password authentication:
 
 ```
 rsocket-py --authSimple abcde:12345 --route stream --allowUntrustedSsl --stream wss://localhost:6565
