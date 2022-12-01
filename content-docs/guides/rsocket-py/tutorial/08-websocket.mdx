@@ -25,8 +25,7 @@ from aiohttp import web
 from rsocket.rsocket_server import RSocketServer
 from rsocket.transports.aiohttp_websocket import TransportAioHttpWebsocket
 
-
-async def run_server():
+def run_server():
     def websocket_handler_factory(**kwargs):
         async def websocket_handler(request):
             websocket = web.WebSocketResponse()
@@ -44,13 +43,19 @@ async def run_server():
     app.add_routes([web.get('/chat', websocket_handler_factory(handler_factory=handler_factory,
                                                                fragment_size_bytes=1_000_000))])
 
-    await web._run_app(app, port=6565)
-```
-*Lines 21-25* set up the web server and attach the application to the */chat* url. This is done using the
-`websocket_handler_factory` helper defined in *Lines 7-19*.
+    web.run_app(app, port=6565)
 
-*Lines 10-11* set up the websocket, and *lines 13-14* set up the `TransportAioHttpWebsocket` transport adapter for it,
-and pass it to an `RSocketServer`. *Line 15* listens for incoming websocket requests.
+if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
+    run_server()
+```
+*Lines 20-24* set up the web server and attach the application to the */chat* url. This is done using the
+`websocket_handler_factory` helper defined in *Lines 6-18*.
+
+*Lines 9-10* set up the websocket, and *lines 12-13* set up the `TransportAioHttpWebsocket` transport adapter for it,
+and pass it to an `RSocketServer`. *Line 14* listens for incoming websocket requests.
+
+Since `aiohttp` controls the event loop, *Lines 26-28* are modified to run the `run_server` method directly.
 
 ## Client side
 
@@ -83,7 +88,7 @@ this time using the `TransportAioHttpClient` transport. Note that the server and
 
 *Line 7* yields the client. Make sure to annotate the method with [asynccontextmanager](https://docs.python.org/3/library/contextlib.html#contextlib.asynccontextmanager) as shown in *Line 9*
 
-Finally we will update the `main()` method to use the new client:
+Finally, we will update the `main()` method to use the new client:
 
 ```py
 async def main():
