@@ -1,5 +1,22 @@
 module.exports = [
   "guides/rsocket-py/index",
+  "guides/rsocket-py/simple",
+  {
+    "Tutorial":
+      [
+        "guides/rsocket-py/tutorial/index",
+        "guides/rsocket-py/tutorial/base",
+        "guides/rsocket-py/tutorial/request_routing",
+        "guides/rsocket-py/tutorial/user_session",
+        "guides/rsocket-py/tutorial/messages",
+        "guides/rsocket-py/tutorial/channels",
+        "guides/rsocket-py/tutorial/files",
+        "guides/rsocket-py/tutorial/statistics",
+        "guides/rsocket-py/tutorial/reactivex",
+        "guides/rsocket-py/tutorial/websocket"
+      ]
+
+  },
   {
     "Client": [
       "guides/rsocket-py/client/introduction",
@@ -14,10 +31,6 @@ module.exports = [
       "guides/rsocket-py/server/rsocket-websocket-server",
     ]
   },
-  {
-    "RxPy": [
-      "guides/rsocket-py/rxpy/introduction"
-    ]
-  },
+  "guides/rsocket-py/rxpy",
   "guides/rsocket-py/cli"
 ];

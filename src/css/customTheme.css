@@ -31,3 +31,23 @@ html[data-theme='dark'] .hero {
 .header__logo {
   max-width: 30rem;
 }
+
+
+
+pre.language-py code::before {
+  counter-reset: listing;
+}
+
+pre.language-py code > span {
+  counter-increment: listing;
+}
+
+pre.language-py code > span::before {
+  color: #9a9a9a;
+  content: counter(listing) ". ";
+  display: inline-block;
+  width: 3em;
+  margin-right: 1em;
+  margin-left: auto;
+  text-align: right;
+}
