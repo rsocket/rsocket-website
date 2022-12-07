@@ -72,7 +72,7 @@ module.exports = {
           "customCss": path.resolve("./src/css/customTheme.css"),
         },
         "gtag": {
-          "trackingID": "UA-122364851-2"
+          "trackingID": "UA-251236997-1"
         }
       }
     ]
@@ -147,8 +147,8 @@ module.exports = {
               "to": "https://twitter.com/RSocketIO"
             },
             {
-              "label": "RSocket Java Gitter",
-              "to": "https://gitter.im/rsocket/rsocket-java"
+              "label": "Gitter",
+              "to": "https://gitter.im/rsocket"
             }
           ]
         },
