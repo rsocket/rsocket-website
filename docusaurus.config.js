@@ -72,6 +72,9 @@ module.exports = {
         },
         "theme": {
           "customCss": path.resolve("./src/css/customTheme.css"),
+        },
+        "gtag": {
+          "trackingID": "UA-122364851-2"
         }
       }
     ]
@@ -94,7 +97,7 @@ module.exports = {
       "theme": require("prism-react-renderer/themes/vsDark"),
       "additionalLanguages": ["java", "kotlin", "python"],
     },
-    "metadatas": [
+    "metadata": [
       { property: "og:image", content: `${deployUrl}/img/social/rsocket-io-facebook-og.jpg` },
       { name: "twitter:image", content: `${deployUrl}/img/social/rsocket-io-twitter-card.jpg` },
       { name: "twitter:site", content: "@rsocket" },
@@ -144,9 +147,6 @@ module.exports = {
         "alt": "RSocket Logo",
         "src": "img/r-socket-pink.svg"
       }
-    },
-    "gtag": {
-      "trackingID": "UA-122364851-2"
     }
   }
 };
