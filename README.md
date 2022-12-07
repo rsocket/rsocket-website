@@ -1,6 +1,6 @@
 # RSocket Website
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/8e20ceda-df0e-4ebe-a730-cde1c98a8c7d/deploy-status)](https://app.netlify.com/sites/rsocket/deploys)
+[![Broken Links Checker](https://github.com/rsocket/rsocket-website/actions/workflows/broken-links-checker.yml/badge.svg)](https://github.com/rsocket/rsocket-website/actions/workflows/broken-links-checker.yml)
 
 Builds and deploys the [rsocket.io](http://rsocket.io) website hosted on GitHub Pages.
 
