@@ -5,7 +5,7 @@ on:
     - cron: "0 0 * * *"
   workflow_dispatch:
   workflow_run:
-    workflows: [pages build and deployment]
+    workflows: [pages-build-deployment]
     types:
       - completed
 
