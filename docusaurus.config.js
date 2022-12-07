@@ -125,7 +125,12 @@ module.exports = {
           "to": "/help",
           "label": "Help",
           "position": "left"
-        }
+        },
+        {
+          "to": "https://crowdfunding.lfx.linuxfoundation.org/projects/bb4066fb-8137-4557-8224-f17dba073494",
+          "label": "Funding",
+          "position": "left"
+        },
       ]
     },
     "footer": {
