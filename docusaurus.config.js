@@ -117,8 +117,8 @@ module.exports = {
           "position": "left"
         },
         {
-          "to": "/help",
-          "label": "Help",
+          "to": "/community",
+          "label": "Community",
           "position": "left"
         },
         {
