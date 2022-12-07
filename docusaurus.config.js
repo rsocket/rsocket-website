@@ -147,8 +147,8 @@ module.exports = {
               "to": "https://twitter.com/RSocketIO"
             },
             {
-              "label": "RSocket Java Gitter",
-              "to": "https://gitter.im/rsocket/rsocket-java"
+              "label": "Gitter",
+              "to": "https://gitter.im/rsocket"
             }
           ]
         },
