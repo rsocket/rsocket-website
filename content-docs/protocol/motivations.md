@@ -1,5 +1,5 @@
 ---
-slug: /about/motivations
+slug: /protocol/motivations
 title: Motivations
 sidebar_label: Motivations
 ---

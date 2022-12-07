@@ -1,8 +1,8 @@
-const aboutItems = [
-  "about/faq",
-  "about/motivations",
-  "about/protocol",
-  "about/implementations"
+const protocolItems = [
+  "protocol/faq",
+  "protocol/motivations",
+  "protocol/protocol",
+  "protocol/implementations"
 ];
 
 const guideItems = [
@@ -16,12 +16,12 @@ const guideItems = [
 module.exports = {
   "docs": [
     {
-      "About": aboutItems
+      "Protocol": protocolItems
     },
     {
       "Guides": guideItems
     }
   ],
-  "about": aboutItems,
+  "protocol": protocolItems,
   "guides": guideItems,
 };

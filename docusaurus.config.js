@@ -107,8 +107,8 @@ module.exports = {
       },
       "items": [
         {
-          "to": "about/faq",
-          "label": "About",
+          "to": "protocol/faq",
+          "label": "Protocol",
           "position": "left"
         },
         {
