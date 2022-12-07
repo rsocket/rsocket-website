@@ -1,0 +1,16 @@
+name: Broken Links Checker
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  check-for-broken-links:
+    uses: ScholliYT/Broken-Links-Crawler-Action@v3
+    with:
+      website_url: 'https://rsocket.io'
+      exclude_url_prefix: 'mailto:,https://www.linkedin.com,https://linkedin.com'
+      verbose: 'true'
+      max_retry_time: 30
+      max_retries: 5
+      max_depth: 1
