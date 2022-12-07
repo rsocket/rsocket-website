@@ -139,8 +139,16 @@ module.exports = {
           "title": "Community",
           "items": [
             {
+              "label": "Funding",
+              "to": "https://crowdfunding.lfx.linuxfoundation.org/projects/bb4066fb-8137-4557-8224-f17dba073494"
+            },
+            {
               "label": "Twitter",
               "to": "https://twitter.com/RSocketIO"
+            },
+            {
+              "label": "RSocket Java Gitter",
+              "to": "https://gitter.im/rsocket/rsocket-java"
             }
           ]
         },
