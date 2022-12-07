@@ -22,14 +22,12 @@ module.exports = {
   "projectName": process.env.PROJECT_NAME || "rsocket-website",
   "noIndex": false,
   "scripts": [
-    "https://docusaurus.io/slash.js",
     {
       "src": "https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js",
       "async": true
     }
   ],
   "stylesheets": [
-    "https://docusaurus.io/style.css",
     {
       "href": "https://css.link",
       "type": "text/css"
