@@ -5,9 +5,10 @@ on:
     - cron: "0 0 * * *"
   workflow_dispatch:
   workflow_run:
-    workflows: [Deploy]
+    workflows: [pages build and deployment]
     types:
       - completed
+
 jobs:
   check-for-broken-links:
     runs-on: ubuntu-latest
@@ -16,7 +17,7 @@ jobs:
         uses: ScholliYT/Broken-Links-Crawler-Action@v3
         with:
           website_url: 'https://rsocket.io'
-          exclude_url_prefix: 'mailto:,https://www.linkedin.com,https://linkedin.com,https://www.googletagmanager.com',
+          exclude_url_prefix: 'mailto:,https://www.linkedin.com,https://linkedin.com,https://www.googletagmanager.com'
           verbose: 'true'
           max_retry_time: 30
           max_retries: 5
