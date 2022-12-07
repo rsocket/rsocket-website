@@ -117,11 +117,6 @@ module.exports = {
           "position": "left"
         },
         {
-          "href": "https://github.com/rsocket",
-          "label": "GitHub",
-          "position": "left"
-        },
-        {
           "to": "/help",
           "label": "Help",
           "position": "left"
@@ -129,6 +124,11 @@ module.exports = {
         {
           "to": "https://crowdfunding.lfx.linuxfoundation.org/projects/bb4066fb-8137-4557-8224-f17dba073494",
           "label": "Funding",
+          "position": "left"
+        },
+        {
+          "href": "https://github.com/rsocket",
+          "label": "GitHub",
           "position": "left"
         },
       ]
