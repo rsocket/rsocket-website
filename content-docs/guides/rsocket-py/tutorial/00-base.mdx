@@ -73,11 +73,14 @@ which handle the 4 RSocket request types:
 
 Check the `BaseRequestHandler` for other methods which can be implemented.
 
-*Lines 13-15* implement the `request_response` handler, which welcomes the user.
+*Lines 13-15* implement the `request_response` handler, which welcomes the user. This method receives a single argument containing the payload.
+It is an instance of a `Payload` class which contains the data and metadata of the request. The username is taken from the `data` property
+of the `Payload`. The `data` property's type is always `bytes`. In our case it is a UTF8 encoded string, so we will use the `utf8_decode`
+helper to decode it.
 
-The username is taken from the `data` property of the `Payload`, and a response is created using helper methods:
+A response is created using helper methods:
 - `create_future` : This creates a future which contains the response data.
-- `ensure_bytes` : All values in a response must be either bytes or bytearrays. This method encodes string to bytes and assumes utf-8 for the input.
+- `ensure_bytes` : All values in a response must be of type `bytes`. This method encodes string to bytes and assumes UTF8 for the input.
 
 Next we will look at a simple client which connects to this server.
 
@@ -109,6 +112,10 @@ if __name__ == '__main__':
     asyncio.run(main())
 ```
 
-*Line 12* instantiates an `RSocketClient`, and *line 13* sends the request.
+*Line 10* instantiates an asyncio TCP connection to localhost on port 6565.
+
+*Line 12* instantiates an `RSocketClient` using a `with` statement, to ensure the client closes the TCP connection when done.
+
+*Line 13* sends the request with a `Payload` containing the username as the data. The `data` value must be of type `bytes`.
 
 The response is a `Payload` instance, the `data` of which is printed (*Line 15*).

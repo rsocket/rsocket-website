@@ -8,6 +8,8 @@ In this section we will add basic channel support:
 - Joining and leaving channels
 - Sending messages to channels
 
+We will also cover automatically decoding the payload data based on method argument type-hints.
+
 See resulting code on [GitHub](https://github.com/rsocket/rsocket-py/tree/master/examples/tutorial/step4)
 
 ## Shared code
@@ -185,7 +187,64 @@ convert the session ids to usernames.
 
 If the channel does not exist (*Line 10*) the `EmptyStream` helper can be used as a response.
 
+### Simplify route methods
+
+Up until now, all routed methods received the `Payload` as an argument and extracted and decoded the data property.
+There is a simpler method for doing this. By passing a `payload_mapper` argument to the RequestRouter and specifying a
+type-hint on the route method argument, the method arguments will be automatically decoded.
+We will modify the code and add this functionality.
+
+In the `shared` module add the following helper method:
+
+```py
+from rsocket.payload import Payload
+from rsocket.helpers import utf8_decode
+
+def decode_payload(cls, payload: Payload):
+    data = payload.data
+
+    if cls is bytes:
+        return data
+
+    if cls is str:
+        return utf8_decode(data)
+
+    return decode_dataclass(data, cls)
+```
+
+This method converts the payload data to some type hints. It assumes that the payload data is either:
+- `bytes`, in which case no transformation is applied (*Lines 7-8*)
+- `str`, in which case a utf8 decode is applied (*Lines 10-11*)
+- A `dataclass` which, which is decoded using a previously define helper (See [Private Message](/guides/rsocket-py/tutorial/messages#shared)) (*Line 13*)
+
+Next we will pass this method as an argument to the `RequestRouter`:
+
+```py
+router = RequestRouter(payload_mapper=decode_payload)
+```
+
+Once this is done, the signature of the routed methods may be simplified. For example the `join_channel` method:
+
+```py
+@router.response('channel.join')
+async def join_channel(channel_name: str) -> Awaitable[Payload]:
+    # channel_name = payload.data.decode('utf-8') # this can be removed
+    ...
+```
+
+The `send_message` method can be simplified to:
+
+```py
+@router.response('message')
+async def send_message(message: Message) -> Awaitable[Payload]:
+    # message = Message(**json.loads(payload.data)) # this can be removed
+    logging.info('Received message for user: %s, channel: %s', message.user, message.channel)
+    ...
+```
+
 ## Client side
+
+### Channel requests
 
 We will add the methods on the `ChatClient` to interact with the new server functionality:
 
@@ -217,8 +276,8 @@ class ChatClient:
             await self._rsocket.request_response(Payload(encode_dataclass(Message(channel=channel, content=content)),
                                                      composite(route('message'))))
 
-    async def list_channels(self) -> List[str]:
-        request = Payload(metadata=composite(route('channels')))
+    async def list_channel_users(self, channel_name: str):
+        request = Payload(ensure_bytes(channel_name), composite(route('channel.users')))
         response = await AwaitableRSocket(self._rsocket).request_stream(request)
         return list(map(lambda _: utf8_decode(_.data), response))
 
@@ -241,6 +300,8 @@ def print_message(data: bytes):
     message = Message(**json.loads(data))
     print(f'{self._username}: from {message.user} ({message.channel}): {message.content}')
 ```
+
+### Test the new functionality
 
 Let's test the new functionality using the following code:
 
