@@ -114,7 +114,7 @@ if __name__ == '__main__':
 
 *Line 10* instantiates an asyncio TCP connection to localhost on port 6565.
 
-*Line 12* instantiates an `RSocketClient` using a `with` statement, to ensure the client closes the TCP connection when done.
+*Line 12* instantiates an `RSocketClient` using an `async with` statement, to ensure the client closes the TCP connection when done.
 
 *Line 13* sends the request with a `Payload` containing the username as the data. The `data` value must be of type `bytes`.
 

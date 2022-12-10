@@ -49,16 +49,17 @@ The `RequestRouter` has a decorator method for each RSocket request type:
 - `fire_and_forget`
 - `metadata_push`
 
-All of the above methods receive a single argument, a string representing the route.
+All of the above methods receive a single argument, a string representing the route. The decorators may be applied multiple times
+which allows for aliases for the same route.
 
 *Lines 12-15* define the login method and attach it to a request-response with the <b>login</b> route.
 The method name does not have to match the route.
 
 All methods decorated by the request router accept two optional arguments:
-- Any argument named *composite_metadata* (regardless of type-hint) will receive a `CompositeMetadata` instance containing parsed composite metadata
-- Any other argument without a type-hint will receive the `Payload`
+- Any argument named *composite_metadata* (regardless of type-hint), or type-hinted with `CompositeMetadata` will receive a `CompositeMetadata` instance containing parsed composite metadata
+- Any other argument without a type-hint, or type-hinted with `Payload` will receive the request's payload
 
-The `RequestRouter` has additional functionality which will be covered in later sections of the guide.
+The `RequestRouter` has additional functionality which will be covered in later sections.
 
 *Line 17* returns the actual request handler, an instance of `RoutingRequestHandler`, which uses the request router instance.
 

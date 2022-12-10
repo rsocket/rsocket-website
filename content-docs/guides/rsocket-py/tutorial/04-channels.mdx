@@ -190,11 +190,11 @@ If the channel does not exist (*Line 10*) the `EmptyStream` helper can be used a
 ### Simplify route methods
 
 Up until now, all routed methods received the `Payload` as an argument and extracted and decoded the data property.
-There is a simpler method for doing this. By passing a `payload_mapper` argument to the RequestRouter and specifying a
+There is a simpler method for doing this. By passing a `payload_mapper` to the RequestRouter and specifying a
 type-hint on the route method argument, the method arguments will be automatically decoded.
 We will modify the code and add this functionality.
 
-In the `shared` module add the following helper method:
+In the `shared` module add the following helper method, which will be used as the `payload_mapper`:
 
 ```py
 from rsocket.payload import Payload
@@ -212,7 +212,7 @@ def decode_payload(cls, payload: Payload):
     return decode_dataclass(data, cls)
 ```
 
-This method converts the payload data to some type hints. It assumes that the payload data is either:
+This method converts the payload data according to some type hints. It assumes that the payload data can be converted to either:
 - `bytes`, in which case no transformation is applied (*Lines 7-8*)
 - `str`, in which case a utf8 decode is applied (*Lines 10-11*)
 - A `dataclass` which, which is decoded using a previously define helper (See [Private Message](/guides/rsocket-py/tutorial/messages#shared)) (*Line 13*)
@@ -223,7 +223,7 @@ Next we will pass this method as an argument to the `RequestRouter`:
 router = RequestRouter(payload_mapper=decode_payload)
 ```
 
-Once this is done, the signature of the routed methods may be simplified. For example the `join_channel` method:
+Once this is done, the signature of the routed methods may be simplified. For example the `join_channel` method can be simplified to:
 
 ```py
 @router.response('channel.join')
@@ -232,7 +232,7 @@ async def join_channel(channel_name: str) -> Awaitable[Payload]:
     ...
 ```
 
-The `send_message` method can be simplified to:
+and the `send_message` method can be simplified to:
 
 ```py
 @router.response('message')

@@ -26,7 +26,7 @@ class Message:
 - `user` : name of the recipient user when sending a message, and the name of the sender when receiving it.
 - `content` : the message body.
 
-We will use json to serialize the messages for transport. Add the following helper methods to the <b>shared</b> module:
+We will use [json](https://docs.python.org/3/library/json.html) to serialize the messages for transport. Add the following helper methods to the <b>shared</b> module:
 
 ```py
 import json
@@ -170,10 +170,10 @@ class ChatUserSession:
 
 The only method on the `Publisher` interface is `subscribe` (*Lines 25-28*), which is the action taken upon the client sending a request to the route.
 The `subscriber` argument represents the client side. In this method an asyncio [Task](https://docs.python.org/3/library/asyncio-task.html#asyncio.Task) is started (*Line 28*)
-which continuously sends the connected client the messages intended for that user from the server side session queue (*Lines 30-34*)
+which continuously sends the subscriber the messages intended for that user from the server side session queue (*Lines 30-34*)
 
 The same class will be used for canceling the stream (*Lines 22-23*), if triggered by the client. This is provided by the `Subscription` interface which
-is connected to the client on *Line 27*.
+is provided to the client on *Line 27*.
 
 ## Client side
 

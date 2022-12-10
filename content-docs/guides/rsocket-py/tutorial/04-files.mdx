@@ -100,7 +100,7 @@ and set and get the file content from the `chat_data` storage respectively.
 In this section we introduce the second argument which can be passed to routed endpoints. If the session is set up to use
 composite metadata, the `composite_metadata` parameter will contain a parsed structure of the metadata in the request payload.
 
-Line 36 uses the `StreamFromGenerator` helper which creates a stream `Publisher` from a generator factory.
+Line 36 uses the `StreamFromGenerator` helper which creates a stream `Publisher`/`Subscription` from a generator factory.
 
 The generator must return a tuple of two values for each iteration:
 - Payload instance
