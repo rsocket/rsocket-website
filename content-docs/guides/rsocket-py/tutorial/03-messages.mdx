@@ -74,14 +74,15 @@ class UserSessionData:
 ```py
 from typing import Optional
 
-from more_itertools import first
-
 def find_session_by_username(username: str) -> Optional[UserSessionData]:
-    return first((session for session in chat_data.user_session_by_id.values() if
-                  session.username == username), None)
+    try:
+        return next(session for session in chat_data.user_session_by_id.values() if
+                    session.username == username)
+    except StopIteration:
+        return None
 ```
 
-*Lines 5-7* define a helper for looking up a user's session by username. This will be used to deliver private messages.
+*Lines 3-8* define a helper for looking up a user's session by username. This will be used to deliver private messages.
 
 ### Send messages
 
