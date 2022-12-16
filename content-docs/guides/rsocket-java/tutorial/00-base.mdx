@@ -27,64 +27,59 @@ package io.rsocket.guide.step0;
 
 import io.rsocket.Payload;
 import io.rsocket.RSocket;
+import io.rsocket.SocketAcceptor;
 import io.rsocket.core.RSocketServer;
-import io.rsocket.frame.decoder.PayloadDecoder;
 import io.rsocket.transport.netty.server.TcpServerTransport;
 import io.rsocket.util.DefaultPayload;
 import reactor.core.publisher.Mono;
 
-import java.util.Objects;
-
 public class ServerApplication {
 
     public static void main(String[] args) {
-        final var rSocketServer = RSocketServer.create()
-                .acceptor((setup, sendingSocket) -> Mono.just(new RSocket() {
-                    public Mono<Payload> requestResponse(String route, Payload payload) {
-                        return Mono.just(DefaultPayload.create("Welcome to chat, " + payload.getDataUtf8()));
-                    }
-                }));
-
         final var transport = TcpServerTransport.create(6565);
-        Objects.requireNonNull(rSocketServer.bind(transport)
-                        .block())
+
+        final SocketAcceptor socketAcceptor = (setup, sendingSocket) -> Mono.just(new RSocket() {
+            public Mono<Payload> requestResponse(Payload payload) {
+                return Mono.just(DefaultPayload.create("Welcome to chat, " + payload.getDataUtf8()));
+            }
+        });
+
+        RSocketServer.create()
+                .acceptor(socketAcceptor)
+                .bind(transport)
+                .block()
                 .onClose()
                 .block();
     }
 }
 ```
 
-*Lines 16-22* Define the RSocket server with a single response endpoint at *Lines *18-20*.
+*Lines 22-27* start an RSocket TCP server listening on localhost:6565.
 
-*Line 19* Takes the username from the `Payload` instance's data and returns it to the client with a "welcome" message.
-
-*Lines 25-29* start a TCP server listening on localhost:6565.
-
-** Python **
 The 2 parameters passed are:
-- transport : An instance of a supported connection method. In this case it is an adapter over the TCP connection.
-- handler_factory: A callable which returns an `RSocketHandler` instance. This will be used to respond to the client's requests.
+- transport : An instance of a supported connection method. In this case it is at instance of `TcpServerTransport` created in *Line 14*.
+- socketAcceptor: A callable which returns an `RSocket` instance wrapped in a `Mono`. This will be used to respond to the client's requests.
 
-There is no need to specify anything else here since the `RSocketServer` starts internal
-tasks which listen for requests, and responds accordingly. The session will close when the connection is lost.
+*Lines 16-20* Define the `RSocket` service with a single `requestResponse` endpoint at *Lines *17-19*.
 
-In the example, the handler factory (*Line 12*) is a subclass of `BaseRequestHandler`. In this class, we can implement any of the methods
-which handle the 4 RSocket request types:
-- `request_response`
-- `request_stream`
-- `request_channel`
-- `fire_and_forget`
+The `requestResponse` method receives a single argument containing the payload.
+It is an instance of a `Payload` class which contains the data and metadata of the request. The data property is assumed to contain
+a UTF-8 encoded string of the username, so is retrieved using `getDataUtf8`.
 
-Check the `BaseRequestHandler` for other methods which can be implemented.
-
-*Lines 13-15* implement the `request_response` handler, which welcomes the user. This method receives a single argument containing the payload.
-It is an instance of a `Payload` class which contains the data and metadata of the request. The username is taken from the `data` property
-of the `Payload`. The `data` property's type is always `bytes`. In our case it is a UTF8 encoded string, so we will use the `utf8_decode`
-helper to decode it.
+*Line 18* Takes the username from the `Payload` instance's data and returns it to the client with a "welcome" message.
 
 A response is created using helper methods:
-- `create_future` : This creates a future which contains the response data.
-- `ensure_bytes` : All values in a response must be of type `bytes`. This method encodes string to bytes and assumes UTF8 for the input.
+- `DefaultPayload::create` : This creates a payload which is the standard object which wraps all data transferred over RSocket. In our case, only the data property is set.
+- `Mono::just` : All RSocket responses must be in the form of streams, either a `Flux` or a `Mono`.
+
+In the example, only the `requestResponse` method of `RSocket` is overridden. In this class, we can override the methods
+which handle the 4 RSocket request types:
+- `requestResponse`
+- `requestStream`
+- `requestChannel`
+- `fireAndForget`
+
+Check the `RSocket` for other methods which can be implemented.
 
 Next we will look at a simple client which connects to this server.
 
@@ -97,9 +92,7 @@ Below is the code for the <b>ClientApplication</b> class:
 ```java
 package io.rsocket.guide.step0;
 
-import io.rsocket.Payload;
 import io.rsocket.core.RSocketConnector;
-import io.rsocket.metadata.WellKnownMimeType;
 import io.rsocket.transport.netty.client.TcpClientTransport;
 import io.rsocket.util.DefaultPayload;
 
@@ -108,23 +101,27 @@ import java.time.Duration;
 public class ClientApplication {
 
     public static void main(String[] args) {
+        final var transport = TcpClientTransport.create("localhost", 6565);
+
         final var rSocket = RSocketConnector.create()
-                .connect(TcpClientTransport.create("localhost", 6565))
+                .connect(transport)
                 .block();
 
-        final Payload payload = DefaultPayload.create("George");
+        final var payload = DefaultPayload.create("George");
+
         rSocket.requestResponse(payload)
                 .doOnNext(response -> System.out.println(response.getDataUtf8()))
                 .block(Duration.ofMinutes(1));
     }
-
 }
 ```
 
-*Line 10* instantiates an asyncio TCP connection to localhost on port 6565.
+*Line 12* instantiates a TCP connection to localhost on port 6565, similar to the one in `ServerApplication`.
 
-*Line 12* instantiates an `RSocketClient` using an `async with` statement, to ensure the client closes the TCP connection when done.
+*Lines 14-16* instantiates an `RSocket` client.
 
-*Line 13* sends the request with a `Payload` containing the username as the data. The `data` value must be of type `bytes`.
+*Line 18* Wraps the username "George" which the client will send to the server in a `Payload` using the `DefaultPayload.create` factory method
 
-The response is a `Payload` instance, the `data` of which is printed (*Line 15*).
+Finally, *Line 20* sends the request to the server and prints (*Line 21*) the received response.
+
+Since RSocket is reactive, and we want to wait for the request to finish before quitting, a call to `block(Duration.ofMinutes(1))` is added to block for 1 minute.
