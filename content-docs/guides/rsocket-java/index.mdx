@@ -1,0 +1,51 @@
+---
+slug: /guides/rsocket-java
+title: rsocket-java
+sidebar_label: Introduction
+---
+
+:::caution
+The python package API is not stable. There may be changes until version 1.0.0.
+:::
+
+The python `rsocket` package implements the 1.0 version of the [RSocket protocol](/about/protocol)
+(excluding "resume" functionality) and is designed for use in python >= 3.8 using asyncio.
+
+## Guides
+
+See [Quick Start](/guides/rsocket-py/simple) for a short getting started guide, and [Tutorial](/guides/rsocket-py/tutorial) for a more in depth
+step by step construction of an application.
+
+Use the [Command-line tool](/guides/rsocket-py/cli) to quicly interact with an RSocket server without writing code.
+
+Other code snippets examples for [Client](/guides/rsocket-py/client), [Server](/guides/rsocket-py/server)
+and [RxPy](/guides/rsocket-py/rxpy) integration are also available.
+
+API Documentation (Under construction) is available at [ReadTheDocs](https://rsocket.readthedocs.io/)
+
+## Installing
+
+A pip package is available when installing with
+'pip install rsocket' ([rsocket](https://pypi.org/project/rsocket/))
+
+Optionally, install using some extras:
+
+- rx: RxPy3 client
+- reactivex: RxPy4 client
+- aiohttp: Websocket server/client transport for aiohttp framework
+- quart: Websocket server transport for quart framework
+- quic: QUIC/HTTP3(wss) support
+- cli: Command line interface
+
+## Status
+
+The following are currently implemented:
+
+- RSocketClient / RSocketServer
+- Transports:
+- TCP
+- QUIC/HTTP3(wss)
+- Websocket (aiohttp (server/client), quart (server)
+- Simple load balancing
+- Minimal integration with RxPy (>= 3.x) and reactivex
+- Command line interface

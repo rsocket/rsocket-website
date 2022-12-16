@@ -1,0 +1,130 @@
+---
+slug: /guides/rsocket-java/tutorial/request_routing
+title: Request routing
+sidebar_label: Request routing
+---
+
+In the previous step we added a single request-response handler. In order to allow more than one functionality to use this handler,
+(e.g. login, messages, join/leave chanel) they need to be distinguished from each other. To achieve this, each request to the server will
+be identified by a [route](https://github.com/rsocket/rsocket/blob/master/Extensions/Routing.md). This is similar to paths in an HTTP URL where
+each URL may handle one of the HTTP methods (eg. GET, POST). To implement this we will use the `RequestRouter` and `RoutingRequestHandler` classes.
+
+See resulting code on [GitHub](https://github.com/rsocket/rsocket-py/tree/master/examples/tutorial/step1)
+
+## Server side
+
+We will modify the example from the previous step into a routed request response.
+
+### Routing request handler
+
+The `handler_factory` method below replaces the `Handler` class from the previous step:
+
+```py
+from typing import Awaitable
+
+from rsocket.frame_helpers import ensure_bytes
+from rsocket.helpers import utf8_decode, create_response
+from rsocket.payload import Payload
+from rsocket.routing.request_router import RequestRouter
+from rsocket.routing.routing_request_handler import RoutingRequestHandler
+
+def handler_factory() -> RoutingRequestHandler:
+    router = RequestRouter()
+
+    @router.response('login')
+    async def login(payload: Payload) -> Awaitable[Payload]:
+        username = utf8_decode(payload.data)
+        return create_response(ensure_bytes(f'Welcome to chat, {username}'))
+
+    return RoutingRequestHandler(router)
+```
+
+*Line 10* instantiates the `RequestRouter`. The methods on this helper are used as decorators to register the route of each request
+(it is similar to Flask and Quart syntax).
+
+The `RequestRouter` has a decorator method for each RSocket request type:
+- `response`
+- `stream`
+- `channel`
+- `fire_and_forget`
+- `metadata_push`
+
+All of the above methods receive a single argument, a string representing the route. The decorators may be applied multiple times
+which allows for aliases for the same route.
+
+*Lines 12-15* define the login method and attach it to a request-response with the <b>login</b> route.
+The method name does not have to match the route.
+
+All methods decorated by the request router accept two optional arguments:
+- Any argument named *composite_metadata* (regardless of type-hint), or type-hinted with `CompositeMetadata` will receive a `CompositeMetadata` instance containing parsed composite metadata
+- Any other argument without a type-hint, or type-hinted with `Payload` will receive the request's payload
+
+The `RequestRouter` has additional functionality which will be covered in later sections.
+
+*Line 17* returns the actual request handler, an instance of `RoutingRequestHandler`, which uses the request router instance.
+
+### Use the routing request handler
+
+Modify the `RSocketServer` instantiation from the previous example and pass the `handler_factory` method as the *handler_factory* parameter:
+
+```py
+from rsocket.rsocket_server import RSocketServer
+from rsocket.transports.tcp import TransportTCP
+
+async def run_server():
+    def session(*connection):
+        RSocketServer(TransportTCP(*connection), handler_factory=handler_factory)
+```
+
+## Client side
+
+Let's modify the client side to call this new routed request. For readability and maintainability, we will create a `ChatClient`
+which will wrap the RSocket client and provide the methods for interacting with the server.
+
+### ChatClient class
+
+Below is the complete code for the new <b>client.py</b> module:
+
+```py
+from rsocket.extensions.helpers import composite, route
+from rsocket.frame_helpers import ensure_bytes
+from rsocket.helpers import  utf8_decode
+from rsocket.payload import Payload
+from rsocket.rsocket_client import RSocketClient
+
+class ChatClient:
+    def __init__(self, rsocket: RSocketClient):
+        self._rsocket = rsocket
+
+    async def login(self, username: str):
+        payload = Payload(ensure_bytes(username), composite(route('login')))
+        response = await self._rsocket.request_response(payload)
+        print(f'Server response: {utf8_decode(response.data)}')
+```
+
+*Lines 7-14* define our new `ChatClient` which will encapsulate the methods used to interact with the chat server.
+
+*Lines 11-14* define a `login` method. It uses the `composite` and `route` helper methods to create the metadata which will ensure
+the payload is routed to the method registered on the server side in the previous step.
+
+### Test the new functionality
+
+Let's modify the client module to test our new `ChatClient`:
+
+```py
+from rsocket.extensions.mimetypes import WellKnownMimeTypes
+from rsocket.helpers import single_transport_provider
+from rsocket.rsocket_client import RSocketClient
+from rsocket.transports.tcp import TransportTCP
+
+async def main():
+    ...
+    async with RSocketClient(single_transport_provider(TransportTCP(*connection)),
+                             metadata_encoding=WellKnownMimeTypes.MESSAGE_RSOCKET_COMPOSITE_METADATA) as client:
+        user = ChatClient(client)
+        await user.login('George')
+```
+
+*Line 9* changes the *metadata_encoding* type to be COMPOSITE_METADATA. This is required for routing support.
+
+*Lines 10-11* instantiate a `ChatClient` and call the `login` method.
