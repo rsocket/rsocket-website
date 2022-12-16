@@ -7,9 +7,9 @@ sidebar_label: Request routing
 In the previous step we added a single request-response handler. In order to allow more than one functionality to use this handler,
 (e.g. login, messages, join/leave chanel) they need to be distinguished from each other. To achieve this, each request to the server will
 be identified by a [route](https://github.com/rsocket/rsocket/blob/master/Extensions/Routing.md). This is similar to paths in an HTTP URL where
-each URL may handle one of the HTTP methods (eg. GET, POST). To implement this we will use the `RequestRouter` and `RoutingRequestHandler` classes.
+each URL may handle one of the HTTP methods (eg. GET, POST).
 
-See resulting code on [GitHub](https://github.com/rsocket/rsocket-py/tree/master/examples/tutorial/step1)
+See resulting code on [GitHub](https://github.com/rsocket/rsocket-java/tree/master/examples/tutorial/step1)
 
 ## Server side
 
@@ -19,112 +19,127 @@ We will modify the example from the previous step into a routed request response
 
 The `handler_factory` method below replaces the `Handler` class from the previous step:
 
-```py
-from typing import Awaitable
+```java
+final SocketAcceptor socketAcceptor = (setup, sendingSocket) -> Mono.just(new RSocket() {
+    public Mono<Payload> requestResponse(Payload payload) {
+        final var route = requireRoute(payload);
 
-from rsocket.frame_helpers import ensure_bytes
-from rsocket.helpers import utf8_decode, create_response
-from rsocket.payload import Payload
-from rsocket.routing.request_router import RequestRouter
-from rsocket.routing.routing_request_handler import RoutingRequestHandler
+        switch (route) {
+            case "login":
+                return Mono.just(DefaultPayload.create("Welcome to chat, " + payload.getDataUtf8()));
+        }
 
-def handler_factory() -> RoutingRequestHandler:
-    router = RequestRouter()
+        throw new RuntimeException("Unknown requestResponse route " + route);
+    }
 
-    @router.response('login')
-    async def login(payload: Payload) -> Awaitable[Payload]:
-        username = utf8_decode(payload.data)
-        return create_response(ensure_bytes(f'Welcome to chat, {username}'))
+    private String requireRoute(Payload payload) {
+        final var metadata = payload.sliceMetadata();
+        final CompositeMetadata compositeMetadata = new CompositeMetadata(metadata, false);
 
-    return RoutingRequestHandler(router)
+        for (CompositeMetadata.Entry metadatum : compositeMetadata) {
+            if (Objects.requireNonNull(metadatum.getMimeType())
+                    .equals(WellKnownMimeType.MESSAGE_RSOCKET_ROUTING.getString())) {
+                return new RoutingMetadata(metadatum.getContent()).iterator().next();
+            }
+        }
+
+        throw new IllegalStateException();
+    }
+});
 ```
 
-*Line 10* instantiates the `RequestRouter`. The methods on this helper are used as decorators to register the route of each request
-(it is similar to Flask and Quart syntax).
+The `requestResponse` method in *Lines 2-11* is modified to first parse the route from the `Payload` metadata, using the `requireRoute` helper method.
+For now there is only a single case, the "login" route, which returns the same response as in the previous section of this guide.
 
-The `RequestRouter` has a decorator method for each RSocket request type:
-- `response`
-- `stream`
-- `channel`
-- `fire_and_forget`
-- `metadata_push`
+*Line 10* raises an exception if no known route is supplied.
 
-All of the above methods receive a single argument, a string representing the route. The decorators may be applied multiple times
-which allows for aliases for the same route.
-
-*Lines 12-15* define the login method and attach it to a request-response with the <b>login</b> route.
-The method name does not have to match the route.
-
-All methods decorated by the request router accept two optional arguments:
-- Any argument named *composite_metadata* (regardless of type-hint), or type-hinted with `CompositeMetadata` will receive a `CompositeMetadata` instance containing parsed composite metadata
-- Any other argument without a type-hint, or type-hinted with `Payload` will receive the request's payload
-
-The `RequestRouter` has additional functionality which will be covered in later sections.
-
-*Line 17* returns the actual request handler, an instance of `RoutingRequestHandler`, which uses the request router instance.
-
-### Use the routing request handler
-
-Modify the `RSocketServer` instantiation from the previous example and pass the `handler_factory` method as the *handler_factory* parameter:
-
-```py
-from rsocket.rsocket_server import RSocketServer
-from rsocket.transports.tcp import TransportTCP
-
-async def run_server():
-    def session(*connection):
-        RSocketServer(TransportTCP(*connection), handler_factory=handler_factory)
-```
+The `requireRoute` method parses the `Payload` metadata using the `CompositeMetadata` class. If any of the metadata items is of routing type, its value is returned.
+If no routing metadata is found (*Line 24*) an exception is thrown.
 
 ## Client side
 
 Let's modify the client side to call this new routed request. For readability and maintainability, we will create a `ChatClient`
 which will wrap the RSocket client and provide the methods for interacting with the server.
 
-### ChatClient class
+### Client class
 
-Below is the complete code for the new <b>client.py</b> module:
+Below is the complete code for the new `Client` class:
 
-```py
-from rsocket.extensions.helpers import composite, route
-from rsocket.frame_helpers import ensure_bytes
-from rsocket.helpers import  utf8_decode
-from rsocket.payload import Payload
-from rsocket.rsocket_client import RSocketClient
+```java
+package io.rsocket.guide.step1;
 
-class ChatClient:
-    def __init__(self, rsocket: RSocketClient):
-        self._rsocket = rsocket
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.CompositeByteBuf;
+import io.netty.buffer.Unpooled;
+import io.rsocket.Payload;
+import io.rsocket.RSocket;
+import io.rsocket.metadata.CompositeMetadataCodec;
+import io.rsocket.metadata.TaggingMetadataCodec;
+import io.rsocket.metadata.WellKnownMimeType;
+import io.rsocket.util.DefaultPayload;
+import reactor.core.publisher.Mono;
 
-    async def login(self, username: str):
-        payload = Payload(ensure_bytes(username), composite(route('login')))
-        response = await self._rsocket.request_response(payload)
-        print(f'Server response: {utf8_decode(response.data)}')
+import java.util.List;
+
+public class Client {
+
+    private final RSocket rSocket;
+
+    public Client(RSocket rSocket) {
+        this.rSocket = rSocket;
+    }
+
+    public Mono<Payload> login(String username) {
+        final Payload payload = DefaultPayload.create(
+                Unpooled.wrappedBuffer(username.getBytes()),
+                route("login")
+        );
+        return rSocket.requestResponse(payload);
+    }
+
+    private static CompositeByteBuf route(String route) {
+        final var metadata = ByteBufAllocator.DEFAULT.compositeBuffer();
+
+        CompositeMetadataCodec.encodeAndAddMetadata(
+                metadata,
+                ByteBufAllocator.DEFAULT,
+                WellKnownMimeType.MESSAGE_RSOCKET_ROUTING,
+                TaggingMetadataCodec.createTaggingContent(ByteBufAllocator.DEFAULT, List.of(route))
+        );
+
+        return metadata;
+    }
+}
 ```
 
-*Lines 7-14* define our new `ChatClient` which will encapsulate the methods used to interact with the chat server.
+*Lines 17-45* define our new `Client` which will encapsulate the methods used to interact with the chat server.
 
-*Lines 11-14* define a `login` method. It uses the `composite` and `route` helper methods to create the metadata which will ensure
-the payload is routed to the method registered on the server side in the previous step.
+*Lines 25-31* define a `login` method. It uses the `route` helper method defined later in the class to create the routing metadata, which is added to the `Payload`.
+This ensures the payload is routed to the method registered on the server side in the previous step.
+
+The `route` method defined in *Lines 33-44*, creates a composite metadata item (*Line 34*) and adds the route metadata to it (*Lines 36-41*).
 
 ### Test the new functionality
 
-Let's modify the client module to test our new `ChatClient`:
+Let's modify the `ClientApplication` class to test our new `Client`:
 
-```py
-from rsocket.extensions.mimetypes import WellKnownMimeTypes
-from rsocket.helpers import single_transport_provider
-from rsocket.rsocket_client import RSocketClient
-from rsocket.transports.tcp import TransportTCP
+```java
+final var rSocket = RSocketConnector.create()
+                .metadataMimeType(WellKnownMimeType.MESSAGE_RSOCKET_COMPOSITE_METADATA.getString())
+                .connect(transport)
+                .block();
 
-async def main():
-    ...
-    async with RSocketClient(single_transport_provider(TransportTCP(*connection)),
-                             metadata_encoding=WellKnownMimeTypes.MESSAGE_RSOCKET_COMPOSITE_METADATA) as client:
-        user = ChatClient(client)
-        await user.login('George')
+final var client = new Client(rSocket);
+
+client.login("George")
+        .doOnNext(response -> System.out.println(response.getDataUtf8()))
+        .block(Duration.ofMinutes(10));
 ```
 
-*Line 9* changes the *metadata_encoding* type to be COMPOSITE_METADATA. This is required for routing support.
+The `RSocket` instantiation is modified, and in *Line 2* sets the `metadataMimeType` type to be COMPOSITE_METADATA.
+This is required for multiple elements in the `Payload` metadata, which includes the routing information.
 
-*Lines 10-11* instantiate a `ChatClient` and call the `login` method.
+*Lines 6* instantiates a `Client`, passing it the `RSocket`
+
+*Lines 8-10* call the `login` method, and prints the response.
