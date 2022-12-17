@@ -62,267 +62,133 @@ public class ChatData {
 }
 ```
 
-
-```py
-import json
-from typing import TypeVar, Type
-from rsocket.frame_helpers import ensure_bytes
-from rsocket.payload import Payload
-from rsocket.helpers import utf8_decode
-
-def encode_dataclass(obj):
-    return ensure_bytes(json.dumps(obj.__dict__))
-
-T = TypeVar('T')
-
-def decode_dataclass(data: bytes, cls: Type[T]) -> T:
-    return cls(**json.loads(utf8_decode(data)))
-
-def dataclass_to_payload(obj) -> Payload:
-    return Payload(encode_dataclass(obj))
-```
-
-*Lines 7-8* Define a minimal dataclass json encoder which assumes all the fields in the dataclass are python primitives, or builtin collections of those.
-
-*Lines 10-13* Define the decoder counterpart of the above method.
-
-*Lines 15-16* Define a helper method for creating `Payload`s containing only a serialized `dataclass`.
-
 ## Server side
 
 ### Data storage and helper methods
 
-First we add a queue for incoming user messages:
+Let's add a helper method to find sessions by username to the `Server` class:
 
-```py
-from dataclasses import dataclass, field
-from asyncio import Queue
-
-@dataclass()
-class UserSessionData:
-    ...
-    messages: Queue = field(default_factory=Queue)
+```java
+public Mono<Session> findUserByName(final String username) {
+    return Flux.fromIterable(chatData.sessionById.entrySet())
+            .filter(e -> e.getValue().username.equals(username))
+            .map(e -> e.getValue())
+            .single();
+  }
 ```
 
-*Line 7* defines a `messages` queue. These are private (and later on channel) messages to the user from other clients.
-
-```py
-from typing import Optional
-
-def find_session_by_username(username: str) -> Optional[UserSessionData]:
-    try:
-        return next(session for session in chat_data.user_session_by_id.values() if
-                    session.username == username)
-    except StopIteration:
-        return None
-```
-
-*Lines 3-8* define a helper for looking up a user's session by username. This will be used to deliver private messages.
+TODO: explain
 
 ### Send messages
 
-Next we will register a request-response endpoint for sending private messages:
+Next we will register a request-response endpoint for sending private messages in the `requestResponse` route switch case:
 
-```py
-import json
-from typing import Awaitable
-
-from rsocket.helpers import create_response
-from rsocket.payload import Payload
-from rsocket.routing.request_router import RequestRouter
-from shared import Message
-
-class ChatUserSession:
-
-  def router_factory(self):
-      router = RequestRouter()
-
-      @router.response('message')
-      async def send_message(payload: Payload) -> Awaitable[Payload]:
-          message = Message(**json.loads(payload.data))
-
-          logging.info('Received message for user: %s', message.user)
-
-          target_message = Message(self._session.username, message.content)
-
-          session = find_session_by_username(message.user)
-          await session.messages.put(target_message)
-
-          return create_response()
+```java
+case "message":
+    try {
+        final var message = objectMapper.readValue(payload.getDataUtf8(), Message.class);
+        final var targetMessage = new Message(session.username, message.content);
+        return findUserByName(message.user)
+                .doOnNext(targetSession -> targetSession.messages.add(targetMessage))
+                .thenReturn(EmptyPayload.INSTANCE);
+    } catch (Exception exception) {
+        throw new RuntimeException(exception);
+    }
 ```
 
-*Lines 15-26* define the endpoint for sending messages. The Payload must contain a json serialized `Message` object.
-The recipient's session is found (*Line 23*), and the message is placed in the user's message queue (*Line 24*).
-
-*Line 25* returns an empty `Payload` future using the `create_response` helper method.
+TODO: explain
 
 ### Receive incoming messages
 
 As a last step on the server side, we register a request-stream endpoint which listens for incoming messages and sends
 them to the client:
 
-```py
-import asyncio
+```java
+public void messageSupplier(FluxSink<Payload> sink) {
+    while (true) {
+        try {
+            final var message = session.messages.poll(20, TimeUnit.DAYS);
+            if (message != null) {
+                sink.next(DefaultPayload.create(objectMapper.writeValueAsString(message)));
+            }
+        } catch (Exception exception) {
+            break;
+        }
+    }
+}
 
-from shared import encode_dataclass
-from reactivestreams.publisher import DefaultPublisher
-from reactivestreams.subscriber import Subscriber
-from reactivestreams.subscription import DefaultSubscription
-from rsocket.payload import Payload
-from rsocket.routing.request_router import RequestRouter
+public Flux<Payload> requestStream(String route, Payload payload) {
+    return Flux.defer(() -> {
+        switch (route) {
+            case "messages.incoming":
+                final var threadContainer = new AtomicReference<Thread>();
+                return Flux.create(sink -> sink.onRequest(n -> {
+                            if (threadContainer.get() == null) {
+                                final var thread = new Thread(() -> messageSupplier(sink));
+                                thread.start();
+                                threadContainer.set(thread);
+                            }
+                        })
+                        .onCancel(() -> threadContainer.get().interrupt())
+                        .onDispose(() -> threadContainer.get().interrupt()));
+        }
 
-class ChatUserSession:
-
-  def router_factory(self):
-      router = RequestRouter()
-
-      @router.stream('messages.incoming')
-      async def messages_incoming():
-          class MessagePublisher(DefaultPublisher, DefaultSubscription):
-              def __init__(self, session: UserSessionData):
-                  self._session = session
-                  self._sender = None
-
-              def cancel(self):
-                  self._sender.cancel()
-
-              def subscribe(self, subscriber: Subscriber):
-                  super(MessagePublisher, self).subscribe(subscriber)
-                  subscriber.on_subscribe(self)
-                  self._sender = asyncio.create_task(self._message_sender())
-
-              async def _message_sender(self):
-                  while True:
-                      next_message = await self._session.messages.get()
-                      next_payload = Payload(encode_dataclass(next_message))
-                      self._subscriber.on_next(next_payload)
-
-          return MessagePublisher(self._session)
+        throw new IllegalStateException();
+    });
+}
 ```
 
-*Lines 15-36* define the endpoint for listening to new messages.
-
-*Lines 17-34* define the `Publisher` which will be returned. It is given access to the user's session (*Lines 18-19*)
-
-The only method on the `Publisher` interface is `subscribe` (*Lines 25-28*), which is the action taken upon the client sending a request to the route.
-The `subscriber` argument represents the client side. In this method an asyncio [Task](https://docs.python.org/3/library/asyncio-task.html#asyncio.Task) is started (*Line 28*)
-which continuously sends the subscriber the messages intended for that user from the server side session queue (*Lines 30-34*)
-
-The same class will be used for canceling the stream (*Lines 22-23*), if triggered by the client. This is provided by the `Subscription` interface which
-is provided to the client on *Line 27*.
+TODO: explain
 
 ## Client side
 
 First let's add a client method for sending private messages:
 
-```py
-from shared import Message, encode_dataclass
-from rsocket.extensions.helpers import composite, route
-from rsocket.payload import Payload
-
-class ChatClient:
-
-    async def private_message(self, username: str, content: str):
-        print(f'Sending {content} to user {username}')
-
-        await self._rsocket.request_response(Payload(encode_dataclass(Message(username, content)),
-                                                     composite(route('message'))))
+```java
+public Mono<Payload> sendMessage(String data) {
+    final Payload payload = DefaultPayload.create(Unpooled.wrappedBuffer(data.getBytes()),
+            route("message")
+    );
+    return rSocket.requestResponse(payload);
+}
 ```
 
-*Line 10-11* creates a `Payload` with the messages and sends it to the 'message' route.
+TODO: explain
 
 Next we add a method which will listen for incoming messages:
 
-```py
-import json
-from typing import Optional
+```java
+public final AtomicReference<Disposable> incomingMessages = new AtomicReference<>();
 
-from shared import Message
-from reactivestreams.subscriber import DefaultSubscriber
-from reactivestreams.subscription import DefaultSubscription
-from rsocket.rsocket_client import RSocketClient
-from rsocket.extensions.helpers import composite, route
-from rsocket.payload import Payload
+public void listenForMessages() {
+    new Thread(() ->
+    {
+        Disposable subscribe = rSocket.requestStream(DefaultPayload.create(null, route("messages.incoming")))
+                .doOnComplete(() -> System.out.println("Response from server stream completed"))
+                .doOnNext(response -> System.out.println("Response from server stream :: " + response.getDataUtf8()))
 
-class ChatClient:
-    def __init__(self, rsocket: RSocketClient):
-        ...
-        self._message_subscriber: Optional = None
+                .collectList()
+                .subscribe();
+        incomingMessages.set(subscribe);
+    }).start();
+}
 
-    def listen_for_messages(self):
-        def print_message(data: bytes):
-            message = Message(**json.loads(data))
-            print(f'{self._username}: from {message.user}: {message.content}')
-
-        class MessageListener(DefaultSubscriber, DefaultSubscription):
-            def __init__(self):
-
-            def on_next(self, value, is_complete=False):
-                print_message(value.data)
-
-            def on_error(self, exception: Exception):
-                print(exception)
-
-            def cancel(self):
-                self.subscription.cancel()
-
-        self._message_subscriber = MessageListener()
-        self._rsocket.request_stream(
-            Payload(metadata=composite(route('messages.incoming')))
-        ).subscribe(self._message_subscriber)
-
-    def stop_listening_for_messages(self):
-        self._message_subscriber.cancel()
+public void stopListeningForMessages() {
+    incomingMessages.get().dispose();
+}
 ```
 
-*Lines 21-31* define the `Subscriber` which will listen for incoming messages and print them on the client side.
-
-An instance of the `MessageListener` is stored on the client (*Line 33*) to later allow stopping the incoming message stream.
-
-*Lines 34-36* send the request and subscribe to the resulting `Publisher`.
-
-The method in *Lines 38-39* can be used to stop the above message listener.
+TODO: explain
 
 ### Test the new functionality
 
-Finally, let's test the new functionality. Modify the `main` method in the client:
+Finally, let's test the new functionality. Modify the `ClientApplication.main` method:
 
-```py
-import asyncio
-
-from rsocket.extensions.mimetypes import WellKnownMimeTypes
-from rsocket.helpers import single_transport_provider
-from rsocket.rsocket_client import RSocketClient
-from rsocket.transports.tcp import TransportTCP
-
-async def main():
-    connection1 = await asyncio.open_connection('localhost', 6565)
-
-    async with RSocketClient(single_transport_provider(TransportTCP(*connection1)),
-                             metadata_encoding=WellKnownMimeTypes.MESSAGE_RSOCKET_COMPOSITE_METADATA) as client1:
-        connection2 = await asyncio.open_connection('localhost', 6565)
-
-        async with RSocketClient(single_transport_provider(TransportTCP(*connection2)),
-                                 metadata_encoding=WellKnownMimeTypes.MESSAGE_RSOCKET_COMPOSITE_METADATA) as client2:
-            user1 = ChatClient(client1)
-            user2 = ChatClient(client2)
-
-            await user1.login('user1')
-            await user2.login('user2')
-
-            user2.listen_for_messages()
-
-            await user1.private_message('user2', 'private message from user1')
-
-            await asyncio.sleep(3)
-
-            user2.stop_listening_for_messages()
+```java
+client.listenForMessages();
+client.sendMessage("{\"user\":\"user1\", \"content\":\"message\"}");
+Thread.sleep(2000);
+client.incomingMessages.get().dispose();
 ```
 
-In this example, we open two rsocket connections to the server (*lines 9-12* and *lines 13-16*).
-
-*Lines 17-21* wrap the rsocket clients with the chat client adapter and login the two users.
-
-*Line 23* makes user2 listen for incoming messages, while *line 25* has user1 send a message to user2.
-
-Finally, *lines 27-29* make the application wait for 3 seconds, then stops user2 listening for messages.
+TODO: explain
