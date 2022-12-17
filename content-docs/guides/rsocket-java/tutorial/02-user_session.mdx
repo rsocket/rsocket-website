@@ -86,49 +86,23 @@ public class Server implements SocketAcceptor {
 }
 ```
 
-In order to keep a reference to the `UserSessionData` we will modify the request handler factory.
-The `ChatUserSession` class will keep the reference to the session data, and define the request routes.
-
-Below is the modified `handler_factory`:
-
-```py
-class CustomRoutingRequestHandler(RoutingRequestHandler):
-    def __init__(self, session: ChatUserSession):
-        super().__init__(session.router_factory())
-        self._session = session
-
-def handler_factory():
-    return CustomRoutingRequestHandler(ChatUserSession())
-```
-
-The `CustomRoutingRequestHandler` class (*Lines 1-4*) is the actual request handler which will wrap the `ChatUserSession` instance.
-
-Finally, we modify the `handler_factory` (*Lines 6-7*) to instantiate the handler and the session.
+In order to keep a reference to the `Session` we will instantiate it in the `accept` method (*Line 21-22*) which serves as the scope for the current client connection.
+The username provided in the login `Payload` will be stored in the session (*Line 30*).
 
 ## Client side
 
-Below is the modified ChatClient:
+We will modify the `Client` to store the username, to use it in output later on:
 
 ```py
-from rsocket.extensions.helpers import composite, route
-from rsocket.frame_helpers import ensure_bytes
-from rsocket.payload import Payload
-from rsocket.rsocket_client import RSocketClient
+public Mono<Payload> login(String username) {
+    this.username = username;
 
-class ChatClient:
-    def __init__(self, rsocket: RSocketClient):
-        self._rsocket = rsocket
-        self._session_id = None
-        self._username: Optional[str] = None
-
-    async def login(self, username: str):
-        payload = Payload(ensure_bytes(username), composite(route('login')))
-        response = await self._rsocket.request_response(payload)
-        self._session_id = response.data
-        self._username = username
-        return self
+    final Payload payload = DefaultPayload.create(
+            Unpooled.wrappedBuffer(username.getBytes()),
+            route("login")
+    );
+    return rSocket.requestResponse(payload);
+}
 ```
 
-Instead of a greeting from the server, we now receive a session id in the response payload. *Line 14* stores this session on the client class.
-
-We also store the username on the client for later printing as part of incoming messages.
+Instead of a greeting from the server, we now receive a session id in the response payload (*Line 8*).

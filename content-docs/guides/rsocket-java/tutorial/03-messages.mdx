@@ -6,27 +6,62 @@ sidebar_label: Private messages
 
 Let's add private messaging between users. We will use a request-stream to listen for new messages from other users.
 
-See resulting code on [GitHub](https://github.com/rsocket/rsocket-py/tree/master/examples/tutorial/step3)
+See resulting code on [GitHub](https://github.com/rsocket/rsocket-java/tree/master/examples/tutorial/step3)
 
 ## Shared
 
-Let's add an object representation of a message to the <b>shared</b> module:
+Let's add an object representation of a message. Below is the contents of the `Message` class:
 
-```py
-from dataclasses import dataclass
-from typing import Optional
+```java
+package io.rsocket.guide;
 
-@dataclass(frozen=True)
-class Message:
-    user: Optional[str] = None
-    content: Optional[str] = None
+public class Message {
+    public String user;
+    public String content;
+
+    public Message() {
+    }
+
+    public Message(String user, String content) {
+        this.user = user;
+        this.content = content;
+    }
+}
 ```
 
-*Lines 4-7* defines a frozen dataclass with two fields:
-- `user` : name of the recipient user when sending a message, and the name of the sender when receiving it.
-- `content` : the message body.
+*Lines 3-6* defines a POJO with 2 fields:
+- `user` : Name of the recipient user when sending a message, and the name of the sender when receiving it.
+- `content` : The message body.
 
-We will use [json](https://docs.python.org/3/library/json.html) to serialize the messages for transport. Add the following helper methods to the <b>shared</b> module:
+We will use [json](https://docs.python.org/3/library/json.html) to serialize the messages for transport. We will use the jackson library to do this.
+Add the following dependencies to the pom.xml:
+
+```xml
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.14.1</version>
+</dependency>
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-core</artifactId>
+    <version>2.14.1</version>
+</dependency>
+```
+
+We will also add a global storage in order to look up sessions of other users and deliver them messages. Add the `ChatData` class:
+
+```java
+package io.rsocket.guide.step3;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class ChatData {
+    public final Map<String, Session> sessionById = new HashMap<>();
+}
+```
+
 
 ```py
 import json
