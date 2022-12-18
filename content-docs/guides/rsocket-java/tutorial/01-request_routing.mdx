@@ -16,7 +16,7 @@ We will modify the example from the previous step into a routed request response
 
 ### Routing request handler
 
-The `handler_factory` method below replaces the `Handler` class from the previous step:
+Below is the modified code for instantiating `SocketAcceptor`:
 
 ```java
 final SocketAcceptor socketAcceptor = (setup, sendingSocket) -> Mono.just(new RSocket() {
@@ -57,7 +57,7 @@ If no routing metadata is found (*Line 24*) an exception is thrown.
 
 ## Client side
 
-Let's modify the client side to call this new routed request. For readability and maintainability, we will create a `ChatClient`
+Let's modify the client side to call this new routed request. For readability and maintainability, we will create a `Client`
 which will wrap the RSocket client and provide the methods for interacting with the server.
 
 ### Client class
