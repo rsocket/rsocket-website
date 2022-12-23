@@ -12,76 +12,107 @@ See resulting code on [GitHub](https://github.com/rsocket/rsocket-py/tree/master
 
 ## Shared code
 
-We will define some data-classes to represent the payloads being sent between the client and server:
+We will define some POJOs to represent the payloads being sent between the client and server.
 
-```py
-from dataclasses import dataclass, field
-from typing import Optional, List
+:::note
+The Jackson JSON annotations are optional. They are only required for compatibility with the client/server implementations of the other languages.
+:::
 
-@dataclass(frozen=True)
-class ServerStatistics:
-    user_count: Optional[int] = None
-    channel_count: Optional[int] = None
+A `ServerStatistics` will hold the server channel and user count:
 
-@dataclass()
-class ServerStatisticsRequest:
-    ids: Optional[List[str]] = field(default_factory=lambda: ['users', 'channels'])
-    period_seconds: Optional[int] = field(default_factory=lambda: 2)
+```java
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@dataclass(frozen=True)
-class ClientStatistics:
-    memory_usage: Optional[int] = None
+public class ServerStatistic {
+    @JsonProperty("user_count")
+    public Integer userCount;
+
+    @JsonProperty("channel_count")
+    public Integer channelCount;
+
+    public ServerStatistic() {
+    }
+
+    public ServerStatistic(Integer userCount, Integer channelCount) {
+        this.userCount = userCount;
+        this.channelCount = channelCount;
+    }
+}
 ```
 
-*Lines 4-7* define the data sent to the client upon request. It contains two optional fields, the user count and the channel count.
+A `ClientStatistics` will hold the client's memory usage:
+```java
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-*Lines 9-12* define a request from the client which specified which statistics it wants and how often to report. The `ids` list
-represents the two values in the `ServerStatistics` class.
+public class ClientStatistics {
+    @JsonProperty("memory_usage")
+    public Long memoryUsage;
 
-*Lines 14-16* define the statistics sent from the client to the server.
+    public ClientStatistics() {
+    }
+
+    public ClientStatistics(Long memoryUsage) {
+        this.memoryUsage = memoryUsage;
+    }
+}
+```
+
+And finally, the client will use a `StatisticsSettings` instance to tell the server which statistics it wants and how often:
+```java
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class ServerStatistic {
+    @JsonProperty("user_count")
+    public Integer userCount;
+
+    @JsonProperty("channel_count")
+    public Integer channelCount;
+
+    public ServerStatistic() {
+    }
+
+    public ServerStatistic(Integer userCount, Integer channelCount) {
+        this.userCount = userCount;
+        this.channelCount = channelCount;
+    }
+}
+```
 
 ## Server side
 
-# Data-classes
+### Session
 
-First we will add a field on the `UserSessionData` to store the last statistics sent by the client:
+First we will add fields on the `Session` class to hold statistics and statistics-settings sent from the client:
 
-```py
-from dataclasses import dataclass
-from typing import Optional
+```java
+public class Session {
 
-from shared import ClientStatistics
+    public StatisticsSettings statisticsSettings = new StatisticsSettings();
 
-@dataclass()
-class UserSessionData:
-    ...
-    statistics: Optional[ClientStatistics] = None
+    public ClientStatistics clientStatistics;
+}
 ```
 
 ### Endpoints
 
-We will add two endpoints, one for receiving from the client, and one for requesting specific statistics from the server.
+We will add two endpoints, one for receiving from the client, and one for sending specific statistics from the server.
 
-#### Client send statistics
+#### Client sent statistics
 
-```py
-import json
+```java
+public Mono<Void> fireAndForget(Payload payload) {
+    final var route = requireRoute(payload);
 
-from shared import ClientStatistics
-from rsocket.helpers import utf8_decode
-from rsocket.payload import Payload
-from rsocket.routing.request_router import RequestRouter
+    return Mono.defer(() -> {
+        switch (route) {
+            case "statistics":
+                session.clientStatistics = fromJson(payload.getDataUtf8(), ClientStatistics.class);
+                return Mono.empty();
+        }
 
-class ChatUserSession:
-    def router_factory(self):
-        router = RequestRouter()
-
-        ...
-
-        @router.fire_and_forget('statistics')
-        async def receive_statistics(payload: Payload):
-            statistics = ClientStatistics(**json.loads(utf8_decode(payload.data)))
-            self._session.statistics = statistics
+        throw new IllegalStateException();
+    });
+}
 ```
 
 *Lines 14-17* defines an endpoint for receiving statistics from the client. It uses the fire-and-forget request type, since this
