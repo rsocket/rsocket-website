@@ -22,3 +22,18 @@ jobs:
           max_retry_time: 30
           max_retries: 5
           max_depth: 1
+      
+      - name: Checkout Source
+        if: failure()
+        uses: actions/checkout@v3
+      
+      - name: Create Github Issue
+        if: failure()
+        uses: JasonEtco/create-an-issue@v2.9.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WORKFLOW_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        with:
+          filename: .github/broken-links-issue-template.md
+          update_existing: true
+          search_existing: open
