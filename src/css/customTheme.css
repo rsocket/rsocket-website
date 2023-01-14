@@ -34,15 +34,18 @@ html[data-theme='dark'] .hero {
 
 
 
-pre.language-py code::before {
+pre.language-py code::before,
+pre.language-java code::before {
   counter-reset: listing;
 }
 
-pre.language-py code > span {
+pre.language-py code > span,
+pre.language-java code > span{
   counter-increment: listing;
 }
 
-pre.language-py code > span::before {
+pre.language-py code > span::before,
+pre.language-java code > span::before{
   color: #9a9a9a;
   content: counter(listing) ". ";
   display: inline-block;

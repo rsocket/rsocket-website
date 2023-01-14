@@ -1,0 +1,194 @@
+---
+slug: /guides/rsocket-java/tutorial/messages
+title: Private messages
+sidebar_label: Private messages
+---
+
+Let's add private messaging between users. We will use a request-stream to listen for new messages from other users.
+
+See resulting code on [GitHub](https://github.com/rsocket/rsocket-java/tree/master/examples/tutorial/step3)
+
+## Shared
+
+Let's add an object representation of a message. Below is the contents of the `Message` class:
+
+```java
+package io.rsocket.guide;
+
+public class Message {
+    public String user;
+    public String content;
+
+    public Message() {
+    }
+
+    public Message(String user, String content) {
+        this.user = user;
+        this.content = content;
+    }
+}
+```
+
+*Lines 3-6* defines a POJO with 2 fields:
+- `user` : Name of the recipient user when sending a message, and the name of the sender when receiving it.
+- `content` : The message body.
+
+We will use [json](https://docs.python.org/3/library/json.html) to serialize the messages for transport. We will use the jackson library to do this.
+Add the following dependencies to the pom.xml:
+
+```xml
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.14.1</version>
+</dependency>
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-core</artifactId>
+    <version>2.14.1</version>
+</dependency>
+```
+
+We will also add a global storage in order to look up sessions of other users and deliver them messages. Add the `ChatData` class:
+
+```java
+package io.rsocket.guide.step3;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class ChatData {
+    public final Map<String, Session> sessionById = new HashMap<>();
+}
+```
+
+## Server side
+
+### Data storage and helper methods
+
+Let's add a helper method to find sessions by username to the `Server` class:
+
+```java
+public Mono<Session> findUserByName(final String username) {
+    return Flux.fromIterable(chatData.sessionById.entrySet())
+            .filter(e -> e.getValue().username.equals(username))
+            .map(e -> e.getValue())
+            .single();
+  }
+```
+
+TODO: explain
+
+### Send messages
+
+Next we will register a request-response endpoint for sending private messages in the `requestResponse` route switch case:
+
+```java
+case "message":
+    try {
+        final var message = objectMapper.readValue(payload.getDataUtf8(), Message.class);
+        final var targetMessage = new Message(session.username, message.content);
+        return findUserByName(message.user)
+                .doOnNext(targetSession -> targetSession.messages.add(targetMessage))
+                .thenReturn(EmptyPayload.INSTANCE);
+    } catch (Exception exception) {
+        throw new RuntimeException(exception);
+    }
+```
+
+TODO: explain
+
+### Receive incoming messages
+
+As a last step on the server side, we register a request-stream endpoint which listens for incoming messages and sends
+them to the client:
+
+```java
+public void messageSupplier(FluxSink<Payload> sink) {
+    while (true) {
+        try {
+            final var message = session.messages.poll(20, TimeUnit.DAYS);
+            if (message != null) {
+                sink.next(DefaultPayload.create(objectMapper.writeValueAsString(message)));
+            }
+        } catch (Exception exception) {
+            break;
+        }
+    }
+}
+
+public Flux<Payload> requestStream(String route, Payload payload) {
+    return Flux.defer(() -> {
+        switch (route) {
+            case "messages.incoming":
+                final var threadContainer = new AtomicReference<Thread>();
+                return Flux.create(sink -> sink.onRequest(n -> {
+                            if (threadContainer.get() == null) {
+                                final var thread = new Thread(() -> messageSupplier(sink));
+                                thread.start();
+                                threadContainer.set(thread);
+                            }
+                        })
+                        .onCancel(() -> threadContainer.get().interrupt())
+                        .onDispose(() -> threadContainer.get().interrupt()));
+        }
+
+        throw new IllegalStateException();
+    });
+}
+```
+
+TODO: explain
+
+## Client side
+
+First let's add a client method for sending private messages:
+
+```java
+public Mono<Payload> sendMessage(String data) {
+    final Payload payload = DefaultPayload.create(Unpooled.wrappedBuffer(data.getBytes()),
+            route("message")
+    );
+    return rSocket.requestResponse(payload);
+}
+```
+
+TODO: explain
+
+Next we add a method which will listen for incoming messages:
+
+```java
+public final AtomicReference<Disposable> incomingMessages = new AtomicReference<>();
+
+public void listenForMessages() {
+    new Thread(() ->
+    {
+        Disposable subscribe = rSocket.requestStream(DefaultPayload.create(null, route("messages.incoming")))
+                .doOnComplete(() -> System.out.println("Response from server stream completed"))
+                .doOnNext(response -> System.out.println("Response from server stream :: " + response.getDataUtf8()))
+
+                .collectList()
+                .subscribe();
+        incomingMessages.set(subscribe);
+    }).start();
+}
+
+public void stopListeningForMessages() {
+    incomingMessages.get().dispose();
+}
+```
+
+TODO: explain
+
+### Test the new functionality
+
+Finally, let's test the new functionality. Modify the `ClientApplication.main` method:
+
+```java
+client.listenForMessages();
+client.sendMessage("{\"user\":\"user1\", \"content\":\"message\"}");
+Thread.sleep(2000);
+client.incomingMessages.get().dispose();
+```
+
+TODO: explain

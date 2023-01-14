@@ -1,0 +1,4 @@
+In the previous step we added a single request-response handler. In order to allow more than one functionality to use this handler,
+(e.g. login, messages, join/leave chanel) they need to be distinguished from each other. To achieve this, each request to the server will
+be identified by a [route](https://github.com/rsocket/rsocket/blob/master/Extensions/Routing.md). This is similar to paths in an HTTP URL where
+each URL may handle one of the HTTP methods (eg. GET, POST).

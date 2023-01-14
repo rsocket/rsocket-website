@@ -9,7 +9,8 @@ const guideItems = [
   "guides/index",
   {
     "rsocket-js": require("./sidebar-rsocket-js"),
-    "rsocket-py": require("./sidebar-rsocket-py")
+    "rsocket-py": require("./sidebar-rsocket-py"),
+    "rsocket-java": require("./sidebar-rsocket-java")
   }
 ];
 

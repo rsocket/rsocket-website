@@ -1,0 +1,144 @@
+---
+slug: /guides/rsocket-java/tutorial/request_routing
+title: Request routing
+sidebar_label: Request routing
+---
+
+import Routing from '../../guide-shared/_routing.mdx'
+
+<Routing/>
+
+See resulting code on [GitHub](https://github.com/rsocket/rsocket-java/tree/master/examples/tutorial/step1)
+
+## Server side
+
+We will modify the example from the previous step into a routed request response.
+
+### Routing request handler
+
+Below is the modified code for instantiating `SocketAcceptor`:
+
+```java
+final SocketAcceptor socketAcceptor = (setup, sendingSocket) -> Mono.just(new RSocket() {
+    public Mono<Payload> requestResponse(Payload payload) {
+        final var route = requireRoute(payload);
+
+        switch (route) {
+            case "login":
+                return Mono.just(DefaultPayload.create("Welcome to chat, " + payload.getDataUtf8()));
+        }
+
+        throw new RuntimeException("Unknown requestResponse route " + route);
+    }
+
+    private String requireRoute(Payload payload) {
+        final var metadata = payload.sliceMetadata();
+        final CompositeMetadata compositeMetadata = new CompositeMetadata(metadata, false);
+
+        for (CompositeMetadata.Entry metadatum : compositeMetadata) {
+            if (Objects.requireNonNull(metadatum.getMimeType())
+                    .equals(WellKnownMimeType.MESSAGE_RSOCKET_ROUTING.getString())) {
+                return new RoutingMetadata(metadatum.getContent()).iterator().next();
+            }
+        }
+
+        throw new IllegalStateException();
+    }
+});
+```
+
+The `requestResponse` method in *Lines 2-11* is modified to first parse the route from the `Payload` metadata, using the `requireRoute` helper method.
+For now there is only a single case, the "login" route, which returns the same response as in the previous section of this guide.
+
+*Line 10* raises an exception if no known route is supplied.
+
+The `requireRoute` method parses the `Payload` metadata using the `CompositeMetadata` class. If any of the metadata items is of routing type, its value is returned.
+If no routing metadata is found (*Line 24*) an exception is thrown.
+
+## Client side
+
+Let's modify the client side to call this new routed request. For readability and maintainability, we will create a `Client`
+which will wrap the RSocket client and provide the methods for interacting with the server.
+
+### Client class
+
+Below is the complete code for the new `Client` class:
+
+```java
+package io.rsocket.guide;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.CompositeByteBuf;
+import io.netty.buffer.Unpooled;
+import io.rsocket.Payload;
+import io.rsocket.RSocket;
+import io.rsocket.metadata.CompositeMetadataCodec;
+import io.rsocket.metadata.TaggingMetadataCodec;
+import io.rsocket.metadata.WellKnownMimeType;
+import io.rsocket.util.DefaultPayload;
+import reactor.core.publisher.Mono;
+
+import java.util.List;
+
+public class Client {
+
+    private final RSocket rSocket;
+
+    public Client(RSocket rSocket) {
+        this.rSocket = rSocket;
+    }
+
+    public Mono<Payload> login(String username) {
+        final Payload payload = DefaultPayload.create(
+                Unpooled.wrappedBuffer(username.getBytes()),
+                route("login")
+        );
+        return rSocket.requestResponse(payload);
+    }
+
+    private static CompositeByteBuf route(String route) {
+        final var metadata = ByteBufAllocator.DEFAULT.compositeBuffer();
+
+        CompositeMetadataCodec.encodeAndAddMetadata(
+                metadata,
+                ByteBufAllocator.DEFAULT,
+                WellKnownMimeType.MESSAGE_RSOCKET_ROUTING,
+                TaggingMetadataCodec.createTaggingContent(ByteBufAllocator.DEFAULT, List.of(route))
+        );
+
+        return metadata;
+    }
+}
+```
+
+*Lines 17-45* define our new `Client` which will encapsulate the methods used to interact with the chat server.
+
+*Lines 25-31* define a `login` method. It uses the `route` helper method defined later in the class to create the routing metadata, which is added to the `Payload`.
+This ensures the payload is routed to the method registered on the server side in the previous step.
+
+The `route` method defined in *Lines 33-44*, creates a composite metadata item (*Line 34*) and adds the route metadata to it (*Lines 36-41*).
+
+### Test the new functionality
+
+Let's modify the `ClientApplication` class to test our new `Client`:
+
+```java
+final var rSocket = RSocketConnector.create()
+                .metadataMimeType(WellKnownMimeType.MESSAGE_RSOCKET_COMPOSITE_METADATA.getString())
+                .connect(transport)
+                .block();
+
+final var client = new Client(rSocket);
+
+client.login("George")
+        .doOnNext(response -> System.out.println(response.getDataUtf8()))
+        .block(Duration.ofMinutes(10));
+```
+
+The `RSocket` instantiation is modified, and in *Line 2* sets the `metadataMimeType` type to be COMPOSITE_METADATA.
+This is required for multiple elements in the `Payload` metadata, which includes the routing information.
+
+*Lines 6* instantiates a `Client`, passing it the `RSocket`
+
+*Lines 8-10* call the `login` method, and prints the response.

@@ -4,9 +4,9 @@ title: Request routing
 sidebar_label: Request routing
 ---
 
-The chat application will have various functionality (e.g. private messages and channels). Each request to the server will
-be identified by a [route](https://github.com/rsocket/rsocket/blob/master/Extensions/Routing.md) (similar to paths in an HTTP URL). To implement this we will use the `RequestRouter` and `RoutingRequestHandler`
-classes.
+import Routing from '../../guide-shared/_routing.mdx'
+
+<Routing/>
 
 See resulting code on [GitHub](https://github.com/rsocket/rsocket-py/tree/master/examples/tutorial/step1)
 
@@ -16,7 +16,7 @@ We will modify the example from the previous step into a routed request response
 
 ### Routing request handler
 
-The `handler_factory` method below replaces the `Handler` class from the previous step:
+To implement routing we will use the `RequestRouter` and `RoutingRequestHandler` classes. The `handler_factory` method below replaces the `Handler` class from the previous step:
 
 ```py
 from typing import Awaitable

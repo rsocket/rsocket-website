@@ -1,0 +1,267 @@
+---
+slug: /guides/rsocket-java/tutorial/channels
+title: Channels
+sidebar_label: Channels
+---
+
+In this section we will add basic channel support:
+- Joining and leaving channels
+- Sending messages to channels
+
+See resulting code on [GitHub](https://github.com/rsocket/rsocket-py/tree/master/examples/tutorial/step4)
+
+## Shared code
+
+Let's add a `channel` property to the `Message` class. It will contain the name of the channel the message is intended for:
+
+```java
+public class Message {
+
+    // existing fields
+
+    public String channel;
+
+    // existing constructors
+
+    public Message(String user, String content, String channel) {
+        this.user = user;
+        this.content = content;
+        this.channel = channel;
+    }
+}
+```
+
+## Server side
+
+### Data-classes
+We will add functionality to store the channel state. Belows is the contents of the new `ChatChannel` class:
+
+```java
+package io.rsocket.guide;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicReference;
+
+public class ChatChannel {
+    public String name;
+
+    final public BlockingQueue<Message> messages = new LinkedBlockingQueue<>();
+
+    final public AtomicReference<Thread> messageRouter = new AtomicReference<>();
+
+    final public Set<String> users = new HashSet<>();
+}
+```
+
+```java
+public class ChatData {
+
+    // existing fields
+
+    public final Map<String, ChatChannel> channelByName = new HashMap<>();
+}
+```
+
+In the `channel_users` dict, the keys are channel names, and the value is a set of user session ids. A [WeakSet](https://docs.python.org/3/library/weakref.html#weakref.WeakSet) is used to automatically remove logged-out users.
+
+In the `channel_messages` dict, the keys are the channel names, and the value is a [Queue](https://docs.python.org/3/library/asyncio-queue.html) of messages sent by users to the channel.
+
+### Helper methods
+
+Next, we will define some helper methods for managing channel messages:
+- `ensure_channel_exists`: initialize the data for a new channel if it doesn't exist.
+- `channel_message_delivery`: an asyncio task which will deliver channel messages to all the users in a channel.
+
+```java
+public void ensureChannel(String channelName) {
+    if (!chatData.channelByName.containsKey(channelName)) {
+        ChatChannel chatChannel = new ChatChannel();
+        chatChannel.name = channelName;
+        chatData.channelByName.put(channelName, chatChannel);
+        final var thread = new Thread(() -> channelMessageRouter(channelName));
+        thread.start();
+        chatChannel.messageRouter.set(thread);
+    }
+}
+```
+
+If the channel doesn't exist yet (*Line 2*) It will be added to the `channel_users` and `channel_messages` dictionaries.
+*Line 5* starts an asyncio task (described below) which will deliver messages sent to the channel, to the channel's users.
+
+```java
+public void channelMessageRouter(String channelName) {
+    final var channel = chatData.channelByName.get(channelName);
+    while (true) {
+        try {
+            final var message = channel.messages.poll(20, TimeUnit.DAYS);
+            if (message != null) {
+                for (String user : channel.users) {
+                    findUserByName(user).doOnNext(session -> {
+                        try {
+                            session.messages.put(message);
+                        } catch (InterruptedException exception) {
+                            throw new RuntimeException(exception);
+                        }
+                    }).block();
+                }
+            }
+        } catch (Exception exception) {
+            break;
+        }
+    }
+}
+```
+
+The above method will loop infinitely and watch the `channel_messages` queue of the specified
+channel (*Line 8*). Upon receiving a message, it will be delivered to all the users in the channel (*Lines 9-13*).
+
+### Join/Leave Channel
+
+Now let's add the channel join/leave handling request-response endpoints.
+
+```java
+case "channel.join":
+    final var channelJoin = payload.getDataUtf8();
+    ensureChannel(channelJoin);
+    join(channelJoin, session.sessionId);
+    return Mono.just(EmptyPayload.INSTANCE);
+case "channel.leave":
+    leave(payload.getDataUtf8(), session.sessionId);
+    return Mono.just(EmptyPayload.INSTANCE);
+```
+
+### Send channel message
+
+Next we add the ability to send channel message. We will modify the `send_message` method:
+
+```java
+case "message":
+    final var message = fromJson(payload.getDataUtf8(), Message.class);
+    final var targetMessage = new Message(session.username, message.content, message.channel);
+
+    if (message.channel != null) {
+        chatData.channelByName.get(message.channel).messages.add(targetMessage);
+    } else {
+
+        return findUserByName(message.user)
+                .doOnNext(targetSession -> targetSession.messages.add(targetMessage))
+                .thenReturn(EmptyPayload.INSTANCE);
+    }
+```
+
+*Lines 16-20* decide whether it is a private message or a channel message, and add it to the relevant queue.
+
+### List channels
+
+```java
+case "channels":
+    return Flux.fromIterable(chatData.channelByName.keySet()).map(DefaultPayload::create);
+```
+
+*Lines 6-11* define an endpoint for getting a list of channels. It uses the `StreamFromGenerator` helper. Note that the argument to this class
+is a factory method for the [generator](https://docs.python.org/3/glossary.html#term-generator), not the generator itself.
+
+### Get channel users
+
+```java
+case "channel.users":
+    return Flux.fromIterable(chatData.channelByName.getOrDefault(payload.getDataUtf8(), new ChatChannel()).users)
+            .map(DefaultPayload::create);
+```
+*Lines 6-11* define an endpoint for getting a list of users in a given channel. The `find_username_by_session` helper method is used to
+convert the session ids to usernames.
+
+If the channel does not exist (*Line 10*) the `EmptyStream` helper can be used as a response.
+
+## Client side
+
+We will add the methods on the `Client` to interact with the new server functionality:
+
+```py
+from typing import List
+
+from rsocket.awaitable.awaitable_rsocket import AwaitableRSocket
+from rsocket.extensions.helpers import composite, route
+from rsocket.frame_helpers import ensure_bytes
+from rsocket.payload import Payload
+from rsocket.helpers import utf8_decode
+
+from shared import encode_dataclass
+
+class ChatClient:
+
+    async def join(self, channel_name: str):
+        request = Payload(ensure_bytes(channel_name), composite(route('channel.join')))
+        await self._rsocket.request_response(request)
+        return self
+
+    async def leave(self, channel_name: str):
+        request = Payload(ensure_bytes(channel_name), composite(route('channel.leave')))
+        await self._rsocket.request_response(request)
+        return self
+
+    async def channel_message(self, channel: str, content: str):
+            print(f'Sending {content} to channel {channel}')
+            await self._rsocket.request_response(Payload(encode_dataclass(Message(channel=channel, content=content)),
+                                                     composite(route('message'))))
+
+    async def list_channels(self) -> List[str]:
+        request = Payload(metadata=composite(route('channels')))
+        response = await AwaitableRSocket(self._rsocket).request_stream(request)
+        return list(map(lambda _: utf8_decode(_.data), response))
+
+    async def get_users(self, channel_name: str) -> List[str]:
+      request = Payload(ensure_bytes(channel_name), composite(route('channel.users')))
+      users = await AwaitableRSocket(self._rsocket).request_stream(request)
+      return [utf8_decode(user.data) for user in users]
+```
+
+*Lines 15-23* define the join/leave methods. They are both simple routed `request_response` calls, with the channel name as the payload data.
+
+*Lines 25-28* define the list_channels method. This method uses the `AwaitableRSocket` adapter to simplify getting the response stream as a list.
+
+*Lines 30-31* define the get_users method, which lists a channel's users.
+
+Update the `print_message` method to include the channel:
+
+```py
+def print_message(data: bytes):
+    message = Message(**json.loads(data))
+    print(f'{self._username}: from {message.user} ({message.channel}): {message.content}')
+```
+
+Let's test the new functionality using the following code:
+
+```py
+async def messaging_example(user1: ChatClient, user2: ChatClient):
+    user1.listen_for_messages()
+    user2.listen_for_messages()
+
+    await user1.join('channel1')
+    await user2.join('channel1')
+
+    print(f'Channels: {await user1.list_channels()}')
+
+    await user1.private_message('user2', 'private message from user1')
+    await user1.channel_message('channel1', 'channel message from user1')
+
+    await asyncio.sleep(1)
+
+    user1.stop_listening_for_messages()
+    user2.stop_listening_for_messages()
+```
+
+Call the example method from the `main` method and pass it the two chat clients:
+
+```py
+user1 = ChatClient(client1)
+user2 = ChatClient(client2)
+
+await user1.login('user1')
+await user2.login('user2')
+
+await messaging_example(user1, user2)
+```
