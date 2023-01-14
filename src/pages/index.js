@@ -410,8 +410,6 @@ function Home() {
     }
   ];
 
-  console.log(styles)
-
   return (
     <Layout
       title={siteConfig.title}
