@@ -76,8 +76,8 @@ This illustrates why every single solution that doesn’t have built-in flow con
 
 This is effectively the same as the HTTP/2 requirement to exchange SETTINGS frames—see:
 
-- [HTTP/2 Spec: HTTP/2 Connection Preface](https://http2.github.io/http2-spec/#ConnectionHeader)
-- [HTTP/2 Spec: Starting HTTP/2 for "http" URIs](https://http2.github.io/http2-spec/#discover-http)
+- [HTTP/2 Spec: HTTP/2 Connection Preface](https://httpwg.org/specs/rfc7540.html#ConnectionHeader)
+- [HTTP/2 Spec: Starting HTTP/2 for "http" URIs](https://httpwg.org/specs/rfc7540.html#discover-http)
 
 HTTP/2 and RSocket both require a stateful connection with an initial exchange.
 
