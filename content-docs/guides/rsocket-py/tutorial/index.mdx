@@ -12,7 +12,7 @@ If you find a problem, code or otherwise, please report an [issue](https://githu
 
 ## Preface
 
-We will be setting up a chat application with a server and a client.
+We will be creating a chat application with a server and a client.
 
 The chat client will have the following functionality:
 - Private messages between users
@@ -20,24 +20,32 @@ The chat client will have the following functionality:
 - Uploading/Downloading files
 - Getting server and client statistics (e.g. number of channels)
 
-Since the emphasis is on showcasing as much RSocket functionality as possible, some of the examples may be either a bit contrived, or
+Since the emphasis is on showcasing as much RSocket functionality as possible, some examples may be either a bit contrived, or
 be possible to implement in a different way using RSocket. This is left as an exercise to the reader.
 
-In the first steps the code will be written using only the core code.
-This results in more verbose code, but prevents the need for additional packages need be installed.
+In the first steps the code will be written using only the core rsocket python implementation.
+This results in more verbose code, but prevents the need for additional packages being installed.
 In later steps, [Reactivex](https://rxpy.readthedocs.io) implementation will be added to show more concise code, on both server and client side.
 
 ## Required knowledge
 
 The guide assumes the following knowledge:
 
-* Basic python level (Classes, methods, decorators, dataclasses)
-* Basic asyncio usage
+* Basic python level (classes, using decorators, simple dataclasses)
+* Basic asyncio usage (syntax, starting tasks)
 * Basic understanding of RSocket protocol (See [About RSocket](/about/faq))
+
+## Notes
+
+The word *interface* will be used to denote classes with all or mostly abstract methods, even though python has no such inherent entity.
 
 ## Required setup
 
-Install the rsocket package. See the [pypi package listing](https://pypi.org/project/rsocket/) for installation methods. The tutorial was tested against version 0.4.5.
+As rsocket is supported on python 3.8 and above, this guide will limit itself to using python 3.8 features. Some code
+examples may be simplified using later python versions. This is left as an exercise for the reader.
+
+Install the rsocket package. See the [pypi package listing](https://pypi.org/project/rsocket/) for installation methods.
+The tutorial was tested against version 0.4.6.
 
 ## Code
 

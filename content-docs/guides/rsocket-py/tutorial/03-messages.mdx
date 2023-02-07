@@ -26,25 +26,36 @@ class Message:
 - `user` : name of the recipient user when sending a message, and the name of the sender when receiving it.
 - `content` : the message body.
 
-We will use json to serialize the messages for transport. Add the following helper method to the <b>shared</b> module:
+We will use [json](https://docs.python.org/3/library/json.html) to serialize the messages for transport. Add the following helper methods to the <b>shared</b> module:
 
 ```py
 import json
+from typing import TypeVar, Type
 from rsocket.frame_helpers import ensure_bytes
 from rsocket.payload import Payload
+from rsocket.helpers import utf8_decode
 
 def encode_dataclass(obj):
     return ensure_bytes(json.dumps(obj.__dict__))
+
+T = TypeVar('T')
+
+def decode_dataclass(data: bytes, cls: Type[T]) -> T:
+    return cls(**json.loads(utf8_decode(data)))
 
 def dataclass_to_payload(obj) -> Payload:
     return Payload(encode_dataclass(obj))
 ```
 
-*Lines 5-6* Defines a minimal dataclass json encoder which assumes all the fields in the dataclass are python primitives, or builtin collections of those.
+*Lines 7-8* Define a minimal dataclass json encoder which assumes all the fields in the dataclass are python primitives, or builtin collections of those.
 
-*Lines 8-9* Defines a helper method for creating `Payload`s containing only data fields.
+*Lines 10-13* Define the decoder counterpart of the above method.
+
+*Lines 15-16* Define a helper method for creating `Payload`s containing only a serialized `dataclass`.
 
 ## Server side
+
+### Data storage and helper methods
 
 First we add a queue for incoming user messages:
 
@@ -63,14 +74,17 @@ class UserSessionData:
 ```py
 from typing import Optional
 
-from more_itertools import first
-
 def find_session_by_username(username: str) -> Optional[UserSessionData]:
-    return first((session for session in chat_data.user_session_by_id.values() if
-                  session.username == username), None)
+    try:
+        return next(session for session in chat_data.user_session_by_id.values() if
+                    session.username == username)
+    except StopIteration:
+        return None
 ```
 
-*Lines 5-7* define a helper for looking up a user's session by username. This will be used to deliver private messages.
+*Lines 3-8* define a helper for looking up a user's session by username. This will be used to deliver private messages.
+
+### Send messages
 
 Next we will register a request-response endpoint for sending private messages:
 
@@ -106,6 +120,8 @@ class ChatUserSession:
 The recipient's session is found (*Line 23*), and the message is placed in the user's message queue (*Line 24*).
 
 *Line 25* returns an empty `Payload` future using the `create_response` helper method.
+
+### Receive incoming messages
 
 As a last step on the server side, we register a request-stream endpoint which listens for incoming messages and sends
 them to the client:
@@ -151,11 +167,14 @@ class ChatUserSession:
 
 *Lines 15-36* define the endpoint for listening to new messages.
 
-*Lines 17-34* define the publisher which will be returned.
-The same class will be used as the subscription for canceling the stream. The messages are taken from the user's
-session message queue and delivering them to the client.
+*Lines 17-34* define the `Publisher` which will be returned. It is given access to the user's session (*Lines 18-19*)
 
-The loop (*Lines 31-34*) is placed in an asyncio [Task](https://docs.python.org/3/library/asyncio-task.html#asyncio.Task) which can be canceled by the client (*Lines 22-23*)
+The only method on the `Publisher` interface is `subscribe` (*Lines 25-28*), which is the action taken upon the client sending a request to the route.
+The `subscriber` argument represents the client side. In this method an asyncio [Task](https://docs.python.org/3/library/asyncio-task.html#asyncio.Task) is started (*Line 28*)
+which continuously sends the subscriber the messages intended for that user from the server side session queue (*Lines 30-34*)
+
+The same class will be used for canceling the stream (*Lines 22-23*), if triggered by the client. This is provided by the `Subscription` interface which
+is provided to the client on *Line 27*.
 
 ## Client side
 
@@ -228,6 +247,8 @@ An instance of the `MessageListener` is stored on the client (*Line 33*) to late
 *Lines 34-36* send the request and subscribe to the resulting `Publisher`.
 
 The method in *Lines 38-39* can be used to stop the above message listener.
+
+### Test the new functionality
 
 Finally, let's test the new functionality. Modify the `main` method in the client:
 

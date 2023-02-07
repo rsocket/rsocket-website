@@ -4,9 +4,10 @@ title: Request routing
 sidebar_label: Request routing
 ---
 
-The chat application will have various functionality (e.g. private messages and channels). Each request to the server will
-be identified by a [route](https://github.com/rsocket/rsocket/blob/master/Extensions/Routing.md) (similar to paths in an HTTP URL). To implement this we will use the `RequestRouter` and `RoutingRequestHandler`
-classes.
+In the previous step we added a single request-response handler. In order to allow more than one functionality to use this handler,
+(e.g. login, messages, join/leave chanel) they need to be distinguished from each other. To achieve this, each request to the server will
+be identified by a [route](https://github.com/rsocket/rsocket/blob/master/Extensions/Routing.md). This is similar to paths in an HTTP URL where
+each URL may handle one of the HTTP methods (eg. GET, POST). To implement this we will use the `RequestRouter` and `RoutingRequestHandler` classes.
 
 See resulting code on [GitHub](https://github.com/rsocket/rsocket-py/tree/master/examples/tutorial/step1)
 
@@ -38,15 +39,27 @@ def handler_factory() -> RoutingRequestHandler:
     return RoutingRequestHandler(router)
 ```
 
-*Line 10* instantiates the `RequestRouter`. This helper is used as a method decorator to register the route of each request
+*Line 10* instantiates the `RequestRouter`. The methods on this helper are used as decorators to register the route of each request
 (it is similar to Flask and Quart syntax).
+
+The `RequestRouter` has a decorator method for each RSocket request type:
+- `response`
+- `stream`
+- `channel`
+- `fire_and_forget`
+- `metadata_push`
+
+All of the above methods receive a single argument, a string representing the route. The decorators may be applied multiple times
+which allows for aliases for the same route.
 
 *Lines 12-15* define the login method and attach it to a request-response with the <b>login</b> route.
 The method name does not have to match the route.
 
-All methods decorated by the request router accept two optional arguments, *payload* and *composite_metadata*. For now, we only pass the payload.
-It is ann instance of a `Payload` class which contains the data and metadata of the request. This argument must appear with the exact names as above,
-as that is how the decorator detects where to pass the payload. The argument type hints are optional.
+All methods decorated by the request router accept two optional arguments:
+- Any argument named *composite_metadata* (regardless of type-hint), or type-hinted with `CompositeMetadata` will receive a `CompositeMetadata` instance containing parsed composite metadata
+- Any other argument without a type-hint, or type-hinted with `Payload` will receive the request's payload
+
+The `RequestRouter` has additional functionality which will be covered in later sections.
 
 *Line 17* returns the actual request handler, an instance of `RoutingRequestHandler`, which uses the request router instance.
 
@@ -94,7 +107,7 @@ class ChatClient:
 *Lines 11-14* define a `login` method. It uses the `composite` and `route` helper methods to create the metadata which will ensure
 the payload is routed to the method registered on the server side in the previous step.
 
-### Use the new ChatClient class
+### Test the new functionality
 
 Let's modify the client module to test our new `ChatClient`:
 
