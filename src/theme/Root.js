@@ -1,9 +1,8 @@
 import React from 'react';
 import { SupportRibbon } from './SupportRibbon';
 
-// Default implementation, that you can customize
+// https://docusaurus.io/docs/swizzling#wrapper-your-site-with-root
 export default function Root({children}) {
-    console.log('Root', children);
     return (
         <>
             <SupportRibbon />
