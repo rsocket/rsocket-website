@@ -1,0 +1,76 @@
+.corner-ribbon {
+    position: relative;
+  }
+  
+  .corner-ribbon__inner {
+    /* Displayed at the top left corner */
+    left: 0px;
+    position: absolute;
+    top: 0px;
+  
+    /* Size */
+    height: 4rem;
+    width: 4rem;
+  
+    /* Hide the part of its children which is displayed outside */
+    overflow: hidden;
+  }
+  
+  .corner-ribbon__ribbon {
+    /* Position */
+    left: 1rem;
+    position: absolute;
+    top: 1rem;
+  
+    /* Size */
+    height: 1.5rem;
+    width: 5.656rem;
+  
+    /* Displayed diagonally */
+    transform: translate(-38px, -8px) rotate(-45deg);
+  
+    /* Background color */
+    background-color: #d1d5db;
+  
+    /* Centerize the text content */
+    text-align: center;
+  }
+  
+  
+  .ribbon-support {
+    position: fixed;
+    background: #ef0092;
+    box-shadow: 0 0 0 999px #ef0092;
+    color: #fff;
+    clip-path: inset(0 -100%);
+    font-weight: 500;
+    z-index: 999;
+    padding: 10px;
+  }
+  
+  .ribbon-support:hover {
+    background: #fff;
+    color: #ef0092;
+    box-shadow: 0 0 0 999px #fff;
+    text-decoration: none;
+  }
+  
+  /* hide on smaller screens */
+  @media screen and (max-width: 600px) {
+    .ribbon-support  {
+      display: none;
+    }
+  }
+  
+  .ribbon-left {
+    inset: 0 auto auto 0;
+    transform-origin: 100% 0;
+    transform: translate(-29.3%) rotate(-45deg);
+  }
+  
+  .ribbon-right {
+    inset: 0 0 auto auto;
+    transform-origin: -40px 0;
+    transform: translate(29.3%) rotate(45deg);
+  }
+  

@@ -418,13 +418,6 @@ function Home() {
       description={siteConfig.tagline}
     >
       <header className={classnames('hero hero--primary', styles.heroBanner)}>  
-        <a
-          href="https://crowdfunding.lfx.linuxfoundation.org/projects/bb4066fb-8137-4557-8224-f17dba073494"
-          rel="noopener noreferrer"
-          target={"_blank"}
-          className={classnames([styles['ribbon-support'], styles['ribbon-right']])}>
-          <span>Support RSocket</span>
-        </a>
         <div className="container">
           <h1 className="hero__title">
             <img
@@ -513,9 +506,9 @@ function Home() {
                 width="100%"
                 height="315"
                 src="https://www.youtube.com/embed/KapSjhUYSz4"
-                frameborder="0"
+                frameBorder="0"
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen
+                allowFullScreen
               />
               <div className="text--center padding-vert--lg">
                 <Link
