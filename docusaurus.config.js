@@ -27,12 +27,7 @@ module.exports = {
       "async": true
     }
   ],
-  "stylesheets": [
-    {
-      "href": "https://css.link",
-      "type": "text/css"
-    }
-  ],
+  "stylesheets": [],
   "favicon": "img/favicon.png",
   "customFields": {
     "defaultVersionShown": "1.0.0",
