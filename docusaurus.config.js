@@ -72,7 +72,20 @@ module.exports = {
       }
     ]
   ],
-  "plugins": [],
+  "plugins": [
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        fromExtensions: ['html', 'htm'],
+        redirects: [
+          {
+            to: '/community',
+            from: '/help',
+          }
+        ],
+      }
+    ]
+  ],
   "themeConfig": {
     "colorMode": {
       // "light" | "dark"
@@ -117,8 +130,8 @@ module.exports = {
           "position": "left"
         },
         {
-          "to": "/help",
-          "label": "Help",
+          "to": "/community",
+          "label": "Community",
           "position": "left"
         },
         {
