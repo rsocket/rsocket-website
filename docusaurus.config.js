@@ -131,6 +131,59 @@ module.exports = {
     "footer": {
       "links": [
         {
+          "title": "Projects",
+          "items": [
+            {
+              "label": "RSocket GitHub",
+              "to": "https://github.com/rsocket"
+            },
+            {
+              "label": "RSocket Java",
+              "to": "https://github.com/rsocket/rsocket-java"
+            },
+            {
+              "label": "RSocket Kotlin",
+              "to": "https://github.com/rsocket/rsocket-kotlin"
+            },
+            {
+              "label": "RSocket JS",
+              "to": "https://github.com/rsocket/rsocket-js"
+            },
+            {
+              "label": "RSocket Python",
+              "to": "https://github.com/rsocket/rsocket-py"
+            },
+            {
+              "label": "RSocket Swift",
+              "to": "https://github.com/rsocket/rsocket-swift"
+            },
+            {
+              "label": "RSocket Rust",
+              "to": "https://github.com/rsocket/rsocket-rust"
+            },
+            {
+              "label": "RSocket C++",
+              "to": "https://github.com/rsocket/rsocket-cpp"
+            },
+            {
+              "label": "RSocket Go",
+              "to": "https://github.com/rsocket/rsocket-go"
+            },
+            {
+              "label": "RSocket .Net",
+              "to": "https://github.com/rsocket/rsocket-net"
+            },
+            {
+              "label": "RSocket Dart",
+              "to": "https://github.com/rsocket/rsocket-dart"
+            },
+            {
+              "label": "RSocket PhP",
+              "to": "https://github.com/rsocket/rsocket-php"
+            },
+          ]
+        },
+        {
           "title": "Community",
           "items": [
             {
@@ -138,12 +191,24 @@ module.exports = {
               "to": "https://crowdfunding.lfx.linuxfoundation.org/projects/bb4066fb-8137-4557-8224-f17dba073494"
             },
             {
-              "label": "Twitter",
-              "to": "https://twitter.com/RSocketIO"
+              "label": "Discord",
+              "to": "https://discord.gg/qPy6msaUrr"
             },
             {
               "label": "Gitter",
               "to": "https://gitter.im/rsocket"
+            },
+            {
+              "label": "Twitter",
+              "to": "https://twitter.com/RSocketIO"
+            },
+            {
+              "label": "Stack Overflow",
+              "to": "https://stackoverflow.com/questions/tagged/rsocket"
+            },
+            {
+              "label": "YouTube",
+              "to": "https://www.youtube.com/results?search_query=rsocket"
             }
           ]
         },
