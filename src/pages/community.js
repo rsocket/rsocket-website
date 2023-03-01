@@ -49,7 +49,78 @@ function DocumentationSection() {
             key={idx}
             className={classnames(
               'col',
-              `col--${cards.length * 2}`,
+              `col--6`,
+              'margin-bottom--md'
+            )}
+          >
+            {c()}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// https://app.gitter.im/#/room/#rsocket_rsocket-java:gitter.im
+// https://app.gitter.im/#/room/#rsocket_rsocket-js:gitter.im
+// https://app.gitter.im/#/room/#rsocket-routing_community:gitter.im
+function CommunitySection() {
+  const cards = [
+    () => (
+      <Card
+        icon="💬"
+        type="link"
+        description="Join the conversation on Discord!"
+        label="Discord"  
+        href={"https://discord.gg/qPy6msaUrr"}
+      />
+    ),
+    () => (
+      <Card
+        icon="💬"
+        type="link"
+        description="Discuss RSocket Java on Gitter!"
+        label="RSocket Java Gitter"  
+        href={"https://app.gitter.im/#/room/#rsocket_rsocket-java:gitter.im"}
+      />
+    ),
+    () => (
+      <Card
+        icon="💬"
+        type="link"
+        description="Discuss RSocket JS on Gitter!"
+        label="RSocket JS Gitter"  
+        href={"https://app.gitter.im/#/room/#rsocket_rsocket-js:gitter.im"}
+      />
+    ),
+    () => (
+      <Card
+        icon="💬"
+        type="link"
+        description="Discuss RSocket Routing on Gitter!"
+        label="RSocket Routing Gitter"  
+        href={"https://app.gitter.im/#/room/#rsocket-routing_community:gitter.im"}
+      />
+    )
+  ]
+  return (
+    <div>
+      <h2>Join the Community</h2>
+      <div className="row">
+        <div className="col col--12">
+          <p>
+            Ask questions and discussion RSocket in the RSocket Discord & Gitter
+            communities:
+          </p>
+        </div>
+      </div>
+      <div className="row">
+        {cards.map((c, idx) => (
+          <div
+            key={idx}
+            className={classnames(
+              'col',
+              `col--6`,
               'margin-bottom--md'
             )}
           >
@@ -165,18 +236,9 @@ function Community() {
               </div>
             </div>
             <div className="row">
-              {supportLinks.map(({ content, title }, idx) => (
-                <div
-                  key={idx}
-                  className={classnames(
-                    'col',
-                    `col--${supportLinks.length * 2}`
-                  )}
-                >
-                  <h3>{title}</h3>
-                  {content}
-                </div>
-              ))}
+              <div className="col col--12">
+                <CommunitySection />
+              </div>
             </div>
           </div>
         </section>
