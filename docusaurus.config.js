@@ -208,10 +208,6 @@ module.exports = {
               "to": "https://discord.gg/qPy6msaUrr"
             },
             {
-              "label": "Gitter",
-              "to": "https://gitter.im/rsocket"
-            },
-            {
               "label": "Twitter",
               "to": "https://twitter.com/RSocketIO"
             },
