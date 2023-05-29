@@ -67,7 +67,7 @@ module.exports = {
           "customCss": path.resolve("./src/css/customTheme.css"),
         },
         "gtag": {
-          "trackingID": "UA-251236997-1"
+          "trackingID": "G-875HQF3Z9F"
         }
       }
     ]
