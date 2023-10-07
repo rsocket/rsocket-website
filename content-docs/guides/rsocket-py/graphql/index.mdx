@@ -1,0 +1,172 @@
+---
+slug: /guides/rsocket-py/graphql
+title: GraphQL integration
+sidebar_label: Introduction
+---
+
+This guide will go over using GraphQL over RSocket, but client and server side.
+This document assumes you know how to set up an RSocket server with a routing handler.
+
+To use the graphql integration, install using `pip install rsocket[graphql]`
+
+The implementation uses [graphql-core](https://pypi.org/project/graphql-core/) on the server side, and [gql](https://pypi.org/project/gql/) for the client side.
+
+## Schema
+
+The following examples use the given GraphQL schema:
+
+```graphql
+type Query {
+    greeting: Greeting
+}
+
+type Subscription {
+    greetings: Greeting
+}
+
+type Greeting {
+    message: String
+}
+```
+
+## Server
+
+We will construct a simple server which will respond to requests to the schema given in the previous section.
+First we will define the resolve methods:
+
+```py
+import asyncio
+
+async def greeting(*args):
+    return {
+        'message': "Hello world"
+    }
+
+
+def greetings(*args):
+    async def results():
+        for i in range(10):
+            yield {'greetings': {'message': f"Hello world {i}"}}
+            await asyncio.sleep(1)
+
+    return results()
+```
+
+Load the schema from the file, and connect the methods to it:
+
+```py
+from graphql import build_schema
+
+with open('rsocket.graphqls') as fd:
+    schema = build_schema(fd.read())
+
+schema.query_type.fields['greeting'].resolve = greeting
+schema.subscription_type.fields['greetings'].subscribe = greetings
+```
+
+Finally, expose this schema via RSocket:
+
+```py
+import asyncio
+import logging
+import sys
+
+from rsocket.graphql.server_helper import graphql_handler
+from rsocket.routing.routing_request_handler import RoutingRequestHandler
+from rsocket.rsocket_server import RSocketServer
+from rsocket.transports.tcp import TransportTCP
+
+
+def handler_factory():
+    return RoutingRequestHandler(graphql_handler(schema, 'graphql'))
+
+
+async def run_server(server_port):
+    logging.info('Starting server at localhost:%s', server_port)
+
+    def session(*connection):
+        RSocketServer(TransportTCP(*connection), handler_factory=handler_factory)
+
+    server = await asyncio.start_server(session, 'localhost', server_port)
+
+    async with server:
+        await server.serve_forever()
+
+
+if __name__ == '__main__':
+    port = sys.argv[1] if len(sys.argv) > 1 else 9191
+    logging.basicConfig(level=logging.DEBUG)
+    asyncio.run(run_server(port))
+```
+
+Assuming you already know how to set up an RSocket server over TCP, the above code should look familiar.
+
+The connection between RSocket and GraphQL is done using the `graphql_handler` (*Line 12*) method which accepts 2 arguments:
+- The GraphQL schema object.
+- The RSocket route under which the schema will be available, both queries, and subscriptions.
+
+## Client
+
+The following example client can be used with the server defined in the previous section.
+
+```py
+import asyncio
+import logging
+import sys
+
+from gql import Client
+
+from rsocket.extensions.mimetypes import WellKnownMimeTypes
+from rsocket.graphql.rsocket_transport import RSocketTransport
+from rsocket.helpers import single_transport_provider
+from rsocket.rsocket_client import RSocketClient
+from rsocket.transports.tcp import TransportTCP
+
+
+async def main(server_port: int):
+    connection = await asyncio.open_connection('localhost', server_port)
+
+    async with RSocketClient(single_transport_provider(TransportTCP(*connection)),
+                             metadata_encoding=WellKnownMimeTypes.MESSAGE_RSOCKET_COMPOSITE_METADATA) as client:
+       with open('rsocket.graphqls') as fd:
+           schema = build_schema(fd.read())
+
+        graphql = Client(
+            schema=schema,
+            transport=RSocketTransport(client),
+        )
+
+if __name__ == '__main__':
+    port = sys.argv[1] if len(sys.argv) > 1 else 9191
+    logging.basicConfig(level=logging.DEBUG)
+    asyncio.run(main(port))
+```
+
+On the client side, an RSocket connection is first opened, and then passed as the transport to a GraphQL client (*Line 22-25*).
+The graphql client can be used as usual, using the `execute_async` and `subscribe_async` methods, as in the example above.
+
+Example usage for the endpoints defined in the above server:
+
+```py
+async def subscription(graphql: Client):
+    async for response in graphql.subscribe_async(
+            document=gql("""
+                subscription {
+                    greetings {message}
+                }
+                """),
+            get_execution_result=True):
+
+        print(response.data)
+
+
+async def greeting(graphql: Client):
+    response = await graphql.execute_async(
+        gql("""query { greeting { message } }"""),
+        get_execution_result=True)
+
+    assert response.data['greeting']['message'] == 'Hello world'
+
+    print(response.data)
+```
+
