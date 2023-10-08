@@ -17,13 +17,6 @@ module.exports = [
       ]
   },
   {
-    "GraphQL":
-      [
-        "guides/rsocket-py/graphql/index",
-        "guides/rsocket-py/graphql/mutation"
-      ]
-  },
-  {
     "Client": [
       "guides/rsocket-py/client/introduction",
       "guides/rsocket-py/client/rsocket-tcp-client",
@@ -38,5 +31,12 @@ module.exports = [
     ]
   },
   "guides/rsocket-py/rxpy",
-  "guides/rsocket-py/cli"
+  {
+    "GraphQL":
+      [
+        "guides/rsocket-py/graphql/index",
+        "guides/rsocket-py/graphql/mutation"
+      ]
+  },
+  "guides/rsocket-py/cli",
 ];
