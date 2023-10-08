@@ -2,7 +2,8 @@ const aboutItems = [
   "about/faq",
   "about/motivations",
   "about/protocol",
-  "about/implementations"
+  "about/implementations",
+  "about/integrations"
 ];
 
 const guideItems = [
