@@ -143,9 +143,7 @@ if __name__ == '__main__':
 ```
 
 On the client side, an RSocket connection is first opened, and then passed as the transport to a GraphQL client (*Line 22-25*).
-The graphql client can be used as usual, using the `execute_async` and `subscribe_async` methods, as in the example above.
-
-Example usage for the endpoints defined in the above server:
+The graphql client can be used as usual, using the `execute_async` and `subscribe_async` methods, as in these examples:
 
 ```py
 async def subscription(graphql: Client):
