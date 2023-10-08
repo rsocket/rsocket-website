@@ -6,6 +6,29 @@ sidebar_label: Mutation
 
 In this section we will add an example for `Mutation`.
 
+## Scheme
+
+Update the schema to include a mutation, and a method which will be used to verify the mutation:
+
+```graphql
+type Query {
+    greeting: Greeting
+    getMessage: String
+}
+
+type Subscription {
+    greetings: Greeting
+}
+
+type Greeting {
+    message: String
+}
+
+type Mutation {
+    setMessage(message: String): Greeting
+}
+```
+
 ## Server
 
 First we will add the python functionality:
