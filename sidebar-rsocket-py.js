@@ -15,7 +15,6 @@ module.exports = [
         "guides/rsocket-py/tutorial/reactivex",
         "guides/rsocket-py/tutorial/websocket"
       ]
-
   },
   {
     "Client": [
@@ -32,5 +31,12 @@ module.exports = [
     ]
   },
   "guides/rsocket-py/rxpy",
-  "guides/rsocket-py/cli"
+  {
+    "GraphQL":
+      [
+        "guides/rsocket-py/graphql/index",
+        "guides/rsocket-py/graphql/mutation"
+      ]
+  },
+  "guides/rsocket-py/cli",
 ];
