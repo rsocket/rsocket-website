@@ -101,7 +101,7 @@ module.exports = {
     },
     "prism": {
       "theme": require("prism-react-renderer/themes/vsDark"),
-      "additionalLanguages": ["java", "kotlin", "python"],
+      "additionalLanguages": ["java", "kotlin", "python", "flow"],
     },
     "metadata": [
       { property: "og:image", content: `${deployUrl}/img/social/rsocket-io-facebook-og.jpg` },
